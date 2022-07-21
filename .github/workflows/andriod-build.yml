@@ -37,12 +37,12 @@ jobs:
         
       # CI 작업 시작
       # 1. Ktlint 체크
-      - name: Run ktlint
-        run: ./gradlew ktlintCheck
+      #- name: Run ktlint
+      #  run: ./gradlew ktlintCheck
 
       # 2. detekt 체크
-      - name: Run detekt
-        run: ./gradlew detekt
+      #- name: Run detekt
+      #  run: ./gradlew detekt
 
       # 3. unit test 체크
       - name: Run unit tests
