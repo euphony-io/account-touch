@@ -29,17 +29,10 @@ jobs:
           key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties', '**/buildSrc/**/*.kt') }}
           restore-keys: |
             ${{ runner.os }}-gradle-
+            
+      # 권한 관련 (모든 권한 허용)
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
-
-      # 권한 관련
-      - name: Decrypt secrets.tar.gpg
-        run: gpg --quiet --batch --yes --always-trust --decrypt --passphrase="$SECRET_GPG_PASSWORD" --output secrets.tar secrets.tar.gpg
-        env:
-          SECRET_GPG_PASSWORD: ${{ secrets.SECRET_GPG_PASSWORD }}
-
-      - name: Unzip secrets.tar
-        run: tar xvf secrets.tar
         
       # CI 작업 시작
       # 1. Ktlint 체크
@@ -54,11 +47,12 @@ jobs:
       - name: Run unit tests
         run: ./gradlew testDebugUnitTest
         
-      # test report 함
+      # test report ( always 명령어로 항상 돌아가게 함 )
       - name: Create android test report
         uses: asadmansr/android-test-report-action@v1.2.0
         if: ${{ always() }}
-        
+      
+      # slack nodification 
       - name: Send Slack nofitication
         if: always()
         uses: 8398a7/action-slack@v3
