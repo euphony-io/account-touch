@@ -1,6 +1,7 @@
 package com.euphony.project.account_touch
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
+import androidx.lifecycle.Observer
 import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Rule
@@ -21,23 +22,37 @@ class EuphonyTestViewModelTest {
     @Test
     fun speak_setIsSpeakTrue() {
         // Given
+        val observer = Observer<Boolean> {}
 
-        // When
-        viewModel.speak()
+        try {
+            viewModel.isSpeaking.observeForever(observer)
 
-        // Then
-        assertEquals(viewModel.isSpeaking.value, true)
+            // When
+            viewModel.speak()
+
+            // Then
+            assertEquals(viewModel.isSpeaking.value, true)
+        } finally {
+            viewModel.isSpeaking.removeObserver(observer)
+        }
     }
 
     @Test
     fun speak_setIsSpeakFalse() {
         // Given
+        val observer = Observer<Boolean> {}
 
-        // When
-        viewModel.speak() // true
-        viewModel.speak() // false
+        try {
+            viewModel.isSpeaking.observeForever(observer)
 
-        // Then
-        assertEquals(viewModel.isSpeaking.value, false)
+            // When
+            viewModel.speak()
+            viewModel.speak()
+
+            // Then
+            assertEquals(viewModel.isSpeaking.value, false)
+        } finally {
+            viewModel.isSpeaking.removeObserver(observer)
+        }
     }
 }
