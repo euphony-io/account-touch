@@ -18,8 +18,7 @@ import com.euphony.project.account_touch.data.source.dao.UserDao
     entities = [
         (UserEntity::class),
         (Account::class),
-        (Received::class),
-        (Bank::class),
+        (Received::class)
     ], version = 1
 )
 @TypeConverters(DateConverter::class)
