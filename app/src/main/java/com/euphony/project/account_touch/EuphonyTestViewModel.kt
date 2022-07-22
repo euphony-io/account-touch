@@ -27,11 +27,19 @@ class EuphonyTestViewModel: ViewModel() {
         }
     }
 
-    fun listen(euRxManager: EuRxManager) {
+    fun listen(euTxManager: EuTxManager, euRxManager: EuRxManager) {
         if (isListening.value == false) {
             _isListening.value = true
+            euRxManager.listen()
+            euRxManager.acousticSensor = AcousticSensor {
+                Log.i("EuphonyTestViewModel", it)
+                _isSpeaking.value = false
+                _isListening.value = false
+                euTxManager.stop()
+            }
         } else { // true
             _isListening.value = false
+            euRxManager.finish()
         }
     }
 }
