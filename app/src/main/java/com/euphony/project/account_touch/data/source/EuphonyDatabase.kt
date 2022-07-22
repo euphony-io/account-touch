@@ -6,7 +6,6 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import com.euphony.project.account_touch.data.entity.Account
-import com.euphony.project.account_touch.data.entity.Bank
 import com.euphony.project.account_touch.data.entity.Received
 import com.euphony.project.account_touch.data.entity.UserEntity
 import com.euphony.project.account_touch.data.entity.converter.DateConverter
