@@ -7,9 +7,6 @@ import euphony.lib.receiver.EuRxManager
 import euphony.lib.transmitter.EuTxManager
 
 class EuphonyTestViewModel: ViewModel() {
-    // TODO: will be used as Singleton
-    private val euTxManager = EuTxManager()
-    private val euRxManager = EuRxManager()
 
     private val _isSpeaking: MutableLiveData<Boolean> = MutableLiveData(false)
     val isSpeaking: LiveData<Boolean> get() = _isSpeaking
@@ -17,7 +14,7 @@ class EuphonyTestViewModel: ViewModel() {
     private val _isListening: MutableLiveData<Boolean> = MutableLiveData(false)
     val isListening: LiveData<Boolean> get() = _isListening
 
-    fun speak() {
+    fun speak(euTxManager: EuTxManager) {
         if (isSpeaking.value == false) {
             _isSpeaking.value = true
         } else { // true
@@ -25,7 +22,7 @@ class EuphonyTestViewModel: ViewModel() {
         }
     }
 
-    fun listen() {
+    fun listen(euRxManager: EuRxManager) {
         if (isListening.value == false) {
             _isListening.value = true
         } else { // true

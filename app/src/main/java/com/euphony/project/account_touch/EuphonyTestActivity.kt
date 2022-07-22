@@ -33,7 +33,7 @@ class EuphonyTestActivity : ComponentActivity() {
         val isSpeaking = viewModel.isSpeaking.observeAsState()
 
         Button(onClick = {
-            viewModel.speak()
+            viewModel.speak(EuphonyManager.getEuTxManager())
         }) {
             if (isSpeaking.value == false) Text(text = "transmit")
             else Text(text = "cancel")
@@ -45,7 +45,7 @@ class EuphonyTestActivity : ComponentActivity() {
         val isListening = viewModel.isListening.observeAsState()
 
         Button(onClick = {
-            viewModel.listen()
+            viewModel.listen(EuphonyManager.getEuRxManager())
         }) {
             if (isListening.value == false) Text(text = "receive")
             else Text(text = "cancel")
