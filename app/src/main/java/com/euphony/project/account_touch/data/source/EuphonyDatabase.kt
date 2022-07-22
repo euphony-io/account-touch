@@ -5,14 +5,17 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
+import com.euphony.project.account_touch.data.entity.Account
 import com.euphony.project.account_touch.data.entity.Bank
 import com.euphony.project.account_touch.data.entity.UserEntity
 import com.euphony.project.account_touch.data.entity.converter.DateConverter
+import com.euphony.project.account_touch.data.source.dao.AccountDao
 import com.euphony.project.account_touch.data.source.dao.UserDao
 
 @Database(
     entities = [
         (UserEntity::class),
+        (Account::class),
         (Bank::class),
     ], version = 1
 )
@@ -20,6 +23,7 @@ import com.euphony.project.account_touch.data.source.dao.UserDao
 abstract class EuphonyDatabase : RoomDatabase() {
 
     abstract fun getUserDao(): UserDao
+    abstract fun getAccountDao(): AccountDao
 
     companion object {
         private var INSTANCE: EuphonyDatabase? = null
