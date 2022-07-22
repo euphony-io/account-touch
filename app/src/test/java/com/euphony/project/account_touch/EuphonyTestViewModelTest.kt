@@ -63,14 +63,13 @@ class EuphonyTestViewModelTest {
     fun listen_setIsListeningTrue() {
         // Given
         val observer = Observer<Boolean> {}
-        val euTxManager = mock(EuphonyManager.getEuTxManager()::class.java)
         val euRxManager = mock(EuphonyManager.getEuRxManager()::class.java)
 
         try {
             viewModel.isListening.observeForever(observer)
 
             // When
-            viewModel.listen(euTxManager, euRxManager)
+            viewModel.listen(euRxManager)
 
             // Then
             assertEquals(viewModel.isListening.value, true)
@@ -83,15 +82,14 @@ class EuphonyTestViewModelTest {
     fun listen_setIsListeningFalse() {
         // Given
         val observer = Observer<Boolean> {}
-        val euTxManager = mock(EuphonyManager.getEuTxManager()::class.java)
         val euRxManager = mock(EuphonyManager.getEuRxManager()::class.java)
 
         try {
             viewModel.isListening.observeForever(observer)
 
             // When
-            viewModel.listen(euTxManager, euRxManager)
-            viewModel.listen(euTxManager, euRxManager)
+            viewModel.listen(euRxManager)
+            viewModel.listen(euRxManager)
 
             // Then
             assertEquals(viewModel.isListening.value, false)
