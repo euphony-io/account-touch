@@ -1,5 +1,6 @@
 package com.euphony.project.account_touch.data.entity
 
+import com.euphony.project.account_touch.data.entity.model.BankInfo
 import com.euphony.project.account_touch.data.entity.model.ProfileIcon
 import com.euphony.project.account_touch.data.entity.model.ExternalPackage
 import com.google.common.truth.Truth.assertThat
@@ -10,11 +11,11 @@ class BankTest {
     @Test
     fun 은행_객체를_생성한다(){
         //when
-        val bank = Bank(1L, "국민은행", "bank/kb_bank.png", 12, ExternalPackage.KOOKMIN);
+        val bank = Bank(1L, "국민은행", BankInfo.KB, 12, ExternalPackage.KOOKMIN);
 
         //then
         assertThat(bank).isNotNull()
-        assertThat(bank.bankIconPath).isEqualTo("bank/kb_bank.png",)
+        assertThat(bank.bankIconPath).isEqualTo(BankInfo.KB)
         assertThat(bank.appExternalPackage).isEqualTo(ExternalPackage.KOOKMIN)
     }
 
@@ -23,8 +24,8 @@ class BankTest {
         //given
         val bankLength = 100
         val bankList = arrayOf(
-            Bank(1L, "국민은행", "bank/kb_bank.png", bankLength, ExternalPackage.KOOKMIN),
-            Bank(2L, "케이뱅크", "bank/kbank_bank.png", 12, ExternalPackage.KBANK)
+            Bank(1L, "국민은행", BankInfo.KB, bankLength, ExternalPackage.KOOKMIN),
+            Bank(2L, "케이뱅크", BankInfo.KBANK, 12, ExternalPackage.KBANK)
         )
 
         //when
