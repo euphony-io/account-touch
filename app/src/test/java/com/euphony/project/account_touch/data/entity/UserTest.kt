@@ -4,7 +4,7 @@ import com.google.common.truth.Truth.assertThat
 import org.junit.Test
 import java.util.*
 
-internal class UserEntityTest{
+internal class UserTest{
 
     @Test
     fun 유저_객체를_생성한다(){
