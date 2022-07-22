@@ -1,13 +1,9 @@
 package com.euphony.project.account_touch.data.source.dao
 
-import androidx.room.Insert
-import androidx.room.OnConflictStrategy
-import androidx.room.Query
 import androidx.room.Room
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
 import com.euphony.project.account_touch.data.entity.Account
-import com.euphony.project.account_touch.data.entity.UserEntity
 import com.euphony.project.account_touch.data.source.EuphonyDatabase
 import com.google.common.truth.Truth.assertThat
 import junit.framework.TestCase
