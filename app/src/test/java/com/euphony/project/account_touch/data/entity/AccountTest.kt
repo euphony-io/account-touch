@@ -19,9 +19,7 @@ internal class AccountTest{
             nickname,
             accountNumber,
             false,
-            true,
-            Date(),
-            Date()
+            true
         )
 
         //then
@@ -37,9 +35,7 @@ internal class AccountTest{
             "은빈이의 국민은행 계좌",
             123123123123,
             false,
-            true,
-            Date(),
-            Date()
+            true
         )
 
         //then

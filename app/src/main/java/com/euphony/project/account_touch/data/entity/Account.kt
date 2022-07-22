@@ -26,9 +26,9 @@ data class Account(
     var isAlwaysOn: Boolean,
 
     @ColumnInfo(name = "create_date")
-    override var createDate: Date,
+    override var createDate: Date = Date(System.currentTimeMillis()),
 
     @ColumnInfo(name = "modify_date")
-    override var modifyDate: Date,
+    override var modifyDate: Date = Date(System.currentTimeMillis()),
 
-    ) : BaseEntity()
+) : BaseEntity()
