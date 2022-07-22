@@ -21,7 +21,7 @@ class EuphonyTestActivity : ComponentActivity() {
     private val requestPermissionCallback =
         registerForActivityResult(ActivityResultContracts.RequestPermission()) {
             if (it) {
-                viewModel.listen(EuphonyManager.getEuTxManager(), EuphonyManager.getEuRxManager())
+                viewModel.listen(EuphonyManager.getEuRxManager())
             } else {
                 // do nothing
             }
@@ -60,7 +60,7 @@ class EuphonyTestActivity : ComponentActivity() {
             when {
                 ContextCompat.checkSelfPermission(this,
                     Manifest.permission.RECORD_AUDIO) == PackageManager.PERMISSION_GRANTED -> {
-                    viewModel.listen(EuphonyManager.getEuTxManager(), EuphonyManager.getEuRxManager())
+                    viewModel.listen(EuphonyManager.getEuRxManager())
                 }
                 shouldShowRequestPermissionRationale(Manifest.permission.RECORD_AUDIO) -> requestPermissionCallback.launch(
                     Manifest.permission.RECORD_AUDIO)

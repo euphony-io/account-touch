@@ -16,10 +16,12 @@ class EuphonyTestViewModel: ViewModel() {
     private val _isListening: MutableLiveData<Boolean> = MutableLiveData(false)
     val isListening: LiveData<Boolean> get() = _isListening
 
+    private val data = "1234"
+
     fun speak(euTxManager: EuTxManager) {
         if (isSpeaking.value == false) {
             _isSpeaking.value = true
-            euTxManager.euInitTransmit("1234")
+            euTxManager.euInitTransmit(data)
             euTxManager.process(-1)
         } else { // true
             _isSpeaking.value = false
@@ -27,15 +29,13 @@ class EuphonyTestViewModel: ViewModel() {
         }
     }
 
-    fun listen(euTxManager: EuTxManager, euRxManager: EuRxManager) {
+    fun listen(euRxManager: EuRxManager) {
         if (isListening.value == false) {
             _isListening.value = true
             euRxManager.listen()
             euRxManager.acousticSensor = AcousticSensor {
                 Log.i("EuphonyTestViewModel", it)
-                _isSpeaking.value = false
                 _isListening.value = false
-                euTxManager.stop()
             }
         } else { // true
             _isListening.value = false
