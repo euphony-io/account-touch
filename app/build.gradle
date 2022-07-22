@@ -61,7 +61,7 @@ dependencies {
     debugImplementation "androidx.compose.ui:ui-tooling:$compose_version"
     debugImplementation "androidx.compose.ui:ui-test-manifest:$compose_version"
 
-    testImplementation "androidx.arch.core:core-testing:2.1.0"
+    testImplementation "androidx.arch.core:core-testing:$core_testing_version"
     implementation "androidx.compose.runtime:runtime-livedata:$compose_version"
-    testImplementation 'org.mockito:mockito-core:2.24.5'
+    testImplementation "org.mockito:mockito-core:$mockito_core_version"
 }
