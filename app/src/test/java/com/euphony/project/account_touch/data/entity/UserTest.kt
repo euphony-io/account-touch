@@ -9,7 +9,7 @@ internal class UserTest{
     @Test
     fun 유저_객체를_생성한다(){
         //given
-        val user = UserEntity(1L, "은빈", Date(), Date())
+        val user = UserEntity(1L, "은빈")
 
         //then
         assertThat(user.id).isEqualTo(1L)

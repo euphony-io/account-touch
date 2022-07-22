@@ -11,8 +11,8 @@ interface UserDao {
     suspend fun getUserById(id: Long): UserEntity
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun addUser(user: UserEntity)
+    suspend fun addUser(user: UserEntity): Long
 
     @Query("UPDATE user SET nickname = :nickname, modify_date = :modifyDate  WHERE user_id = :id")
-    suspend fun modifyUser(id: Long, nickname: String,  modifyDate: Date = Date())
+    suspend fun modifyUser(id: Long, nickname: String,  modifyDate: Date = Date(System.currentTimeMillis()))
 }

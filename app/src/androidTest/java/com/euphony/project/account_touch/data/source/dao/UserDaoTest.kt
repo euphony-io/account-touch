@@ -29,14 +29,13 @@ class UserDaoTest : TestCase() {
             EuphonyDatabase::class.java
         ).build()
 
-
         dao = db.getUserDao()
     }
 
     @Test
     fun 유저_생성() = runBlocking {
         //given
-        val user = UserEntity(1,"은빈", Date(), Date())
+        val user = UserEntity(1,"은빈")
 
         //when
         dao.addUser(user)
@@ -50,7 +49,7 @@ class UserDaoTest : TestCase() {
     fun 유저_정보_수정() = runBlocking {
         //given
         val modifyNickname = "은빈빈";
-        val user = UserEntity(1,"은빈",Date(), Date())
+        val user = UserEntity(1,"은빈")
         dao.addUser(user)
 
         //when
