@@ -6,6 +6,7 @@ import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
+import org.mockito.Mockito.mock
 
 class EuphonyTestViewModelTest {
 
@@ -23,12 +24,13 @@ class EuphonyTestViewModelTest {
     fun speak_setIsSpeakTrue() {
         // Given
         val observer = Observer<Boolean> {}
+        val euTxManager = mock(EuphonyManager.getEuTxManager()::class.java)
 
         try {
             viewModel.isSpeaking.observeForever(observer)
 
             // When
-            viewModel.speak()
+            viewModel.speak(euTxManager)
 
             // Then
             assertEquals(viewModel.isSpeaking.value, true)
@@ -41,13 +43,14 @@ class EuphonyTestViewModelTest {
     fun speak_setIsSpeakFalse() {
         // Given
         val observer = Observer<Boolean> {}
+        val euTxManager = mock(EuphonyManager.getEuTxManager()::class.java)
 
         try {
             viewModel.isSpeaking.observeForever(observer)
 
             // When
-            viewModel.speak()
-            viewModel.speak()
+            viewModel.speak(euTxManager)
+            viewModel.speak(euTxManager)
 
             // Then
             assertEquals(viewModel.isSpeaking.value, false)
