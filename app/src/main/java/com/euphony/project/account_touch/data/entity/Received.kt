@@ -25,4 +25,4 @@ data class Received(
     @ColumnInfo(name = "modify_date")
     override var modifyDate: Date = Date(System.currentTimeMillis()),
 
-    ) : BaseEntity()
+) : BaseEntity()
