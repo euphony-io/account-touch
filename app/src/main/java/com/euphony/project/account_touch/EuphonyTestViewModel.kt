@@ -1,8 +1,10 @@
 package com.euphony.project.account_touch
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import euphony.lib.receiver.AcousticSensor
 import euphony.lib.receiver.EuRxManager
 import euphony.lib.transmitter.EuTxManager
 
@@ -17,8 +19,11 @@ class EuphonyTestViewModel: ViewModel() {
     fun speak(euTxManager: EuTxManager) {
         if (isSpeaking.value == false) {
             _isSpeaking.value = true
+            euTxManager.euInitTransmit("1234")
+            euTxManager.process(-1)
         } else { // true
             _isSpeaking.value = false
+            euTxManager.stop()
         }
     }
 
