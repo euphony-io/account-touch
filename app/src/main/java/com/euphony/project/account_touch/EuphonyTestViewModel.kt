@@ -16,7 +16,7 @@ class EuphonyTestViewModel: ViewModel() {
     private val _isListening: MutableLiveData<Boolean> = MutableLiveData(false)
     val isListening: LiveData<Boolean> get() = _isListening
 
-    private val data = "1234"
+    private val data = "{\"account\": { \"nickname\" : \"test\", \"accountNumber\" : \"123123123123\", }, \"bank\" : { \"id\" : \"1\" }, \"user\" : { \"nickname\" : \"test\", \"icon\" : \"path\" } }"
 
     fun speak(euTxManager: EuTxManager) {
         if (isSpeaking.value == false) {
