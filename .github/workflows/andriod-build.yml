@@ -1,0 +1,64 @@
+name: Android Build CI
+on:
+  pull_request:
+    branches: [ develop ] # develop 브랜치로 들어오는 pull request 작동
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3 # 워크플로우 레포 접근 가능하게 checkout
+        with:
+          fetch-depth: 0
+       # 안드로이드 프로젝트 빌드 기본 설정
+      - name: Setup JDK 11
+        uses: actions/setup-java@v3
+        with:
+          distribution: "zulu"
+          java-version: 11
+
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v2
+        
+        # Gadle 빌드 캐싱
+      - name: Cache Gradle packages
+        uses: actions/cache@v2
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties', '**/buildSrc/**/*.kt') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
+            
+      # 권한 관련 (모든 권한 허용)
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
+        
+      # CI 작업 시작
+      # 1. Ktlint 체크
+      #- name: Run ktlint
+      #  run: ./gradlew ktlintCheck
+
+      # 2. detekt 체크
+      #- name: Run detekt
+      #  run: ./gradlew detekt
+
+      # 3. unit test 체크
+      - name: Run unit tests
+        run: ./gradlew testDebugUnitTest
+        
+      # test report ( always 명령어로 항상 돌아가게 함 )
+      - name: Create android test report
+        uses: asadmansr/android-test-report-action@v1.2.0
+        if: ${{ always() }}
+      
+      # slack nodification 
+      - name: Send Slack nofitication
+        if: always()
+        uses: 8398a7/action-slack@v3
+        with:
+          status: ${{ job.status }}
+          fields: repo,message,commit,author,eventName,ref,workflow,job,took,pullRequest
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
