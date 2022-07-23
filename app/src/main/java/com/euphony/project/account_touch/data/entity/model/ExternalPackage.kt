@@ -12,6 +12,6 @@ enum class ExternalPackage(val packageId: Int){
     NH(R.string.nh_package),
     IBK(R.string.ibk_package),
     SHINHAN(R.string.shinhan_package),
-    HANA(R.string.hanabank_package),
+    KEB(R.string.hanabank_package),
     SINHYEOB(R.string.sinhyeob_package),
 }
