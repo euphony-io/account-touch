@@ -9,7 +9,7 @@ import androidx.sqlite.db.SupportSQLiteDatabase
 import com.euphony.project.account_touch.data.entity.Account
 import com.euphony.project.account_touch.data.entity.Bank
 import com.euphony.project.account_touch.data.entity.Received
-import com.euphony.project.account_touch.data.entity.UserEntity
+import com.euphony.project.account_touch.data.entity.User
 import com.euphony.project.account_touch.data.entity.converter.DateConverter
 import com.euphony.project.account_touch.data.entity.data.BANK_DATA
 import com.euphony.project.account_touch.data.source.dao.AccountDao
@@ -22,7 +22,7 @@ import kotlinx.coroutines.launch
 
 @Database(
     entities = [
-        (UserEntity::class),
+        (User::class),
         (Account::class),
         (Received::class),
         (Bank::class)
