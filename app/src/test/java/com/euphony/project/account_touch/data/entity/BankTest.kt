@@ -1,7 +1,6 @@
 package com.euphony.project.account_touch.data.entity
 
 import com.euphony.project.account_touch.data.entity.model.BankInfo
-import com.euphony.project.account_touch.data.entity.model.ProfileIcon
 import com.euphony.project.account_touch.data.entity.model.ExternalPackage
 import com.google.common.truth.Truth.assertThat
 import org.junit.Test
