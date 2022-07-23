@@ -1,6 +1,6 @@
 package com.euphony.project.account_touch.data.entity.model
 
-enum class BankInfo(val path: String) {
+enum class BankIcon(val path: String){
     BNK("banks/bnk_bank.png"),
     CITI("banks/citi_bank.png"),
     DGB("banks/dgb_bank.png"),
