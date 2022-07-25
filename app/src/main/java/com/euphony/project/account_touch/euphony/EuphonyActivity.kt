@@ -1,8 +1,9 @@
-package com.euphony.project.account_touch
+package com.euphony.project.account_touch.euphony
 
 import android.Manifest
 import android.content.pm.PackageManager
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.result.contract.ActivityResultContracts
@@ -15,15 +16,15 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.core.content.ContextCompat
 import com.euphony.project.account_touch.ui.theme.AccounttouchTheme
 
-class EuphonyTestActivity : ComponentActivity() {
+class EuphonyActivity : ComponentActivity() {
 
-    private val viewModel by viewModels<EuphonyTestViewModel>()
+    private val viewModel by viewModels<EuphonyViewModel>()
     private val requestPermissionCallback =
         registerForActivityResult(ActivityResultContracts.RequestPermission()) {
             if (it) {
                 viewModel.listen(EuphonyManager.getEuRxManager())
             } else {
-                // do nothing
+                Toast.makeText(this, "마이크 권한이 거부되었습니다.", Toast.LENGTH_SHORT).show()
             }
         }
 
