@@ -8,7 +8,7 @@ import euphony.lib.receiver.AcousticSensor
 import euphony.lib.receiver.EuRxManager
 import euphony.lib.transmitter.EuTxManager
 
-class EuphonyTestViewModel: ViewModel() {
+class EuphonyViewModel: ViewModel() {
 
     private val _isSpeaking: MutableLiveData<Boolean> = MutableLiveData(false)
     val isSpeaking: LiveData<Boolean> get() = _isSpeaking
