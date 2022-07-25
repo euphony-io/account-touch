@@ -117,14 +117,16 @@ fun BottomSheetTitle(
     title: String,
 ) {
     Row(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(top = 8.dp),
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
     ) {
         Text(
             modifier = Modifier.padding(start = 16.dp),
             text = title,
-            fontSize = 18.sp,
+            fontSize = 16.sp,
             color = Blue_6D95FF,
             fontWeight = FontWeight.Bold
         )
@@ -150,7 +152,7 @@ fun BanksContent(bankBitmaps: List<ImageBitmap?>) {
     LazyVerticalGrid(
         cells = GridCells.Fixed(3),
         modifier = Modifier
-            .padding(horizontal = 16.dp, vertical = 24.dp),
+            .padding(horizontal = 16.dp, vertical = 18.dp),
         verticalArrangement = Arrangement.spacedBy(12.dp),
         horizontalArrangement = Arrangement.spacedBy(8.dp)
     ) {
