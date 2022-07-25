@@ -1,6 +1,5 @@
 package com.euphony.project.account_touch.ui.component
 
-import android.graphics.BitmapFactory
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
@@ -26,7 +25,6 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ImageBitmap
-import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -35,9 +33,9 @@ import androidx.compose.ui.unit.sp
 import com.euphony.project.account_touch.ui.theme.Black_333B58
 import com.euphony.project.account_touch.ui.theme.Blue_6D95FF
 import com.euphony.project.account_touch.ui.theme.Gray_F4F4F4
+import com.euphony.project.account_touch.utils.AssetsUtil
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
-import java.io.IOException
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
@@ -45,16 +43,7 @@ fun ChooseBankContent(
     modalBottomSheetState: ModalBottomSheetState,
     coroutineScope: CoroutineScope,
 ) {
-    val context = LocalContext.current
-    val bankPaths = context.assets.list("banks")?.map { "banks/$it" } ?: listOf()
-    val bankBitmaps = bankPaths.map {
-        try {
-            val inputStream = context.assets.open(it)
-            BitmapFactory.decodeStream(inputStream).asImageBitmap()
-        } catch (e: IOException) {
-            null
-        }
-    }
+    val bankBitmaps = AssetsUtil.getBitmaps(LocalContext.current, "banks")
     BottomSheetTitle(modalBottomSheetState, coroutineScope, "은행 선택")
     BanksContent(bankBitmaps)
 }
@@ -150,14 +139,7 @@ fun BottomSheetTitlePreview() {
 @Preview(showBackground = true)
 @Composable
 fun BankItemPreview() {
-    val context = LocalContext.current
-    val imageBitmap = try {
-        val inputStream = context.assets.open("banks/bnk_bank.png")
-        BitmapFactory.decodeStream(inputStream).asImageBitmap()
-    } catch (e: IOException) {
-        null
-    }
-    imageBitmap?.let {
+    AssetsUtil.getBitmap(LocalContext.current, "banks/bnk_bank.png")?.let {
         BankItem(it)
     }
 }
