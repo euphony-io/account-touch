@@ -3,6 +3,7 @@ package com.euphony.project.account_touch.euphony
 import android.Manifest
 import android.content.pm.PackageManager
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.result.contract.ActivityResultContracts
@@ -23,7 +24,7 @@ class EuphonyActivity : ComponentActivity() {
             if (it) {
                 viewModel.listen(EuphonyManager.getEuRxManager())
             } else {
-                // do nothing
+                Toast.makeText(this, "마이크 권한이 거부되었습니다.", Toast.LENGTH_SHORT).show()
             }
         }
 
