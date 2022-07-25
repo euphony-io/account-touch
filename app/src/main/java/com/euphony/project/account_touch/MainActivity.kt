@@ -38,6 +38,7 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.euphony.project.account_touch.ui.theme.AccounttouchTheme
+import com.euphony.project.account_touch.ui.theme.Black_333B58
 import com.euphony.project.account_touch.ui.theme.Blue_6D95FF
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -60,13 +61,13 @@ fun ModalBottomSheet() {
         rememberModalBottomSheetState(initialValue = ModalBottomSheetValue.Hidden)
     val coroutineScope = rememberCoroutineScope()
     var isEditClicked by remember { mutableStateOf(false) }
-
     ModalBottomSheetLayout(
 
         sheetContent = {
             AccountInfoTitle(modalBottomSheetState, coroutineScope, isEditClicked) {
                 isEditClicked = !isEditClicked
             }
+            Account()
         },
         sheetState = modalBottomSheetState,
         sheetShape = RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp),
@@ -131,12 +132,15 @@ fun AccountInfoTitle(
         } else {
             TextField(
                 modifier = Modifier.padding(start = 16.dp),
-                shape = RoundedCornerShape(16.dp),
+                shape = RoundedCornerShape(24.dp),
                 value = textFieldValue,
                 onValueChange = {
                     if (it.text.length <= 10) textFieldValue = it
                 },
-                colors = TextFieldDefaults.textFieldColors(focusedIndicatorColor = Color.Transparent),
+                colors = TextFieldDefaults.textFieldColors(
+                    focusedIndicatorColor = Color.Transparent,
+                    unfocusedIndicatorColor = Color.Transparent
+                ),
                 maxLines = 1,
             )
         }
@@ -153,5 +157,34 @@ fun AccountInfoTitle(
                 tint = Blue_6D95FF
             )
         }
+    }
+}
+
+@Composable
+fun Account() {
+    var textFieldValue by remember { mutableStateOf(TextFieldValue("")) }
+
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 48.dp, vertical = 32.dp)
+    ) {
+        Text(
+            text = "계좌번호",
+            fontSize = 12.sp,
+            color = Blue_6D95FF,
+            fontWeight = FontWeight.Bold
+        )
+        TextField(
+            value = textFieldValue,
+            onValueChange = {
+                textFieldValue = it
+            },
+            label = {
+                Text(text = "계좌번호를 입력해주세요.", color = Black_333B58)
+            },
+            colors = TextFieldDefaults.textFieldColors(focusedIndicatorColor = Blue_6D95FF),
+            modifier = Modifier.padding(top = 16.dp)
+        )
     }
 }
