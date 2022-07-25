@@ -1,4 +1,4 @@
-package com.euphony.project.account_touch
+package com.euphony.project.account_touch.euphony
 
 import android.util.Log
 import androidx.lifecycle.LiveData

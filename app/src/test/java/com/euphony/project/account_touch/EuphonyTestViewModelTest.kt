@@ -2,6 +2,8 @@ package com.euphony.project.account_touch
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.Observer
+import com.euphony.project.account_touch.euphony.EuphonyManager
+import com.euphony.project.account_touch.euphony.EuphonyTestViewModel
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Rule
