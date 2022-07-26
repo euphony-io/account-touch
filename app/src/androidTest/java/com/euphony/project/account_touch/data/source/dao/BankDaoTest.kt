@@ -4,10 +4,9 @@ import androidx.room.Room
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
 import com.euphony.project.account_touch.data.entity.Bank
-import com.euphony.project.account_touch.data.entity.model.BankInfo
-import com.euphony.project.account_touch.data.entity.model.ProfileIcon
+import com.euphony.project.account_touch.data.entity.model.BankIcon
 import com.euphony.project.account_touch.data.entity.model.ExternalPackage
-import com.euphony.project.account_touch.data.source.TempDatabase
+import com.euphony.project.account_touch.data.source.EuphonyDatabase
 import com.google.common.truth.Truth.assertThat
 import junit.framework.TestCase
 import kotlinx.coroutines.runBlocking
@@ -20,36 +19,46 @@ import org.junit.runner.RunWith
 class BankDaoTest  : TestCase() {
 
     private lateinit var dao: BankDao
-    private lateinit var db: TempDatabase
+    private lateinit var db: EuphonyDatabase
 
     @Before
     public override fun setUp() {
         val appContext = InstrumentationRegistry.getInstrumentation().targetContext
         db = Room.inMemoryDatabaseBuilder(
             appContext,
-            TempDatabase::class.java
+            EuphonyDatabase::class.java
         ).build()
 
-        dao = db.getBank()
+        dao = db.getBankDao()
     }
 
     @Test
     fun 은행_생성_조회() = runBlocking {
         //given
-        val banks = arrayOf(
-            Bank(1L, "국민은행", BankInfo.KB, 12, ExternalPackage.KOOKMIN),
-            Bank(2L, "케이뱅크",BankInfo.KBANK, 12, ExternalPackage.KBANK),
-            Bank(3L, "기업은행", BankInfo.IBK, 12, ExternalPackage.IBK),
-            Bank(4L, "하나은행", BankInfo.KEB, 12, ExternalPackage.HANA),
-            Bank(5L, "카카오페이", BankInfo.KAKAOPAY, 12, ExternalPackage.KAKAOPAY)
+        val bankName = "국민은행"
+        val bank = Bank(1L, bankName, BankIcon.KB, 12, ExternalPackage.KOOKMIN)
+
+        //when
+        dao.addBank(bank)
+        val newBanks = dao.getAll()
+
+        //then
+        assertThat(newBanks).isNotEmpty()
+        assertThat(newBanks[0].name).isEqualTo(bankName)
+    }
+
+    @Test
+    fun 은행_리스트_생성_조회() = runBlocking {
+        //given
+        val banks = arrayListOf<Bank>(
+            Bank(1L, "국민은행", BankIcon.KB, 12, ExternalPackage.KOOKMIN),
+            Bank(2L, "케이뱅크",BankIcon.KBANK, 12, ExternalPackage.KBANK),
+            Bank(3L, "기업은행", BankIcon.IBK, 12, ExternalPackage.IBK),
+            Bank(4L, "하나은행", BankIcon.KEB, 12, ExternalPackage.KEB)
         )
 
         //when
-        val iterator = banks.iterator()
-        iterator.forEach { _bank ->
-            dao.addBank(_bank)
-        }
-
+        dao.addBanks(banks)
         val newBanks = dao.getAll()
 
         //then
@@ -61,7 +70,7 @@ class BankDaoTest  : TestCase() {
     fun 은행_상세_조회() = runBlocking {
         //given
         val bankName = "국민은행"
-        val bank =  Bank(1L, bankName, BankInfo.KB, 12, ExternalPackage.KOOKMIN)
+        val bank =  Bank(1L, bankName, BankIcon.KB, 12, ExternalPackage.KOOKMIN)
         dao.addBank(bank)
 
         //when
@@ -76,7 +85,7 @@ class BankDaoTest  : TestCase() {
     fun 은행_앱패키지_조회() = runBlocking {
         //given
         val ppackage = ExternalPackage.KAKAOPAY
-        val bank =  Bank(1L, "카카오페이", BankInfo.KAKAOPAY, 12, ppackage)
+        val bank =  Bank(1L, "카카오뱅크", BankIcon.KAKAOBANK, 12, ppackage)
         dao.addBank(bank)
 
         //when
