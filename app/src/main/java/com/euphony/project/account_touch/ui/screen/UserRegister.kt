@@ -1,4 +1,4 @@
-package com.euphony.project.account_touch
+package com.euphony.project.account_touch.ui.screen
 
 import android.os.Bundle
 import android.widget.Toast
@@ -26,9 +26,11 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.euphony.project.account_touch.UserRegisterActivity.Companion.navController
-import com.euphony.project.account_touch.UserRegisterActivity.Companion.scope
-import com.euphony.project.account_touch.UserRegisterActivity.Companion.state
+import com.euphony.project.account_touch.R
+import com.euphony.project.account_touch.loadingMainView
+import com.euphony.project.account_touch.ui.screen.UserRegisterActivity.Companion.navController
+import com.euphony.project.account_touch.ui.screen.UserRegisterActivity.Companion.scope
+import com.euphony.project.account_touch.ui.screen.UserRegisterActivity.Companion.state
 import com.euphony.project.account_touch.ui.theme.grey
 import com.euphony.project.account_touch.ui.theme.mainColor
 import com.euphony.project.account_touch.ui.theme.white
@@ -44,7 +46,6 @@ class UserRegisterActivity : ComponentActivity() {
         lateinit var navController:NavHostController
     }
 
-    @OptIn(ExperimentalMaterialApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -63,7 +64,7 @@ fun Navigation(navController: NavHostController){
     ){
         //메인 화면
         composable("main"){
-            loadingView()
+            loadingMainView()
         }
 
         //유저 등록 화면
@@ -75,7 +76,7 @@ fun Navigation(navController: NavHostController){
             BottomSheetScaffold(
                 scaffoldState = state,
                 sheetContent = {
-                    BottomSheetContentPreview()
+                    BottomSheetContent()
                 },
                 sheetPeekHeight = 0.dp,
                 sheetShape = RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp),

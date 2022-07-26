@@ -1,6 +1,9 @@
 buildscript {
     ext {
         compose_version = '1.1.0-beta01'
+        core_testing_version = '2.1.0'
+        mockito_core_version = '2.24.5'
+        room_version  = '2.4.2'
     }
 }// Top-level build file where you can add configuration options common to all sub-projects/modules.
 plugins {
