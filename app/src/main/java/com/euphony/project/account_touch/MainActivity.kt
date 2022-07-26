@@ -10,21 +10,27 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.GridCells
 import androidx.compose.foundation.lazy.LazyVerticalGrid
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
+import androidx.compose.material.ButtonDefaults
+import androidx.compose.material.Divider
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.ModalBottomSheetLayout
 import androidx.compose.material.ModalBottomSheetState
 import androidx.compose.material.ModalBottomSheetValue
+import androidx.compose.material.Switch
 import androidx.compose.material.Text
 import androidx.compose.material.TextField
 import androidx.compose.material.TextFieldDefaults
@@ -63,6 +69,7 @@ import com.euphony.project.account_touch.ui.theme.Color6
 import com.euphony.project.account_touch.ui.theme.Color7
 import com.euphony.project.account_touch.ui.theme.Color8
 import com.euphony.project.account_touch.ui.theme.Color9
+import com.euphony.project.account_touch.ui.theme.Gray_ECEDED
 import com.euphony.project.account_touch.ui.theme.Gray_F4F4F4
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -94,6 +101,8 @@ fun ModalBottomSheet() {
             }
             Account()
             AccountColor()
+            AccountOptions()
+            AccountButton()
         },
         sheetState = modalBottomSheetState,
         sheetShape = RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp),
@@ -269,6 +278,86 @@ fun AccountColor() {
                     }
                 }
             }
+        }
+    }
+}
+
+@Composable
+fun AccountOptions() {
+    var isShare by remember { mutableStateOf(false) }
+    var isEncrypt by remember { mutableStateOf(false) }
+    var size by remember { mutableStateOf(IntSize.Zero) }
+
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 48.dp, vertical = 16.dp),
+        horizontalArrangement = Arrangement.SpaceEvenly
+    ) {
+        Column(
+            modifier = Modifier.onSizeChanged { size = it }
+        ) {
+            Text(
+                text = "항상 공유",
+                fontSize = 12.sp,
+                color = Blue_6D95FF,
+                fontWeight = FontWeight.Bold
+            )
+            Switch(
+                checked = isShare,
+                onCheckedChange = { isShare = !isShare }
+            )
+        }
+
+        Divider(
+            color = Gray_ECEDED,
+            modifier = Modifier.then(
+                with(LocalDensity.current) {
+                    Modifier.size(
+                        width = 1.dp,
+                        height = size.height.toDp()
+                    )
+                }
+            )
+        )
+
+        Column {
+            Text(
+                text = "암호 설정",
+                fontSize = 12.sp,
+                color = Blue_6D95FF,
+                fontWeight = FontWeight.Bold
+            )
+            Switch(
+                checked = isEncrypt,
+                onCheckedChange = { isEncrypt = !isEncrypt }
+            )
+        }
+    }
+}
+
+@Composable
+fun AccountButton() {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(bottom = 16.dp),
+        horizontalArrangement = Arrangement.Center
+    ) {
+        Button(
+            onClick = { /*TODO*/ },
+            modifier = Modifier
+                .fillMaxWidth(0.3f),
+            colors = ButtonDefaults.buttonColors(
+                backgroundColor = Blue_6D95FF
+            ),
+            shape = RoundedCornerShape(24.dp)
+        ) {
+            Text(
+                text = "확인",
+                color = Color.White,
+                fontWeight = FontWeight.Bold
+            )
         }
     }
 }
