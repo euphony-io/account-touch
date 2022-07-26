@@ -20,9 +20,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.euphony.project.account_touch.R
 import com.euphony.project.account_touch.data.entity.Bank
-import com.euphony.project.account_touch.data.entity.model.BankInfo
-import com.euphony.project.account_touch.data.entity.model.ExternalPackage
-import com.euphony.project.account_touch.ui.theme.Purple200
 import com.euphony.project.account_touch.ui.theme.mainColor
 import com.euphony.project.account_touch.ui.theme.white
 import java.util.*
@@ -57,7 +54,7 @@ fun loadingMainView(){
         }
 
         //내 계좌 리스트
-        //DB작업 - 유저가 등록한 계좌 리스트 불러오기
+        /*DB작업 - 유저가 등록한 계좌 리스트 불러오기
         val aList = ArrayList<Bank>()
         aList.add(Bank(1, "닉네임1", BankInfo.BNK,
             10, ExternalPackage.KOOKMIN,
@@ -65,6 +62,7 @@ fun loadingMainView(){
             Date(2022,3,1)
         ))
         myAccountList(aList)
+        */
     }
 }
 
