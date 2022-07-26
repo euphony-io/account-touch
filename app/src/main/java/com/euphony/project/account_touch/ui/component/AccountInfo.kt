@@ -21,6 +21,7 @@ import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.ModalBottomSheetState
+import androidx.compose.material.ModalBottomSheetValue
 import androidx.compose.material.Switch
 import androidx.compose.material.Text
 import androidx.compose.material.TextField
@@ -29,10 +30,12 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -42,6 +45,7 @@ import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.TextFieldValue
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -77,7 +81,7 @@ fun AccountInfo(
         onEditClick = onEditClick
     )
     Account()
-    AccountColor()
+    AccountColors()
     AccountOptions()
     AccountButton()
 }
@@ -186,7 +190,7 @@ fun Account() {
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun AccountColor() {
+fun AccountColors() {
     val colors =
         listOf(Color1, Color2, Color3, Color4, Color5, Color6, Color7, Color8, Color9, Color10)
     var size by remember { mutableStateOf(IntSize.Zero) }
@@ -213,28 +217,39 @@ fun AccountColor() {
             verticalArrangement = Arrangement.spacedBy(6.dp),
         ) {
             items(count = colors.size) {
-                Box(
-                    modifier = Modifier
-                        .then(
-                            with(LocalDensity.current) {
-                                Modifier.size(
-                                    width = size.width.toDp() / 5,
-                                    height = (size.width.toDp() - 96.dp) / 5 // horizontalArrangement * 4
-                                )
-                            }
-                        )
-                        .clip(shape = CircleShape)
-                        .background(color = colors[it])
-                        .clickable {
-                            clicked = it
-                        },
-                    contentAlignment = Alignment.Center
-                ) {
-                    if (clicked == it) {
-                        Icon(Icons.Filled.Check, contentDescription = "체크")
-                    }
+                AccountColorItem(it, colors[it], size, clicked) {
+                    clicked = it
                 }
             }
+        }
+    }
+}
+
+@Composable
+fun AccountColorItem(
+    index: Int,
+    color: Color,
+    size: IntSize,
+    clicked: Int,
+    onClick: (Int) -> Unit,
+) {
+    Box(
+        modifier = Modifier
+            .then(
+                with(LocalDensity.current) {
+                    Modifier.size(
+                        width = size.width.toDp() / 5,
+                        height = (size.width.toDp() - 96.dp) / 5 // horizontalArrangement * 4
+                    )
+                }
+            )
+            .clip(shape = CircleShape)
+            .background(color = color)
+            .clickable { onClick(index) },
+        contentAlignment = Alignment.Center
+    ) {
+        if (clicked == index) {
+            Icon(Icons.Filled.Check, contentDescription = "체크")
         }
     }
 }
@@ -317,4 +332,41 @@ fun AccountButton() {
             )
         }
     }
+}
+
+@OptIn(ExperimentalMaterialApi::class)
+@Preview(showBackground = true)
+@Composable
+fun AccountInfoTitlePreview() {
+    AccountInfoTitle(
+        modalBottomSheetState = rememberModalBottomSheetState(initialValue = ModalBottomSheetValue.Hidden),
+        coroutineScope = rememberCoroutineScope(),
+        isEditClicked = false,
+        onEditClick = {}
+    )
+}
+
+@Preview(showBackground = true)
+@Composable
+fun AccountPreview() {
+    Account()
+}
+
+@Preview(showBackground = true)
+@Composable
+fun AccountColorItemPreview() {
+    AccountColorItem(0, Color1, IntSize(500, 1000), 0) {}
+
+}
+
+@Preview(showBackground = true)
+@Composable
+fun AccountOptionsPreview() {
+    AccountOptions()
+}
+
+@Preview(showBackground = true)
+@Composable
+fun AccountButtonPreview() {
+    AccountButton()
 }
