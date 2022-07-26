@@ -23,7 +23,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import com.euphony.project.account_touch.ui.component.AccountInfo
+import com.euphony.project.account_touch.ui.component.AccountInfoScreen
 import com.euphony.project.account_touch.ui.theme.AccounttouchTheme
 import kotlinx.coroutines.launch
 
@@ -48,9 +48,17 @@ fun ModalBottomSheet() {
 
     ModalBottomSheetLayout(
         sheetContent = {
-            AccountInfo(modalBottomSheetState, coroutineScope, isEditClicked) {
-                isEditClicked = !isEditClicked
-            }
+            AccountInfoScreen(
+                isEditClicked,
+                onCloseClick = {
+                    coroutineScope.launch {
+                        modalBottomSheetState.hide()
+                    }
+                },
+                onEditClick = {
+                    isEditClicked = !isEditClicked
+                }
+            )
         },
         sheetState = modalBottomSheetState,
         sheetShape = RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp),

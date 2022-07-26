@@ -17,11 +17,8 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Divider
-import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
-import androidx.compose.material.ModalBottomSheetState
-import androidx.compose.material.ModalBottomSheetValue
 import androidx.compose.material.Switch
 import androidx.compose.material.Text
 import androidx.compose.material.TextField
@@ -30,12 +27,10 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Edit
-import androidx.compose.material.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -63,21 +58,25 @@ import com.euphony.project.account_touch.ui.theme.Color8
 import com.euphony.project.account_touch.ui.theme.Color9
 import com.euphony.project.account_touch.ui.theme.Gray_ECEDED
 import com.euphony.project.account_touch.ui.theme.Gray_F4F4F4
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.launch
 
-@OptIn(ExperimentalMaterialApi::class)
+@Composable
+fun AccountInfoScreen(
+    isEditClicked: Boolean,
+    onCloseClick: () -> Unit,
+    onEditClick: () -> Unit,
+) { // TODO: viewModel (insert NEW ACCOUNT)
+    AccountInfo(isEditClicked, onCloseClick, onEditClick)
+}
+
 @Composable
 fun AccountInfo(
-    modalBottomSheetState: ModalBottomSheetState,
-    coroutineScope: CoroutineScope,
     isEditClicked: Boolean,
+    onCloseClick: () -> Unit,
     onEditClick: () -> Unit,
 ) {
     AccountInfoTitle(
-        modalBottomSheetState,
-        coroutineScope,
         isEditClicked,
+        onCloseClick = onCloseClick,
         onEditClick = onEditClick
     )
     Account()
@@ -86,12 +85,10 @@ fun AccountInfo(
     AccountButton()
 }
 
-@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun AccountInfoTitle(
-    modalBottomSheetState: ModalBottomSheetState,
-    coroutineScope: CoroutineScope,
     isEditClicked: Boolean,
+    onCloseClick: () -> Unit,
     onEditClick: () -> Unit,
 ) {
     var textFieldValue by remember { mutableStateOf(TextFieldValue("부산은행")) }
@@ -141,11 +138,7 @@ fun AccountInfoTitle(
             )
         }
         IconButton(
-            onClick = {
-                coroutineScope.launch {
-                    modalBottomSheetState.hide()
-                }
-            }
+            onClick = { onCloseClick() }
         ) {
             Icon(
                 imageVector = Icons.Filled.Close,
@@ -334,39 +327,12 @@ fun AccountButton() {
     }
 }
 
-@OptIn(ExperimentalMaterialApi::class)
 @Preview(showBackground = true)
 @Composable
-fun AccountInfoTitlePreview() {
-    AccountInfoTitle(
-        modalBottomSheetState = rememberModalBottomSheetState(initialValue = ModalBottomSheetValue.Hidden),
-        coroutineScope = rememberCoroutineScope(),
+fun AccountInfoPreview() {
+    AccountInfo(
         isEditClicked = false,
+        onCloseClick = {},
         onEditClick = {}
     )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun AccountPreview() {
-    Account()
-}
-
-@Preview(showBackground = true)
-@Composable
-fun AccountColorItemPreview() {
-    AccountColorItem(0, Color1, IntSize(500, 1000), 0) {}
-
-}
-
-@Preview(showBackground = true)
-@Composable
-fun AccountOptionsPreview() {
-    AccountOptions()
-}
-
-@Preview(showBackground = true)
-@Composable
-fun AccountButtonPreview() {
-    AccountButton()
 }
