@@ -54,8 +54,7 @@ class BankDaoTest  : TestCase() {
             Bank(1L, "국민은행", BankIcon.KB, 12, ExternalPackage.KOOKMIN),
             Bank(2L, "케이뱅크",BankIcon.KBANK, 12, ExternalPackage.KBANK),
             Bank(3L, "기업은행", BankIcon.IBK, 12, ExternalPackage.IBK),
-            Bank(4L, "하나은행", BankIcon.KEB, 12, ExternalPackage.KEB),
-            Bank(5L, "카카오페이", BankIcon.KAKAOPAY, 12, ExternalPackage.KAKAOPAY)
+            Bank(4L, "하나은행", BankIcon.KEB, 12, ExternalPackage.KEB)
         )
 
         //when
@@ -86,7 +85,7 @@ class BankDaoTest  : TestCase() {
     fun 은행_앱패키지_조회() = runBlocking {
         //given
         val ppackage = ExternalPackage.KAKAOPAY
-        val bank =  Bank(1L, "카카오페이", BankIcon.KAKAOPAY, 12, ppackage)
+        val bank =  Bank(1L, "카카오뱅크", BankIcon.KAKAOBANK, 12, ppackage)
         dao.addBank(bank)
 
         //when

@@ -4,8 +4,9 @@ import com.euphony.project.account_touch.R
 
 enum class ExternalPackage(val packageId: Int){
     TOSS(R.string.toss_package),
-    KAKAOBANK(R.string.kakaobank_package),
     KAKAOPAY(R.string.kakaopay_package),
+
+    KAKAOBANK(R.string.kakaobank_package),
     KOOKMIN(R.string.kookmin_package),
     KBANK(R.string.kbank_package),
     WOORI(R.string.woori_package),

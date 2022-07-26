@@ -7,7 +7,6 @@ enum class BankIcon(val path: String){
     IBK("banks/ibk_bank.png"),
     JEJU("banks/jaju_bank.png"),
     KAKAOBANK("banks/kakaobank_bank.png"),
-    KAKAOPAY( "banks/kakaopay_bank.png"),
     KBANK("banks/kbank_bank.png"),
     KB("banks/kb_bank.png"),
     KDB( "banks/kdb_bank.png"),
