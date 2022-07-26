@@ -16,7 +16,6 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
-import androidx.compose.material.Divider
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.Switch
@@ -56,7 +55,6 @@ import com.euphony.project.account_touch.ui.theme.Color6
 import com.euphony.project.account_touch.ui.theme.Color7
 import com.euphony.project.account_touch.ui.theme.Color8
 import com.euphony.project.account_touch.ui.theme.Color9
-import com.euphony.project.account_touch.ui.theme.Gray_ECEDED
 import com.euphony.project.account_touch.ui.theme.Gray_F4F4F4
 
 @Composable
@@ -74,16 +72,43 @@ fun AccountInfo(
     onCloseClick: () -> Unit,
     onEditClick: () -> Unit,
 ) {
+    var accountNickname by remember { mutableStateOf(TextFieldValue("부산은행")) }
+    var accountNumber by remember { mutableStateOf(TextFieldValue("")) }
+    var clicked by remember { mutableStateOf(-1) }
+    val colors =
+        listOf(Color1, Color2, Color3, Color4, Color5, Color6, Color7, Color8, Color9, Color10)
+    var isShare by remember { mutableStateOf(false) }
+
     Column {
         AccountInfoTitle(
             isEditClicked,
             onCloseClick = onCloseClick,
-            onEditClick = onEditClick
+            onEditClick = onEditClick,
+            textFieldValue = accountNickname,
+            onValueChange = {
+                if (it.text.length <= 10) accountNickname = it
+            }
         )
-        Account()
-        AccountColors()
-        AccountOption()
-        AccountButton()
+        Account(
+            textFieldValue = accountNumber,
+            onValueChange = {
+                accountNumber = it
+            }
+        )
+        AccountColors(
+            colors = colors,
+            clicked = clicked,
+            onColorClick = {
+                clicked = it
+            }
+        )
+        AccountOption(
+            isShare = isShare,
+            onCheckedChange = {
+                isShare = !isShare
+            }
+        )
+        AccountButton() // TODO: NEW ACCOUNT 생성
     }
 }
 
@@ -92,9 +117,9 @@ fun AccountInfoTitle(
     isEditClicked: Boolean,
     onCloseClick: () -> Unit,
     onEditClick: () -> Unit,
+    textFieldValue: TextFieldValue,
+    onValueChange: (TextFieldValue) -> Unit,
 ) {
-    var textFieldValue by remember { mutableStateOf(TextFieldValue("부산은행")) }
-
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -129,9 +154,7 @@ fun AccountInfoTitle(
                 modifier = Modifier.padding(start = 16.dp),
                 shape = RoundedCornerShape(24.dp),
                 value = textFieldValue,
-                onValueChange = {
-                    if (it.text.length <= 10) textFieldValue = it
-                },
+                onValueChange = { onValueChange(it) },
                 colors = TextFieldDefaults.textFieldColors(
                     focusedIndicatorColor = Color.Transparent,
                     unfocusedIndicatorColor = Color.Transparent
@@ -152,8 +175,10 @@ fun AccountInfoTitle(
 }
 
 @Composable
-fun Account() {
-    var textFieldValue by remember { mutableStateOf(TextFieldValue("")) }
+fun Account(
+    textFieldValue: TextFieldValue,
+    onValueChange: (TextFieldValue) -> Unit,
+) {
 
     Column(
         modifier = Modifier
@@ -168,9 +193,7 @@ fun Account() {
         )
         TextField(
             value = textFieldValue,
-            onValueChange = {
-                textFieldValue = it
-            },
+            onValueChange = { onValueChange(it) },
             label = {
                 Text(text = "계좌번호를 입력해주세요.", color = Black_333B58)
             },
@@ -185,11 +208,8 @@ fun Account() {
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun AccountColors() {
-    val colors =
-        listOf(Color1, Color2, Color3, Color4, Color5, Color6, Color7, Color8, Color9, Color10)
+fun AccountColors(colors: List<Color>, clicked: Int, onColorClick: (Int) -> Unit) {
     var size by remember { mutableStateOf(IntSize.Zero) }
-    var clicked by remember { mutableStateOf(-1) }
 
     Column(
         modifier = Modifier
@@ -212,9 +232,13 @@ fun AccountColors() {
             verticalArrangement = Arrangement.spacedBy(6.dp),
         ) {
             items(count = colors.size) {
-                AccountColorItem(it, colors[it], size, clicked) {
-                    clicked = it
-                }
+                AccountColorItem(
+                    index = it,
+                    color = colors[it],
+                    size = size,
+                    clicked = clicked,
+                    onColorClick = onColorClick
+                )
             }
         }
     }
@@ -226,7 +250,7 @@ fun AccountColorItem(
     color: Color,
     size: IntSize,
     clicked: Int,
-    onClick: (Int) -> Unit,
+    onColorClick: (Int) -> Unit,
 ) {
     Box(
         modifier = Modifier
@@ -240,7 +264,7 @@ fun AccountColorItem(
             )
             .clip(shape = CircleShape)
             .background(color = color)
-            .clickable { onClick(index) },
+            .clickable { onColorClick(index) },
         contentAlignment = Alignment.Center
     ) {
         if (clicked == index) {
@@ -250,9 +274,7 @@ fun AccountColorItem(
 }
 
 @Composable
-fun AccountOption() {
-    var isShare by remember { mutableStateOf(false) }
-
+fun AccountOption(isShare: Boolean, onCheckedChange: (Boolean) -> Unit) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -271,7 +293,7 @@ fun AccountOption() {
                 modifier = Modifier
                     .padding(start = 36.dp),
                 checked = isShare,
-                onCheckedChange = { isShare = !isShare }
+                onCheckedChange = { onCheckedChange(it) }
             )
         }
     }
