@@ -4,6 +4,7 @@ import androidx.annotation.NonNull
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.euphony.project.account_touch.data.entity.model.Color
 import java.util.*
 
 @Entity(tableName="account")
@@ -17,13 +18,16 @@ data class Account(
     val nickname: String,
 
     @ColumnInfo(name = "account_number")
-    var accountNumber: Long,
+    var accountNumber: String,
 
     @ColumnInfo(name = "is_allow_any")
     var isAllowAny: Boolean,
 
     @ColumnInfo(name = "is_always_on")
     var isAlwaysOn: Boolean,
+
+    @ColumnInfo(name = "color")
+    var color: Color,
 
     @ColumnInfo(name = "create_date")
     override var createDate: Date = Date(System.currentTimeMillis()),

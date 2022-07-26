@@ -4,6 +4,7 @@ import androidx.annotation.NonNull
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.euphony.project.account_touch.data.entity.model.UserIcon
 import java.util.*
 
 @Entity(tableName = "received")
@@ -17,7 +18,13 @@ data class Received(
     var accountNickname: String,
 
     @ColumnInfo(name = "account_number")
-    var accountNumber: Long,
+    var accountNumber: String,
+
+    @ColumnInfo(name = "speaker_nickname")
+    var speakerNickName: String,
+
+    @ColumnInfo(name = "speaker_icon")
+    var speakerIcon: UserIcon,
 
     @ColumnInfo(name = "create_date")
     override var createDate: Date = Date(System.currentTimeMillis()),
@@ -25,4 +32,4 @@ data class Received(
     @ColumnInfo(name = "modify_date")
     override var modifyDate: Date = Date(System.currentTimeMillis()),
 
-) : BaseEntity()
+    ) : BaseEntity()

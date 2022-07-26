@@ -13,6 +13,9 @@ interface BankDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun addBank(bank: Bank) : Long
 
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun addBanks(banks: List<Bank>) : List<Long>
+
     @Query("SELECT * FROM bank ORDER BY bank_id")
     suspend fun getAll(): List<Bank>
 

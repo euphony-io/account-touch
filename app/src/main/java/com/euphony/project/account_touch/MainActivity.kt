@@ -3,56 +3,64 @@ package com.euphony.project.account_touch
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.layout.*
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Surface
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.Button
+import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.ModalBottomSheetLayout
+import androidx.compose.material.ModalBottomSheetValue
 import androidx.compose.material.Text
+import androidx.compose.material.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
-import androidx.compose.foundation.Image
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import com.euphony.project.account_touch.ui.component.ChooseBankContent
 import com.euphony.project.account_touch.ui.theme.AccounttouchTheme
+import kotlinx.coroutines.launch
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
             AccounttouchTheme {
-                // A surface container using the 'background' color from the theme
-                Surface(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(start = 20.dp, end = 20.dp, top = 100.dp),
-                    color = MaterialTheme.colors.background
-                ) {
-                    loadingMainView()
-                }
+                ModalBottomSheet()
             }
         }
     }
 }
 
-@Preview(showBackground = true)
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun loadingMainView(){
-//    Column(
-//        modifier = Modifier
-//            .fillMaxWidth()
-//            .padding(start = 20.dp, end = 20.dp, top = 20.dp)
-//    ){
-//        GreetingText(name = "임시 닉네임")
-//        Image(painterResource(id = R.drawable.ic_alarm), contentDescription = "", Alignment.Center)
-//    }
+fun ModalBottomSheet() {
+    val modalBottomSheetState =
+        rememberModalBottomSheetState(initialValue = ModalBottomSheetValue.Hidden)
+    val coroutineScope = rememberCoroutineScope()
 
-    AccounttouchTheme {
-        GreetingText(name = "임시 닉네임")
+    ModalBottomSheetLayout(
+        sheetContent = {
+            ChooseBankContent(modalBottomSheetState, coroutineScope)
+        },
+        sheetState = modalBottomSheetState,
+        sheetShape = RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp),
+        sheetBackgroundColor = Color.White
+    ) {
+        Column(
+            modifier = Modifier.fillMaxSize(),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Button(onClick = {
+                coroutineScope.launch {
+                    modalBottomSheetState.show()
+                }
+            }) {
+                Text(text = "OPEN BOTTOM SHEET")
+            }
+        }
     }
-}
-
-@Composable
-fun GreetingText(name: String) {
-    Text(text = "$name 님, \n안녕하세요.")
 }
