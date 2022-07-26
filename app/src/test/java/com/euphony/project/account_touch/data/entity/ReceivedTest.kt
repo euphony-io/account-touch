@@ -16,7 +16,7 @@ class ReceivedTest {
         val speakerIcon = UserIcon.GHOST
 
         //then
-        val received = Received(1L, accountNickname, accountNumber, speakerNickname, speakerIcon)
+        val received = Received(1L,1L, accountNickname, accountNumber, speakerNickname, speakerIcon)
 
         //then
         assertThat(received.accountNickname).isEqualTo(accountNickname)
@@ -28,11 +28,11 @@ class ReceivedTest {
     @Test
     fun 받은계좌_객체를_상세_조회한다(){
         //given
-        val findReceived = Received(3L, "은빈이의 국민은행 계좌", "123123123","은빈", UserIcon.GHOST)
+        val findReceived = Received(3L, 1L,"은빈이의 국민은행 계좌", "123123123","은빈", UserIcon.GHOST)
 
         val receivedList = listOf<Received>(
-            Received(1L, "은빈이의 하나은행 계좌", "2132112321","은빈", UserIcon.GHOST),
-            Received(2L, "은빈이의 신한은행 계좌", "15651232458","은빈", UserIcon.GHOST),
+            Received(1L, 1L, "은빈이의 하나은행 계좌", "2132112321","은빈", UserIcon.GHOST),
+            Received(2L, 1L,"은빈이의 신한은행 계좌", "15651232458","은빈", UserIcon.GHOST),
             findReceived
         )
 
