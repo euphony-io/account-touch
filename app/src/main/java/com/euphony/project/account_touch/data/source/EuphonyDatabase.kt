@@ -10,7 +10,7 @@ import com.euphony.project.account_touch.data.entity.Account
 import com.euphony.project.account_touch.data.entity.Bank
 import com.euphony.project.account_touch.data.entity.Received
 import com.euphony.project.account_touch.data.entity.User
-import com.euphony.project.account_touch.data.entity.converter.DateConverter
+import com.euphony.project.account_touch.utils.converter.DateConverter
 import com.euphony.project.account_touch.data.entity.data.BANK_DATA
 import com.euphony.project.account_touch.data.source.dao.AccountDao
 import com.euphony.project.account_touch.data.source.dao.BankDao
@@ -19,6 +19,7 @@ import com.euphony.project.account_touch.data.source.dao.UserDao
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import java.util.concurrent.Executors
 
 @Database(
     entities = [
@@ -47,7 +48,6 @@ abstract class EuphonyDatabase : RoomDatabase() {
                 getInstance(context)!!.getBankDao().addBanks(BANK_DATA)
             }
         }
-
         fun getInstance(context: Context): EuphonyDatabase {
 
             synchronized(this) {
@@ -64,6 +64,9 @@ abstract class EuphonyDatabase : RoomDatabase() {
                             fillInDb(context.applicationContext)
                         }
                     })
+                    .setQueryCallback(QueryCallback {
+                            sqlQuery, bindArgs ->  println("SQL Query: $sqlQuery SQL Args: $bindArgs")
+                        }, Executors.newSingleThreadExecutor())
                     .fallbackToDestructiveMigration()
                     .build()
 
