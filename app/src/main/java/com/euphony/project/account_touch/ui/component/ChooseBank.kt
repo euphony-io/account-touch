@@ -34,7 +34,7 @@ import com.euphony.project.account_touch.utils.AssetsUtil
 @Composable
 fun ChooseBankScreen(
     onCloseClick: () -> Unit,
-) { // TODO: viewModel
+) { // TODO: viewModel, OnItemClick
     ChooseBank(onCloseClick)
 }
 
@@ -87,8 +87,8 @@ fun BanksContent() {
         verticalArrangement = Arrangement.spacedBy(12.dp),
         horizontalArrangement = Arrangement.spacedBy(8.dp)
     ) {
-        items(12) { // Dummy Data
-            BankItem(bankBitmaps[0])
+        items(bankBitmaps.size) {
+            BankItem(bankBitmaps[it])
         }
     }
 }
