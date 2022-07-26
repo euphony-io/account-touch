@@ -22,7 +22,7 @@ object AssetsUtil {
 
     fun getBitmap(context: Context, path: String): ImageBitmap? {
         return try {
-            val inputStream = context.assets.open("banks/bnk_bank.png")
+            val inputStream = context.assets.open(path)
             BitmapFactory.decodeStream(inputStream).asImageBitmap()
         } catch (e: IOException) {
             null
