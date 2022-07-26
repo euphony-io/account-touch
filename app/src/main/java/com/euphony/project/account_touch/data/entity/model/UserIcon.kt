@@ -1,6 +1,6 @@
 package com.euphony.project.account_touch.data.entity.model
 
-enum class ProfileIcon(val path: String){
+enum class UserIcon(val path: String){
     SMILE("profiles/icon_smile.png"),
     HAPPY("profiles/icon_happy.png"),
     CRYING("profiles/icon_crying.png"),
