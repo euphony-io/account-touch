@@ -74,15 +74,17 @@ fun AccountInfo(
     onCloseClick: () -> Unit,
     onEditClick: () -> Unit,
 ) {
-    AccountInfoTitle(
-        isEditClicked,
-        onCloseClick = onCloseClick,
-        onEditClick = onEditClick
-    )
-    Account()
-    AccountColors()
-    AccountOptions()
-    AccountButton()
+    Column {
+        AccountInfoTitle(
+            isEditClicked,
+            onCloseClick = onCloseClick,
+            onEditClick = onEditClick
+        )
+        Account()
+        AccountColors()
+        AccountOption()
+        AccountButton()
+    }
 }
 
 @Composable
@@ -248,19 +250,16 @@ fun AccountColorItem(
 }
 
 @Composable
-fun AccountOptions() {
+fun AccountOption() {
     var isShare by remember { mutableStateOf(false) }
-    var isEncrypt by remember { mutableStateOf(false) }
-    var size by remember { mutableStateOf(IntSize.Zero) }
 
     Row(
         modifier = Modifier
             .fillMaxWidth()
             .padding(horizontal = 48.dp, vertical = 16.dp),
-        horizontalArrangement = Arrangement.SpaceEvenly
     ) {
-        Column(
-            modifier = Modifier.onSizeChanged { size = it }
+        Row(
+            verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
                 text = "항상 공유",
@@ -269,33 +268,10 @@ fun AccountOptions() {
                 fontWeight = FontWeight.Bold
             )
             Switch(
+                modifier = Modifier
+                    .padding(start = 36.dp),
                 checked = isShare,
                 onCheckedChange = { isShare = !isShare }
-            )
-        }
-
-        Divider(
-            color = Gray_ECEDED,
-            modifier = Modifier.then(
-                with(LocalDensity.current) {
-                    Modifier.size(
-                        width = 1.dp,
-                        height = size.height.toDp()
-                    )
-                }
-            )
-        )
-
-        Column {
-            Text(
-                text = "암호 설정",
-                fontSize = 12.sp,
-                color = Blue_6D95FF,
-                fontWeight = FontWeight.Bold
-            )
-            Switch(
-                checked = isEncrypt,
-                onCheckedChange = { isEncrypt = !isEncrypt }
             )
         }
     }
