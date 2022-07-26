@@ -19,6 +19,7 @@ import androidx.compose.material.ModalBottomSheetValue
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.HideImage
 import androidx.compose.material.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
@@ -96,15 +97,13 @@ fun BanksContent(bankBitmaps: List<ImageBitmap?>) {
         horizontalArrangement = Arrangement.spacedBy(8.dp)
     ) {
         items(12) { // Dummy Data
-            bankBitmaps[0]?.let {
-                BankItem(it)
-            }
+            BankItem(bankBitmaps[0])
         }
     }
 }
 
 @Composable
-fun BankItem(imageBitmap: ImageBitmap) {
+fun BankItem(imageBitmap: ImageBitmap?) {
     Card(
         shape = RoundedCornerShape(8.dp),
         backgroundColor = Gray_F4F4F4
@@ -114,7 +113,11 @@ fun BankItem(imageBitmap: ImageBitmap) {
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Image(bitmap = imageBitmap, contentDescription = "은행 로고")
+            if (imageBitmap == null) {
+                Image(Icons.Filled.HideImage, contentDescription = "이미지 없음")
+            } else {
+                Image(bitmap = imageBitmap, contentDescription = "은행 로고")
+            }
             Text(
                 text = "부산은행",
                 color = Black_333B58,
@@ -139,7 +142,6 @@ fun BottomSheetTitlePreview() {
 @Preview(showBackground = true)
 @Composable
 fun BankItemPreview() {
-    AssetsUtil.getBitmap(LocalContext.current, "banks/bnk_bank.png")?.let {
-        BankItem(it)
-    }
+    val imageBitmap = AssetsUtil.getBitmap(LocalContext.current, "banks/bnk_bank.png")
+    BankItem(imageBitmap = imageBitmap)
 }
