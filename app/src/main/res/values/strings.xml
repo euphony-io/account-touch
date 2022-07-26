@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">account-touch</string>
+    <string name="user_register_str">시작하기 전,\n닉네임을 설정해주세요.</string>
 </resources>
