@@ -4,6 +4,7 @@ import androidx.annotation.NonNull
 import androidx.annotation.Nullable
 import androidx.room.ColumnInfo
 import androidx.room.Entity
+import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
 import com.euphony.project.account_touch.data.entity.model.BankIcon
 import com.euphony.project.account_touch.data.entity.model.ExternalPackage
@@ -14,24 +15,24 @@ data class Bank(
     @NonNull
     @ColumnInfo(name = "bank_id")
     @PrimaryKey(autoGenerate = true)
-    var id: Long = 0L,
+    val id: Long,
 
     @ColumnInfo(name = "name")
-    var name: String,
+    val name: String,
 
     @ColumnInfo(name = "icon_path")
-    var bankIconPath: BankIcon,
+    val bankIconPath: BankIcon,
 
     @ColumnInfo(name = "account_length")
-    var accountLength: Int,
+    val accountLength: Int,
 
     @Nullable
     @ColumnInfo(name = "app_package")
-    var appExternalPackage: ExternalPackage? = null,
+    val appExternalPackage: ExternalPackage? = null,
 
     @ColumnInfo(name = "create_date")
-    override var createDate: Date = Date(System.currentTimeMillis()),
+    override val createDate: Date = Date(System.currentTimeMillis()),
 
     @ColumnInfo(name = "modify_date")
-    override var modifyDate: Date = Date(System.currentTimeMillis())
+    override val modifyDate: Date = Date(System.currentTimeMillis())
 ) : BaseEntity()
