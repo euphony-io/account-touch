@@ -2,7 +2,6 @@ package com.euphony.project.account_touch.data.received.dto
 
 import com.euphony.project.account_touch.data.global.base.request.BaseRequest
 import com.euphony.project.account_touch.data.received.entity.Received
-import com.euphony.project.account_touch.utils.model.Color
 import com.euphony.project.account_touch.utils.model.UserIcon
 
 class CreateReceivedRequest(

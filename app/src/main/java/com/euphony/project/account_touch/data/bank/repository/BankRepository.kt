@@ -1,6 +1,5 @@
 package com.euphony.project.account_touch.data.bank.repository
 
-import androidx.annotation.WorkerThread
 import com.euphony.project.account_touch.data.bank.dao.BankDao
 import com.euphony.project.account_touch.data.bank.entity.Bank
 import com.euphony.project.account_touch.utils.model.ExternalPackage

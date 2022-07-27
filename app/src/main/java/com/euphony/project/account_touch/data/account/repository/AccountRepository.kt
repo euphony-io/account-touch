@@ -6,7 +6,6 @@ import com.euphony.project.account_touch.data.account.dao.AccountDao
 import com.euphony.project.account_touch.data.account.dto.CreateAccountRequest
 import com.euphony.project.account_touch.data.account.dto.UpdateAccountRequest
 import com.euphony.project.account_touch.data.global.AccountWithBank
-import com.euphony.project.account_touch.data.global.base.response.Response
 import kotlinx.coroutines.flow.Flow
 
 class AccountRepository(private val dao : AccountDao){
