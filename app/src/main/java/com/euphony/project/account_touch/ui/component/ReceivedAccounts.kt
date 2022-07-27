@@ -44,18 +44,21 @@ fun ReceivedAccountsScreen() { // TODO: viewModel, onBackClick as parameters
     )
     val receiveds = listOf<Received>(
         Received(
+            bank = 1,
             accountNickname = "붕어빵",
             accountNumber = "123456789",
             speakerNickName = "붕어빵 사장",
             speakerIcon = UserIcon.GHOST,
         ),
         Received(
+            bank = 1,
             accountNickname = "포장마차",
             accountNumber = "123456789",
             speakerNickName = "포장마차 사장",
             speakerIcon = UserIcon.HAPPY,
         ),
         Received(
+            bank = 1,
             accountNickname = "옷가게",
             accountNumber = "123456789",
             speakerNickName = "옷가게 사장",
@@ -191,18 +194,21 @@ fun ReceivedAccountsPreview() {
     )
     val receiveds = listOf<Received>(
         Received(
+            bank = 1,
             accountNickname = "붕어빵",
             accountNumber = "123456789",
             speakerNickName = "붕어빵 사장",
             speakerIcon = UserIcon.GHOST,
         ),
         Received(
+            bank = 1,
             accountNickname = "포장마차",
             accountNumber = "123456789",
             speakerNickName = "포장마차 사장",
             speakerIcon = UserIcon.HAPPY,
         ),
         Received(
+            bank = 1,
             accountNickname = "옷가게",
             accountNumber = "123456789",
             speakerNickName = "옷가게 사장",
