@@ -1,4 +1,4 @@
-package com.euphony.project.account_touch.data.entity.model
+package com.euphony.project.account_touch.utils.model
 
 enum class BankIcon(val path: String){
     BNK("banks/bnk_bank.png"),

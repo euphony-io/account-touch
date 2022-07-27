@@ -1,4 +1,4 @@
-package com.euphony.project.account_touch.data.source
+package com.euphony.project.account_touch.data.global.config
 
 import android.content.Context
 import androidx.room.Database
@@ -6,16 +6,15 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import androidx.sqlite.db.SupportSQLiteDatabase
-import com.euphony.project.account_touch.data.entity.Account
-import com.euphony.project.account_touch.data.entity.Bank
-import com.euphony.project.account_touch.data.entity.Received
-import com.euphony.project.account_touch.data.entity.User
-import com.euphony.project.account_touch.utils.converter.DateConverter
-import com.euphony.project.account_touch.data.entity.data.BANK_DATA
-import com.euphony.project.account_touch.data.source.dao.AccountDao
-import com.euphony.project.account_touch.data.source.dao.BankDao
-import com.euphony.project.account_touch.data.source.dao.ReceivedDao
-import com.euphony.project.account_touch.data.source.dao.UserDao
+import com.euphony.project.account_touch.data.account.entity.Account
+import com.euphony.project.account_touch.data.bank.entity.Bank
+import com.euphony.project.account_touch.data.received.entity.Received
+import com.euphony.project.account_touch.data.user.entity.User
+import com.euphony.project.account_touch.data.global.converter.DateConverter
+import com.euphony.project.account_touch.data.account.dao.AccountDao
+import com.euphony.project.account_touch.data.bank.dao.BankDao
+import com.euphony.project.account_touch.data.received.dao.ReceivedDao
+import com.euphony.project.account_touch.data.user.dao.UserDao
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

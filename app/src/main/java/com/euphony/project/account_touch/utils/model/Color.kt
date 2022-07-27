@@ -1,4 +1,4 @@
-package com.euphony.project.account_touch.data.entity.model
+package com.euphony.project.account_touch.utils.model
 import com.euphony.project.account_touch.R
 
 enum class Color(val colorId: Int, val fontColorId: Int) {

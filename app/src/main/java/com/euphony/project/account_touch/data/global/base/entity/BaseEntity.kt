@@ -1,4 +1,4 @@
-package com.euphony.project.account_touch.data.entity
+package com.euphony.project.account_touch.data.global.base.entity
 
 import java.util.*
 

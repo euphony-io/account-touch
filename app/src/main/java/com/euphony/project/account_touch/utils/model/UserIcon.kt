@@ -1,4 +1,4 @@
-package com.euphony.project.account_touch.data.entity.model
+package com.euphony.project.account_touch.utils.model
 
 enum class UserIcon(val path: String){
     SMILE("profiles/icon_smile.png"),

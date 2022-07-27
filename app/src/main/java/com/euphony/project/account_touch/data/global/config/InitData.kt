@@ -1,8 +1,8 @@
-package com.euphony.project.account_touch.data.entity.data
+package com.euphony.project.account_touch.data.global.config
 
-import com.euphony.project.account_touch.data.entity.Bank
-import com.euphony.project.account_touch.data.entity.model.BankIcon
-import com.euphony.project.account_touch.data.entity.model.ExternalPackage
+import com.euphony.project.account_touch.data.bank.entity.Bank
+import com.euphony.project.account_touch.utils.model.BankIcon
+import com.euphony.project.account_touch.utils.model.ExternalPackage
 
 val BANK_DATA = arrayListOf(
     Bank(0L, "부산은행", BankIcon.BNK, 12),
