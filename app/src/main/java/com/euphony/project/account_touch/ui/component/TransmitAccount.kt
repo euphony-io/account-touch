@@ -107,7 +107,9 @@ fun TransmitAccount(user: User, account: Account, receivers: List<User>) {
             )
         },
         content = {
-            Column {
+            Column(
+                modifier = Modifier.padding(horizontal = 16.dp)
+            ) {
                 TransmitAccountInfo(user, account)
                 TransmitImage()
                 TransmitAllButton()
