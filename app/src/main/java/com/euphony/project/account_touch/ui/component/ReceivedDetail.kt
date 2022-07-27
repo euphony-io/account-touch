@@ -1,6 +1,11 @@
 package com.euphony.project.account_touch.ui.component
 
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.Card
 import androidx.compose.material.Icon
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
@@ -8,8 +13,10 @@ import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -17,6 +24,9 @@ import androidx.compose.ui.unit.sp
 import com.euphony.project.account_touch.data.entity.Received
 import com.euphony.project.account_touch.data.entity.model.UserIcon
 import com.euphony.project.account_touch.ui.theme.Blue_6D95FF
+import com.euphony.project.account_touch.ui.theme.Blue_DFE8FF
+import com.euphony.project.account_touch.ui.theme.Gray_F4F4F4
+import com.euphony.project.account_touch.utils.AssetsUtil
 
 @Composable
 fun ReceivedDetailScreen() { // TODO: viewMode, onBackClick as parameters
@@ -50,7 +60,10 @@ fun ReceivedDetail(received: Received) {
             )
         },
         content = {
-            SpeakerInfo(received)
+            Column {
+                SpeakerInfo(received)
+                ReceivedAccount(received)
+            }
         }
     )
 }
@@ -59,12 +72,50 @@ fun ReceivedDetail(received: Received) {
 fun SpeakerInfo(received: Received) {
     Text(
         modifier = Modifier
-            .padding(vertical = 24.dp, horizontal = 16.dp),
+            .padding(vertical = 36.dp, horizontal = 16.dp),
         text = "${received.speakerNickName}님꼐서 보내신\n${received.accountNickname} 계좌입니다.",
         fontWeight = FontWeight.Bold,
-        fontSize = 22.sp,
+        fontSize = 24.sp,
         color = Blue_6D95FF
     )
+}
+
+@Composable
+fun ReceivedAccount(received: Received) {
+    val imageBitmap = AssetsUtil.getBitmap(LocalContext.current, received.speakerIcon.path)
+
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp),
+        shape = RoundedCornerShape(8.dp),
+        backgroundColor = Gray_F4F4F4,
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(vertical = 24.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Row(modifier = Modifier.padding(vertical = 24.dp)) {
+                UserIconItem(imageBitmap = imageBitmap, color = Blue_DFE8FF)
+            }
+            Text(
+                text = received.accountNickname,
+                fontWeight = FontWeight.Bold,
+                color = Blue_6D95FF,
+                fontSize = 18.sp
+            )
+            Text(
+                modifier = Modifier
+                    .padding(vertical = 16.dp),
+                text = received.accountNumber,
+                fontWeight = FontWeight.Bold,
+                color = Color.Black,
+                fontSize = 30.sp
+            )
+        }
+    }
 }
 
 @Preview(showBackground = true)
