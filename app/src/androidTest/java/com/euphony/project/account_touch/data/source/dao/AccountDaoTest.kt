@@ -74,7 +74,7 @@ class AccountDaoTest : TestCase() {
     @Test
     fun 계좌_생성() = testScope.runBlockingTest {
         //given
-        val bankId = bankDao.addBank(bank)
+        val bankId = bankDao.insert(bank)
 
         val nickname = "은빈이의 국민은행 계좌임돠"
         val accountNumber = "123123123"
@@ -91,9 +91,9 @@ class AccountDaoTest : TestCase() {
     }
 
     @Test
-    fun 계좌_수정() = runBlocking {
+    fun 계좌_수정() = testScope.runBlockingTest {
         //given
-        bankDao.addBank(bank)
+        bankDao.insert(bank)
 
         val modifyIsAlwaysOn = true
         val account = accountList[0]
@@ -110,9 +110,9 @@ class AccountDaoTest : TestCase() {
     }
 
     @Test
-    fun 계좌_조회_정렬() = runBlocking {
+    fun 계좌_조회_정렬() = testScope.runBlockingTest {
         //given
-        bankDao.addBank(bank)
+        bankDao.insert(bank)
         accountList.forEach { account -> dao.insert(account) }
 
         //when
@@ -124,9 +124,9 @@ class AccountDaoTest : TestCase() {
     }
 
     @Test
-    fun 계좌_삭제() = runBlocking {
+    fun 계좌_삭제() = testScope.runBlockingTest {
         //given
-        bankDao.addBank(bank)
+        bankDao.insert(bank)
         dao.insert(accountList[0])
 
         //when
