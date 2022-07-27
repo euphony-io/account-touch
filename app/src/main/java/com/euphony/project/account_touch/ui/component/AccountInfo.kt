@@ -66,7 +66,7 @@ fun AccountInfo(
 ) {
     var accountNickname by remember { mutableStateOf(TextFieldValue("부산은행")) }
     var accountNumber by remember { mutableStateOf(TextFieldValue("")) }
-    var clicked by remember { mutableStateOf(-1) }
+    var colorIndex by remember { mutableStateOf(-1) }
     val colors = Color.values()
     var isShare by remember { mutableStateOf(false) }
 
@@ -88,9 +88,9 @@ fun AccountInfo(
         )
         AccountColors(
             colors = colors,
-            clicked = clicked,
+            colorIndex = colorIndex,
             onColorClick = {
-                clicked = it
+                colorIndex = it
             }
         )
         AccountOption(
@@ -199,7 +199,7 @@ fun Account(
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun AccountColors(colors: Array<Color>, clicked: Int, onColorClick: (Int) -> Unit) {
+fun AccountColors(colors: Array<Color>, colorIndex: Int, onColorClick: (Int) -> Unit) {
     var size by remember { mutableStateOf(IntSize.Zero) }
 
     Column(
@@ -227,7 +227,7 @@ fun AccountColors(colors: Array<Color>, clicked: Int, onColorClick: (Int) -> Uni
                     index = it,
                     color = colors[it],
                     size = size,
-                    clicked = clicked,
+                    colorIndex = colorIndex,
                     onColorClick = onColorClick
                 )
             }
@@ -240,7 +240,7 @@ fun AccountColorItem(
     index: Int,
     color: Color,
     size: IntSize,
-    clicked: Int,
+    colorIndex: Int,
     onColorClick: (Int) -> Unit,
 ) {
     Box(
@@ -258,7 +258,7 @@ fun AccountColorItem(
             .clickable { onColorClick(index) },
         contentAlignment = Alignment.Center
     ) {
-        if (clicked == index) {
+        if (colorIndex == index) {
             Icon(Icons.Filled.Check, contentDescription = "체크")
         }
     }
