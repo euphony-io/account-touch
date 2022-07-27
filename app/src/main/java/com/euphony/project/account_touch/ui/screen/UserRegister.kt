@@ -27,7 +27,6 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.euphony.project.account_touch.R
-import com.euphony.project.account_touch.loadingMainView
 import com.euphony.project.account_touch.ui.screen.UserRegisterActivity.Companion.navController
 import com.euphony.project.account_touch.ui.screen.UserRegisterActivity.Companion.scope
 import com.euphony.project.account_touch.ui.screen.UserRegisterActivity.Companion.state
@@ -378,4 +377,8 @@ fun BottomSheetImage(
             Image(painter = painterResource(id = Imoticon), contentDescription = "", alignment = Alignment.Center)
         }
     }
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> origin/develop

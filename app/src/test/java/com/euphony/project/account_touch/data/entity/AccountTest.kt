@@ -16,6 +16,7 @@ internal class AccountTest{
         //then
         val account = Account(
             1L,
+            1L,
             nickname,
             accountNumber,
             false,
@@ -27,24 +28,5 @@ internal class AccountTest{
         assertThat(account.nickname).isEqualTo(nickname)
         assertThat(account.accountNumber).isEqualTo(accountNumber)
         assertThat(account.color).isEqualTo(Color.BLACK)
-    }
-
-    @Test
-    fun 계좌_객체를_수정한다(){
-        //given
-        val account = Account(
-            1L,
-            "은빈이의 국민은행 계좌",
-            "123123123123",
-            false,
-            true,
-            Color.APRICOT
-        )
-
-        //then
-        account.isAllowAny = true
-
-        //then
-        assertThat(account.isAllowAny).isTrue()
     }
 }

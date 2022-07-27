@@ -12,18 +12,18 @@ data class User(
     @NonNull
     @ColumnInfo(name = "user_id")
     @PrimaryKey(autoGenerate = true)
-    var id: Long = 0L,
+    val id: Long = 0L,
 
     @ColumnInfo(name = "nickname")
-    var nickname: String,
+    val nickname: String,
 
     @ColumnInfo(name = "icon")
-    var icon: UserIcon,
+    val icon: UserIcon,
 
     @ColumnInfo(name = "create_date")
-    override var createDate: Date = Date(System.currentTimeMillis()),
+    override val createDate: Date = Date(System.currentTimeMillis()),
 
     @ColumnInfo(name = "modify_date")
-    override var modifyDate: Date = Date(System.currentTimeMillis())
+    override val modifyDate: Date = Date(System.currentTimeMillis())
 
 ) : BaseEntity()

@@ -14,12 +14,17 @@ import androidx.compose.material.ModalBottomSheetValue
 import androidx.compose.material.Text
 import androidx.compose.material.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import com.euphony.project.account_touch.ui.component.ChooseBankContent
+import com.euphony.project.account_touch.ui.component.AccountInfoScreen
+import com.euphony.project.account_touch.ui.component.ChooseBankScreen
 import com.euphony.project.account_touch.ui.theme.AccounttouchTheme
 import kotlinx.coroutines.launch
 
@@ -40,10 +45,17 @@ fun ModalBottomSheet() {
     val modalBottomSheetState =
         rememberModalBottomSheetState(initialValue = ModalBottomSheetValue.Hidden)
     val coroutineScope = rememberCoroutineScope()
+    var isEditClicked by remember { mutableStateOf(false) }
 
     ModalBottomSheetLayout(
         sheetContent = {
-            ChooseBankContent(modalBottomSheetState, coroutineScope)
+            ChooseBankScreen(
+                onCloseClick = {
+                    coroutineScope.launch {
+                        modalBottomSheetState.hide()
+                    }
+                }
+            )
         },
         sheetState = modalBottomSheetState,
         sheetShape = RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp),
@@ -55,6 +67,7 @@ fun ModalBottomSheet() {
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Button(onClick = {
+                isEditClicked = false
                 coroutineScope.launch {
                     modalBottomSheetState.show()
                 }
@@ -64,3 +77,4 @@ fun ModalBottomSheet() {
         }
     }
 }
+
