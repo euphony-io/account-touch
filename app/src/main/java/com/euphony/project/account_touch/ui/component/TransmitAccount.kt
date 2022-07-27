@@ -51,6 +51,7 @@ fun TransmitAccountScreen() { // TODO: viewModel
         icon = UserIcon.HAPPY
     )
     val account = Account(
+        bank = 1,
         nickname = "국민은행 체크카드",
         accountNumber = "123456789",
         isAllowAny = false,
@@ -239,6 +240,7 @@ fun TransmitAccountPreview() {
         icon = UserIcon.HAPPY
     )
     val account = Account(
+        bank = 1,
         nickname = "국민은행 체크카드",
         accountNumber = "123456789",
         isAllowAny = false,
