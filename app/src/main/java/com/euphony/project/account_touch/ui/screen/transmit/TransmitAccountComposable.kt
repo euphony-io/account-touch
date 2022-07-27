@@ -1,4 +1,4 @@
-package com.euphony.project.account_touch.ui.component
+package com.euphony.project.account_touch.ui.screen.transmit
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
@@ -36,6 +36,7 @@ import com.euphony.project.account_touch.data.entity.Account
 import com.euphony.project.account_touch.data.entity.User
 import com.euphony.project.account_touch.data.entity.model.Color
 import com.euphony.project.account_touch.data.entity.model.UserIcon
+import com.euphony.project.account_touch.ui.screen.common.UserIconItem
 import com.euphony.project.account_touch.ui.theme.Blue_6D95FF
 import com.euphony.project.account_touch.ui.theme.Blue_DFE8FF
 import com.euphony.project.account_touch.ui.theme.Gray_9C9C9C

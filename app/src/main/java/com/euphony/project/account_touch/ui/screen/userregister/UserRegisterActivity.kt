@@ -1,10 +1,10 @@
-package com.euphony.project.account_touch.ui.activity
+package com.euphony.project.account_touch.ui.screen.userregister
 
 import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import com.euphony.project.account_touch.ui.component.UserRegisterScreen
+import com.euphony.project.account_touch.ui.screen.main.MainActivity
 import com.euphony.project.account_touch.ui.theme.AccounttouchTheme
 
 class UserRegisterActivity : ComponentActivity() {

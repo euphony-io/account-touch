@@ -1,4 +1,4 @@
-package com.euphony.project.account_touch.ui.component
+package com.euphony.project.account_touch.ui.screen.userregister
 
 import android.widget.Toast
 import androidx.compose.foundation.Image

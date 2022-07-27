@@ -1,4 +1,4 @@
-package com.euphony.project.account_touch.ui.activity
+package com.euphony.project.account_touch.ui.screen.receivedetail
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity

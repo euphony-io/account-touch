@@ -1,4 +1,4 @@
-package com.euphony.project.account_touch.ui.component
+package com.euphony.project.account_touch.ui.screen.common
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background

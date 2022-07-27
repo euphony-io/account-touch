@@ -1,4 +1,4 @@
-package com.euphony.project.account_touch.ui.activity
+package com.euphony.project.account_touch.ui.screen.main
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity

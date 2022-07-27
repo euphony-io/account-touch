@@ -1,4 +1,4 @@
-package com.euphony.project.account_touch.ui.component
+package com.euphony.project.account_touch.ui.screen.receivedetail
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -23,6 +23,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.euphony.project.account_touch.data.entity.Received
 import com.euphony.project.account_touch.data.entity.model.UserIcon
+import com.euphony.project.account_touch.ui.screen.common.UserIconItem
 import com.euphony.project.account_touch.ui.theme.Blue_6D95FF
 import com.euphony.project.account_touch.ui.theme.Blue_DFE8FF
 import com.euphony.project.account_touch.ui.theme.Gray_F4F4F4
