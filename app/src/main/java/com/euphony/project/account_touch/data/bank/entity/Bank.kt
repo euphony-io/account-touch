@@ -1,13 +1,13 @@
-package com.euphony.project.account_touch.data.entity
+package com.euphony.project.account_touch.data.bank.entity
 
 import androidx.annotation.NonNull
 import androidx.annotation.Nullable
 import androidx.room.ColumnInfo
 import androidx.room.Entity
-import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
-import com.euphony.project.account_touch.data.entity.model.BankIcon
-import com.euphony.project.account_touch.data.entity.model.ExternalPackage
+import com.euphony.project.account_touch.data.global.base.entity.BaseEntity
+import com.euphony.project.account_touch.utils.model.BankIcon
+import com.euphony.project.account_touch.utils.model.ExternalPackage
 import java.util.*
 
 @Entity(tableName="bank")
