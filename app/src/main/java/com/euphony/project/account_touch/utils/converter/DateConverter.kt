@@ -1,4 +1,4 @@
-package com.euphony.project.account_touch.data.entity.converter
+package com.euphony.project.account_touch.utils.converter
 
 import androidx.room.TypeConverter
 import java.util.*

@@ -4,7 +4,10 @@ import androidx.room.Room
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
 import com.euphony.project.account_touch.data.entity.Account
+import com.euphony.project.account_touch.data.entity.Bank
+import com.euphony.project.account_touch.data.entity.model.BankIcon
 import com.euphony.project.account_touch.data.entity.model.Color
+import com.euphony.project.account_touch.data.entity.model.ExternalPackage
 import com.euphony.project.account_touch.data.source.EuphonyDatabase
 import com.google.common.truth.Truth.assertThat
 import junit.framework.TestCase
@@ -19,6 +22,7 @@ import java.io.IOException
 class AccountDaoTest : TestCase() {
 
     private lateinit var dao: AccountDao
+    private lateinit var bankDao: BankDao
     private lateinit var db: EuphonyDatabase
 
     @Before
@@ -30,19 +34,22 @@ class AccountDaoTest : TestCase() {
         ).build()
 
         dao = db.getAccountDao()
+        bankDao = db.getBankDao()
     }
 
     @Test
     fun 계좌_생성() = runBlocking {
         //given
+        val bankId = bankDao.addBank(Bank(1L, "국민은행", BankIcon.KB, 12, ExternalPackage.KOOKMIN))
         val nickname = "은빈이의 국민은행 계좌임돠"
         val accountNumber = "123123123"
         val account = Account(
             1L,
+            bankId,
             nickname,
             accountNumber,
-            false,
-            true,
+            isAllowAny = false,
+            isAlwaysOn = true,
             Color.APRICOT
         )
 
@@ -59,8 +66,11 @@ class AccountDaoTest : TestCase() {
     @Test
     fun 계좌_수정() = runBlocking {
         //given
+        val bankId = bankDao.addBank(Bank(1L, "국민은행", BankIcon.KB, 12, ExternalPackage.KOOKMIN))
+
         val account = Account(
             1L,
+            bankId,
             "은빈이의 국민은행 계좌임돠",
             "123123123",
             isAllowAny = false,
@@ -85,11 +95,12 @@ class AccountDaoTest : TestCase() {
     @Test
     fun 계좌_조회_정렬() = runBlocking {
         //given
-        val account1 = Account(1L,
+        val bankId = bankDao.addBank(Bank(1L, "국민은행", BankIcon.KB, 12, ExternalPackage.KOOKMIN))
+        val account1 = Account(1L,bankId,
             "은빈이의 국민은행 계좌임돠", "123321123", isAllowAny = false, isAlwaysOn = false, Color.BLACK)
-        val account2 = Account(2L,
+        val account2 = Account(2L,bankId,
             "은빈이의 하나은행 계좌임돠", "343463456", isAllowAny = false, isAlwaysOn = false, Color.BLACK)
-        val account3 = Account(3L,
+        val account3 = Account(3L,bankId,
             "은빈이의 농협은행 계좌임돠", "12313543", isAllowAny = false, isAlwaysOn = false, Color.BLACK)
 
         dao.addAccount(account1)
@@ -100,15 +111,17 @@ class AccountDaoTest : TestCase() {
         val accountList = dao.getAll()
 
         //then
-        assertThat(accountList[0].id).isEqualTo(2L)
-        assertThat(accountList[2].id).isEqualTo(3L)
+        assertThat(accountList).isNotEmpty();
+        assertThat(accountList.size).isEqualTo(3);
     }
 
     @Test
     fun 계좌_삭제() = runBlocking {
         //given
+        val bankId = bankDao.addBank(Bank(1L, "국민은행", BankIcon.KB, 12, ExternalPackage.KOOKMIN))
         val account = Account(
             1L,
+            bankId,
             "은빈이의 국민은행 계좌임돠",
             "123123123",
             isAllowAny = false,
