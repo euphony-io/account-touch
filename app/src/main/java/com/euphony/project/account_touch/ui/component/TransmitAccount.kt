@@ -1,11 +1,13 @@
 package com.euphony.project.account_touch.ui.component
 
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.GridCells
 import androidx.compose.foundation.lazy.LazyVerticalGrid
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -23,6 +25,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -106,6 +109,7 @@ fun TransmitAccount(user: User, account: Account, receivers: List<User>) {
         content = {
             Column {
                 TransmitAccountInfo(user, account)
+                TransmitImage()
                 TransmitAllButton()
                 Receivers(receivers)
             }
@@ -127,6 +131,22 @@ fun TransmitAccountInfo(user: User, account: Account) {
             fontSize = 26.sp,
             textAlign = TextAlign.Center,
             color = Blue_6D95FF
+        )
+    }
+}
+
+@Composable
+fun TransmitImage() {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth(),
+        horizontalArrangement = Arrangement.Center
+    ) {
+        Image(
+            painterResource(id = R.drawable.transmit),
+            contentDescription = "전송 이미지",
+            modifier = Modifier
+                .size(100.dp)
         )
     }
 }
