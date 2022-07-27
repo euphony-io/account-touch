@@ -34,27 +34,19 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.euphony.project.account_touch.R
+import com.euphony.project.account_touch.data.entity.model.Color
 import com.euphony.project.account_touch.ui.theme.Black_333B58
 import com.euphony.project.account_touch.ui.theme.Blue_6D95FF
-import com.euphony.project.account_touch.ui.theme.Color1
-import com.euphony.project.account_touch.ui.theme.Color10
-import com.euphony.project.account_touch.ui.theme.Color2
-import com.euphony.project.account_touch.ui.theme.Color3
-import com.euphony.project.account_touch.ui.theme.Color4
-import com.euphony.project.account_touch.ui.theme.Color5
-import com.euphony.project.account_touch.ui.theme.Color6
-import com.euphony.project.account_touch.ui.theme.Color7
-import com.euphony.project.account_touch.ui.theme.Color8
-import com.euphony.project.account_touch.ui.theme.Color9
 import com.euphony.project.account_touch.ui.theme.Gray_F4F4F4
 
 @Composable
@@ -75,8 +67,7 @@ fun AccountInfo(
     var accountNickname by remember { mutableStateOf(TextFieldValue("부산은행")) }
     var accountNumber by remember { mutableStateOf(TextFieldValue("")) }
     var clicked by remember { mutableStateOf(-1) }
-    val colors =
-        listOf(Color1, Color2, Color3, Color4, Color5, Color6, Color7, Color8, Color9, Color10)
+    val colors = Color.values()
     var isShare by remember { mutableStateOf(false) }
 
     Column {
@@ -156,8 +147,8 @@ fun AccountInfoTitle(
                 value = textFieldValue,
                 onValueChange = { onValueChange(it) },
                 colors = TextFieldDefaults.textFieldColors(
-                    focusedIndicatorColor = Color.Transparent,
-                    unfocusedIndicatorColor = Color.Transparent
+                    focusedIndicatorColor = colorResource(id = R.color.transparent),
+                    unfocusedIndicatorColor = colorResource(id = R.color.transparent)
                 ),
                 maxLines = 1,
             )
@@ -208,7 +199,7 @@ fun Account(
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun AccountColors(colors: List<Color>, clicked: Int, onColorClick: (Int) -> Unit) {
+fun AccountColors(colors: Array<Color>, clicked: Int, onColorClick: (Int) -> Unit) {
     var size by remember { mutableStateOf(IntSize.Zero) }
 
     Column(
@@ -263,7 +254,7 @@ fun AccountColorItem(
                 }
             )
             .clip(shape = CircleShape)
-            .background(color = color)
+            .background(color = colorResource(id = color.colorId))
             .clickable { onColorClick(index) },
         contentAlignment = Alignment.Center
     ) {
@@ -318,7 +309,7 @@ fun AccountButton() {
         ) {
             Text(
                 text = "확인",
-                color = Color.White,
+                color = colorResource(id = R.color.white),
                 fontWeight = FontWeight.Bold
             )
         }
