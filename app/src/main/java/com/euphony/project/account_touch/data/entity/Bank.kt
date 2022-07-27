@@ -1,10 +1,11 @@
 package com.euphony.project.account_touch.data.entity
 
 import androidx.annotation.NonNull
+import androidx.annotation.Nullable
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.euphony.project.account_touch.data.entity.model.BankInfo
+import com.euphony.project.account_touch.data.entity.model.BankIcon
 import com.euphony.project.account_touch.data.entity.model.ExternalPackage
 import java.util.*
 
@@ -19,13 +20,14 @@ data class Bank(
     var name: String,
 
     @ColumnInfo(name = "icon_path")
-    var bankIconPath: BankInfo,
+    var bankIconPath: BankIcon,
 
     @ColumnInfo(name = "account_length")
     var accountLength: Int,
 
+    @Nullable
     @ColumnInfo(name = "app_package")
-    var appExternalPackage: ExternalPackage,
+    var appExternalPackage: ExternalPackage? = null,
 
     @ColumnInfo(name = "create_date")
     override var createDate: Date = Date(System.currentTimeMillis()),

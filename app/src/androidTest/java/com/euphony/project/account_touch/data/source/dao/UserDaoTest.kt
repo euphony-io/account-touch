@@ -3,7 +3,8 @@ package com.euphony.project.account_touch.data.source.dao
 import androidx.room.Room
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
-import com.euphony.project.account_touch.data.entity.UserEntity
+import com.euphony.project.account_touch.data.entity.User
+import com.euphony.project.account_touch.data.entity.model.UserIcon
 import com.euphony.project.account_touch.data.source.EuphonyDatabase
 import junit.framework.TestCase
 import kotlinx.coroutines.runBlocking
@@ -12,7 +13,6 @@ import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import java.io.IOException
-import java.util.*
 import com.google.common.truth.Truth.assertThat
 
 @RunWith(AndroidJUnit4::class)
@@ -35,7 +35,7 @@ class UserDaoTest : TestCase() {
     @Test
     fun 유저_생성() = runBlocking {
         //given
-        val user = UserEntity(1,"은빈")
+        val user = User(1,"은빈", UserIcon.GHOST)
 
         //when
         dao.addUser(user)
@@ -49,11 +49,11 @@ class UserDaoTest : TestCase() {
     fun 유저_정보_수정() = runBlocking {
         //given
         val modifyNickname = "은빈빈";
-        val user = UserEntity(1,"은빈")
+        val user = User(1,"은빈",  UserIcon.GHOST)
         dao.addUser(user)
 
         //when
-        dao.modifyUser(1, "은빈빈")
+        dao.modifyUser(1, "은빈빈", UserIcon.CRYING)
         val newUser = dao.getUserById(1)
 
         //then

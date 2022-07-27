@@ -11,18 +11,13 @@ import androidx.compose.foundation.lazy.GridCells
 import androidx.compose.foundation.lazy.LazyVerticalGrid
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
-import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
-import androidx.compose.material.ModalBottomSheetState
-import androidx.compose.material.ModalBottomSheetValue
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.HideImage
-import androidx.compose.material.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ImageBitmap
@@ -35,25 +30,23 @@ import com.euphony.project.account_touch.ui.theme.Black_333B58
 import com.euphony.project.account_touch.ui.theme.Blue_6D95FF
 import com.euphony.project.account_touch.ui.theme.Gray_F4F4F4
 import com.euphony.project.account_touch.utils.AssetsUtil
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.launch
 
-@OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun ChooseBankContent(
-    modalBottomSheetState: ModalBottomSheetState,
-    coroutineScope: CoroutineScope,
-) {
-    val bankBitmaps = AssetsUtil.getBitmaps(LocalContext.current, "banks")
-    BottomSheetTitle(modalBottomSheetState, coroutineScope, "은행 선택")
-    BanksContent(bankBitmaps)
+fun ChooseBankScreen(
+    onCloseClick: () -> Unit,
+) { // TODO: viewModel, OnItemClick
+    ChooseBank(onCloseClick)
 }
 
-@OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun BottomSheetTitle(
-    modalBottomSheetState: ModalBottomSheetState,
-    coroutineScope: CoroutineScope,
+fun ChooseBank(onCloseClick: () -> Unit) {
+    ChooseBankTitle(onCloseClick, "은행 선택")
+    BanksContent()
+}
+
+@Composable
+fun ChooseBankTitle(
+    onCloseClick: () -> Unit,
     title: String,
 ) {
     Row(
@@ -71,11 +64,7 @@ fun BottomSheetTitle(
             fontWeight = FontWeight.Bold
         )
         IconButton(
-            onClick = {
-                coroutineScope.launch {
-                    modalBottomSheetState.hide()
-                }
-            }
+            onClick = { onCloseClick() }
         ) {
             Icon(
                 imageVector = Icons.Filled.Close,
@@ -88,7 +77,9 @@ fun BottomSheetTitle(
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun BanksContent(bankBitmaps: List<ImageBitmap?>) {
+fun BanksContent() {
+    val bankBitmaps = AssetsUtil.getBitmaps(LocalContext.current, "banks")
+
     LazyVerticalGrid(
         cells = GridCells.Fixed(3),
         modifier = Modifier
@@ -96,8 +87,8 @@ fun BanksContent(bankBitmaps: List<ImageBitmap?>) {
         verticalArrangement = Arrangement.spacedBy(12.dp),
         horizontalArrangement = Arrangement.spacedBy(8.dp)
     ) {
-        items(12) { // Dummy Data
-            BankItem(bankBitmaps[0])
+        items(bankBitmaps.size) {
+            BankItem(bankBitmaps[it])
         }
     }
 }
@@ -128,20 +119,8 @@ fun BankItem(imageBitmap: ImageBitmap?) {
     }
 }
 
-@OptIn(ExperimentalMaterialApi::class)
 @Preview(showBackground = true)
 @Composable
-fun BottomSheetTitlePreview() {
-    BottomSheetTitle(
-        modalBottomSheetState = rememberModalBottomSheetState(initialValue = ModalBottomSheetValue.Hidden),
-        coroutineScope = rememberCoroutineScope(),
-        title = "은행 선택"
-    )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun BankItemPreview() {
-    val imageBitmap = AssetsUtil.getBitmap(LocalContext.current, "banks/bnk_bank.png")
-    BankItem(imageBitmap = imageBitmap)
+fun ChooseBankPreview() {
+    ChooseBank(onCloseClick = {})
 }

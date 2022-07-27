@@ -24,6 +24,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.euphony.project.account_touch.ui.component.AccountInfoScreen
+import com.euphony.project.account_touch.ui.component.ChooseBankScreen
 import com.euphony.project.account_touch.ui.theme.AccounttouchTheme
 import kotlinx.coroutines.launch
 
@@ -48,15 +49,11 @@ fun ModalBottomSheet() {
 
     ModalBottomSheetLayout(
         sheetContent = {
-            AccountInfoScreen(
-                isEditClicked,
+            ChooseBankScreen(
                 onCloseClick = {
                     coroutineScope.launch {
                         modalBottomSheetState.hide()
                     }
-                },
-                onEditClick = {
-                    isEditClicked = !isEditClicked
                 }
             )
         },

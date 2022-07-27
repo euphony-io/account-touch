@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <color name="status_bar">#B9B9B9</color>
     <color name="purple_200">#FFBB86FC</color>
     <color name="purple_500">#FF6200EE</color>
     <color name="purple_700">#FF3700B3</color>
@@ -7,4 +8,19 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+
+    <!--계좌 관련 색상-->
+    <color name="account_blue">#93D6DE</color>
+    <color name="account_indigo">#5386A1</color>
+    <color name="account_orange">#ED7F62</color>
+    <color name="account_apricot">#EFD0C2</color>
+    <color name="account_green">#359176</color>
+    <color name="account_pink">#FFA5AD</color>
+    <color name="account_basie">#C4BDAC</color>
+    <color name="account_turquoise">#74969A</color>
+    <color name="account_sky">#DFE9EC</color>
+    <color name="account_black">#555554</color>
+
+    <color name="account_dark_font">#333B58</color>
+    <color name="account_light_font">#FFFFFF</color>
 </resources>
