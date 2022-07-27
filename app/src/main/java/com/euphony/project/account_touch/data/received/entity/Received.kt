@@ -1,11 +1,13 @@
-package com.euphony.project.account_touch.data.entity
+package com.euphony.project.account_touch.data.received.entity
 
 import androidx.annotation.NonNull
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
-import com.euphony.project.account_touch.data.entity.model.UserIcon
+import com.euphony.project.account_touch.data.bank.entity.Bank
+import com.euphony.project.account_touch.data.global.base.entity.BaseEntity
+import com.euphony.project.account_touch.utils.model.UserIcon
 import java.util.*
 
 @Entity(
@@ -13,7 +15,7 @@ import java.util.*
     foreignKeys = [ForeignKey(
         entity = Bank::class,
         parentColumns = arrayOf("bank_id"),
-        childColumns = arrayOf("bank"),
+        childColumns = arrayOf("bank_id"),
         onDelete = ForeignKey.CASCADE
     )]
 )
@@ -23,8 +25,8 @@ data class Received(
     @PrimaryKey(autoGenerate = true)
     val id: Long = 0L,
 
-    @ColumnInfo(name = "bank", index = true)
-    val bank: Long,
+    @ColumnInfo(name = "bank_id", index = true)
+    val bank_id: Long,
 
     @ColumnInfo(name = "account_nickname")
     val accountNickname: String,
@@ -44,4 +46,4 @@ data class Received(
     @ColumnInfo(name = "modify_date")
     override val modifyDate: Date = Date(System.currentTimeMillis()),
 
-) : BaseEntity()
+    ) : BaseEntity()
