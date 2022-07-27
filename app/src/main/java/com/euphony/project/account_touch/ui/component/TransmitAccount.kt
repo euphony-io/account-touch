@@ -5,6 +5,9 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.Button
+import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Icon
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
@@ -25,6 +28,8 @@ import com.euphony.project.account_touch.data.entity.User
 import com.euphony.project.account_touch.data.entity.model.Color
 import com.euphony.project.account_touch.data.entity.model.UserIcon
 import com.euphony.project.account_touch.ui.theme.Blue_6D95FF
+import com.euphony.project.account_touch.ui.theme.Gray_D2D2D2
+import com.euphony.project.account_touch.ui.theme.White_FAF5F5
 
 @Composable
 fun TransmitAccountScreen() { // TODO: viewModel
@@ -65,6 +70,7 @@ fun TransmitAccount(user: User, account: Account) {
         content = {
             Column {
                 TransmitAccountInfo(user, account)
+                TransmitAllButton()
             }
         }
     )
@@ -85,6 +91,30 @@ fun TransmitAccountInfo(user: User, account: Account) {
             textAlign = TextAlign.Center,
             color = Blue_6D95FF
         )
+    }
+}
+
+@Composable
+fun TransmitAllButton() {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(vertical = 8.dp),
+        horizontalArrangement = Arrangement.End
+    ) {
+        Button(
+            onClick = { /*TODO*/ },
+            shape = RoundedCornerShape(18.dp),
+            colors = ButtonDefaults.buttonColors(
+                backgroundColor = Gray_D2D2D2
+            )
+        ) {
+            Text(
+                text = "모두에게 보내기",
+                color = White_FAF5F5,
+                fontSize = 10.sp
+            )
+        }
     }
 }
 
