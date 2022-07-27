@@ -31,7 +31,7 @@ import com.euphony.project.account_touch.utils.AssetsUtil
 @Composable
 fun ReceivedDetailScreen() { // TODO: viewMode, onBackClick as parameters
     val received = Received(
-        1,1,
+        bank = 1,
         accountNickname = "붕어빵",
         accountNumber = "123456789",
         speakerNickName = "붕어빵 사장",
@@ -123,7 +123,7 @@ fun ReceivedAccount(received: Received) {
 @Composable
 fun ReceivedDetailPreview() {
     val received = Received(
-        1,1,
+        bank = 1,
         accountNickname = "붕어빵",
         accountNumber = "123456789",
         speakerNickName = "붕어빵 사장",

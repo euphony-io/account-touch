@@ -44,24 +44,21 @@ fun ReceivedAccountsScreen() { // TODO: viewModel, onBackClick as parameters
     )
     val receiveds = listOf<Received>(
         Received(
-            1,
-            1,
+            bank = 1,
             accountNickname = "붕어빵",
             accountNumber = "123456789",
             speakerNickName = "붕어빵 사장",
             speakerIcon = UserIcon.GHOST,
         ),
         Received(
-            2,
-            1,
+            bank = 1,
             accountNickname = "포장마차",
             accountNumber = "123456789",
             speakerNickName = "포장마차 사장",
             speakerIcon = UserIcon.HAPPY,
         ),
         Received(
-            3,
-            1,
+            bank = 1,
             accountNickname = "옷가게",
             accountNumber = "123456789",
             speakerNickName = "옷가게 사장",
@@ -93,7 +90,7 @@ fun ReceivedAccounts(user: User, receiveds: List<Received>) {
         },
         content = {
             Column {
-                ReceivedAccountsUser(user, "님께서\n받으신 계좌입니다")
+                ReceivedAccountsUser(user)
                 ReceivedAccountItems(receiveds)
             }
         }
@@ -101,7 +98,7 @@ fun ReceivedAccounts(user: User, receiveds: List<Received>) {
 }
 
 @Composable
-fun ReceivedAccountsUser(user: User, str:String) {
+fun ReceivedAccountsUser(user: User) {
     val imageBitmap = AssetsUtil.getBitmap(LocalContext.current, user.icon.path)
 
     Row(
@@ -111,8 +108,7 @@ fun ReceivedAccountsUser(user: User, str:String) {
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
         Text(
-            text = "${user.nickname}${str}",
-//            text = "${user.nickname}님께서\n받으신 계좌입니다.",
+            text = "${user.nickname}님께서\n받으신 계좌입니다.",
             color = Blue_6D95FF,
             fontWeight = FontWeight.Bold,
             fontSize = 22.sp
@@ -198,21 +194,21 @@ fun ReceivedAccountsPreview() {
     )
     val receiveds = listOf<Received>(
         Received(
-            1,1,
+            bank = 1,
             accountNickname = "붕어빵",
             accountNumber = "123456789",
             speakerNickName = "붕어빵 사장",
             speakerIcon = UserIcon.GHOST,
         ),
         Received(
-            2,1,
+            bank = 1,
             accountNickname = "포장마차",
             accountNumber = "123456789",
             speakerNickName = "포장마차 사장",
             speakerIcon = UserIcon.HAPPY,
         ),
         Received(
-            3,1,
+            bank = 1,
             accountNickname = "옷가게",
             accountNumber = "123456789",
             speakerNickName = "옷가게 사장",
