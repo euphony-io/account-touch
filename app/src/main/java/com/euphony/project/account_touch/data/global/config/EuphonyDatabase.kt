@@ -44,7 +44,7 @@ abstract class EuphonyDatabase : RoomDatabase() {
 
         fun fillInDb(context: Context){
             CoroutineScope(Dispatchers.IO).launch {
-                getInstance(context)!!.getBankDao().addBanks(BANK_DATA)
+                getInstance(context).getBankDao().insertAll(BANK_DATA)
             }
         }
         fun getInstance(context: Context): EuphonyDatabase {

@@ -1,10 +1,11 @@
-package com.euphony.project.account_touch.data.entity
+package com.euphony.project.account_touch.data.user.entity
 
 import androidx.annotation.NonNull
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.euphony.project.account_touch.data.entity.model.UserIcon
+import com.euphony.project.account_touch.data.global.base.entity.BaseEntity
+import com.euphony.project.account_touch.utils.model.UserIcon
 import java.util.*
 
 @Entity(tableName = "user")

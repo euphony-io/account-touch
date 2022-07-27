@@ -45,7 +45,8 @@ class ReceivedDaoTest :TestCase(){
         val context = InstrumentationRegistry.getInstrumentation().targetContext
         db = Room.inMemoryDatabaseBuilder(context, EuphonyDatabase::class.java)
             .setTransactionExecutor(testDispatcher.asExecutor())
-            .setQueryExecutor(testDispatcher.asExecutor()).build()
+            .setQueryExecutor(testDispatcher.asExecutor())
+            .build()
 
         dao = db.getReceivedDao()
         bankDao = db.getBankDao()
