@@ -25,8 +25,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.euphony.project.account_touch.R
 import com.euphony.project.account_touch.data.entity.Bank
-import com.euphony.project.account_touch.ui.activity.ProfileImage
-import com.euphony.project.account_touch.ui.activity.loadText
+import com.euphony.project.account_touch.ui.component.LoadText
+import com.euphony.project.account_touch.ui.component.ProfileImage
 import com.euphony.project.account_touch.ui.theme.mainColor
 import com.euphony.project.account_touch.ui.theme.white
 
@@ -46,7 +46,7 @@ fun loadingMainView(){
         }
         Row {
             var nickname:String = "임시 닉네임"
-           loadText(str = "$nickname 님, \n안녕하세요.")
+           LoadText(str = "$nickname 님, \n안녕하세요.")
             Box(
                 modifier = Modifier.fillMaxWidth(),
                 contentAlignment = Alignment.TopEnd
