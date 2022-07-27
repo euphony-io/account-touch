@@ -1,23 +1,38 @@
 package com.euphony.project.account_touch.data.source.dao
 
+import androidx.lifecycle.asLiveData
 import androidx.room.Room
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
-import com.euphony.project.account_touch.data.entity.Account
-import com.euphony.project.account_touch.data.entity.Bank
-import com.euphony.project.account_touch.data.entity.model.BankIcon
-import com.euphony.project.account_touch.data.entity.model.Color
-import com.euphony.project.account_touch.data.entity.model.ExternalPackage
-import com.euphony.project.account_touch.data.source.EuphonyDatabase
+import com.euphony.project.account_touch.data.account.dao.AccountDao
+import com.euphony.project.account_touch.data.account.entity.Account
+import com.euphony.project.account_touch.data.bank.dao.BankDao
+import com.euphony.project.account_touch.data.bank.entity.Bank
+import com.euphony.project.account_touch.data.global.AccountWithBank
+import com.euphony.project.account_touch.utils.model.BankIcon
+import com.euphony.project.account_touch.utils.model.Color
+import com.euphony.project.account_touch.utils.model.ExternalPackage
+import com.euphony.project.account_touch.data.global.config.EuphonyDatabase
 import com.google.common.truth.Truth.assertThat
 import junit.framework.TestCase
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.take
+import kotlinx.coroutines.flow.toList
+import kotlinx.coroutines.test.TestCoroutineDispatcher
+import kotlinx.coroutines.test.TestCoroutineScope
+import kotlinx.coroutines.test.resetMain
+import kotlinx.coroutines.test.runBlockingTest
 import org.junit.After
 import org.junit.Before
+import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import java.io.IOException
+import java.util.concurrent.CountDownLatch
+import java.util.concurrent.Executors
 
+@OptIn(ExperimentalCoroutinesApi::class, FlowPreview::class)
 @RunWith(AndroidJUnit4::class)
 class AccountDaoTest : TestCase() {
 
@@ -25,117 +40,28 @@ class AccountDaoTest : TestCase() {
     private lateinit var bankDao: BankDao
     private lateinit var db: EuphonyDatabase
 
+    private val testDispatcher = TestCoroutineDispatcher()
+    private val testScope = TestCoroutineScope(testDispatcher)
+
+    companion object {
+        val bank = Bank(1L, "국민은행", BankIcon.KB, 12, ExternalPackage.KOOKMIN)
+        val accountList = listOf<Account>(
+            Account(1L,1L, "은빈이의 국민은행", "123321123", isAlwaysOn = false, Color.GREEN),
+            Account(2L,1L, "은빈이의 하나은행", "343463456", isAlwaysOn = false, Color.BLACK),
+            Account(3L,1L, "은빈이의 농협은행", "12313543", isAlwaysOn = false, Color.BLACK)
+        )
+    }
+
     @Before
     public override fun setUp() {
-        val appContext = InstrumentationRegistry.getInstrumentation().targetContext
-        db = Room.inMemoryDatabaseBuilder(
-            appContext,
-            EuphonyDatabase::class.java
-        ).build()
+        val context = InstrumentationRegistry.getInstrumentation().targetContext
+        db = Room.inMemoryDatabaseBuilder(context,  EuphonyDatabase::class.java)
+            .setTransactionExecutor(testDispatcher.asExecutor())
+            .setQueryExecutor(testDispatcher.asExecutor())
+            .build()
 
         dao = db.getAccountDao()
         bankDao = db.getBankDao()
-    }
-
-    @Test
-    fun 계좌_생성() = runBlocking {
-        //given
-        val bankId = bankDao.addBank(Bank(1L, "국민은행", BankIcon.KB, 12, ExternalPackage.KOOKMIN))
-        val nickname = "은빈이의 국민은행 계좌임돠"
-        val accountNumber = "123123123"
-        val account = Account(
-            1L,
-            bankId,
-            nickname,
-            accountNumber,
-            isAllowAny = false,
-            isAlwaysOn = true,
-            Color.APRICOT
-        )
-
-        //when
-        dao.addAccount(account)
-        val newAccount = dao.getAll()[0]
-
-        //then
-        assertThat(newAccount.nickname).isEqualTo(nickname)
-        assertThat(newAccount.accountNumber).isEqualTo(accountNumber)
-        assertThat(newAccount.color).isEqualTo(Color.APRICOT)
-    }
-
-    @Test
-    fun 계좌_수정() = runBlocking {
-        //given
-        val bankId = bankDao.addBank(Bank(1L, "국민은행", BankIcon.KB, 12, ExternalPackage.KOOKMIN))
-
-        val account = Account(
-            1L,
-            bankId,
-            "은빈이의 국민은행 계좌임돠",
-            "123123123",
-            isAllowAny = false,
-            isAlwaysOn = false,
-            Color.BLUE
-        )
-        dao.addAccount(account)
-
-        val modifyIsAllowAny = true
-        val modifyIsAlwaysOn = true
-
-        //when
-        dao.modifyAccount(1L, modifyIsAllowAny, modifyIsAlwaysOn, Color.GREEN)
-        val modifyAccount = dao.getAll()[0]
-
-        //then
-        assertThat(modifyAccount.isAllowAny).isEqualTo(modifyIsAllowAny)
-        assertThat(modifyAccount.isAlwaysOn).isEqualTo(modifyIsAlwaysOn)
-        assertThat(modifyAccount.color).isEqualTo(Color.GREEN)
-    }
-
-    @Test
-    fun 계좌_조회_정렬() = runBlocking {
-        //given
-        val bankId = bankDao.addBank(Bank(1L, "국민은행", BankIcon.KB, 12, ExternalPackage.KOOKMIN))
-        val account1 = Account(1L,bankId,
-            "은빈이의 국민은행 계좌임돠", "123321123", isAllowAny = false, isAlwaysOn = false, Color.BLACK)
-        val account2 = Account(2L,bankId,
-            "은빈이의 하나은행 계좌임돠", "343463456", isAllowAny = false, isAlwaysOn = false, Color.BLACK)
-        val account3 = Account(3L,bankId,
-            "은빈이의 농협은행 계좌임돠", "12313543", isAllowAny = false, isAlwaysOn = false, Color.BLACK)
-
-        dao.addAccount(account1)
-        dao.addAccount(account2)
-        dao.addAccount(account3)
-
-        //when
-        val accountList = dao.getAll()
-
-        //then
-        assertThat(accountList).isNotEmpty();
-        assertThat(accountList.size).isEqualTo(3);
-    }
-
-    @Test
-    fun 계좌_삭제() = runBlocking {
-        //given
-        val bankId = bankDao.addBank(Bank(1L, "국민은행", BankIcon.KB, 12, ExternalPackage.KOOKMIN))
-        val account = Account(
-            1L,
-            bankId,
-            "은빈이의 국민은행 계좌임돠",
-            "123123123",
-            isAllowAny = false,
-            isAlwaysOn = false,
-            Color.BLUE
-        )
-        dao.addAccount(account)
-
-        //when
-        dao.deleteAccount(account)
-        val accountList = dao.getAll()
-
-        //then
-        assertThat(accountList).isEmpty()
     }
 
     @After
@@ -143,4 +69,74 @@ class AccountDaoTest : TestCase() {
     fun cleanup() {
         db.close()
     }
+
+
+    @Test
+    fun 계좌_생성() = testScope.runBlockingTest {
+        //given
+        val bankId = bankDao.addBank(bank)
+
+        val nickname = "은빈이의 국민은행 계좌임돠"
+        val accountNumber = "123123123"
+        val account = Account(1L, bankId, nickname, accountNumber, isAlwaysOn = true, Color.APRICOT)
+
+        //when
+        dao.insert(account)
+
+        //then
+        dao.findAllBy().take(1).collect { account ->
+            assertThat(account[0].account?.nickname).isEqualTo(nickname)
+            assertThat(account[0].account?.accountNumber).isEqualTo(accountNumber)
+        }
+    }
+
+    @Test
+    fun 계좌_수정() = runBlocking {
+        //given
+        bankDao.addBank(bank)
+
+        val modifyIsAlwaysOn = true
+        val account = accountList[0]
+        dao.insert(account)
+
+        //when
+        dao.update(1L, modifyIsAlwaysOn, Color.GREEN)
+
+        //then
+        dao.findAllBy().take(1).collect { account ->
+            assertThat(account[0].account?.isAlwaysOn).isEqualTo(modifyIsAlwaysOn)
+            assertThat(account[0].account?.color).isEqualTo(Color.GREEN)
+        }
+    }
+
+    @Test
+    fun 계좌_조회_정렬() = runBlocking {
+        //given
+        bankDao.addBank(bank)
+        accountList.forEach { account -> dao.insert(account) }
+
+        //when
+        val getList = dao.findAllBy()
+
+        //then
+        assertThat(getList).isNotNull()
+        assertThat(getList.toList().size).isEqualTo(3)
+    }
+
+    @Test
+    fun 계좌_삭제() = runBlocking {
+        //given
+        bankDao.addBank(bank)
+        dao.insert(accountList[0])
+
+        //when
+        dao.delete(accountList[0])
+
+        //then
+        val getList = dao.findAllBy()
+
+        assertThat(getList.toList()).isEmpty()
+    }
+
+
 }
