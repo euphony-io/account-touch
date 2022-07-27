@@ -16,6 +16,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -32,6 +33,7 @@ import com.euphony.project.account_touch.ui.screen.UserRegisterActivity.Companio
 import com.euphony.project.account_touch.ui.screen.UserRegisterActivity.Companion.state
 import com.euphony.project.account_touch.ui.theme.grey
 import com.euphony.project.account_touch.ui.theme.mainColor
+import com.euphony.project.account_touch.ui.theme.transparent
 import com.euphony.project.account_touch.ui.theme.white
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -166,6 +168,10 @@ fun NicknameEditText(){
             .fillMaxWidth()
             .height(70.dp),
         shape = RoundedCornerShape(8.dp),
+        colors = TextFieldDefaults.textFieldColors(
+          focusedIndicatorColor = transparent,
+            unfocusedIndicatorColor = transparent
+        ),
         value = text,
         onValueChange = {text = it},
         singleLine = true,
@@ -377,8 +383,6 @@ fun BottomSheetImage(
             Image(painter = painterResource(id = Imoticon), contentDescription = "", alignment = Alignment.Center)
         }
     }
-<<<<<<< HEAD
+
 }
-=======
-}
->>>>>>> origin/develop
+
