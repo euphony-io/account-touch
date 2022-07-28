@@ -19,11 +19,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.euphony.project.account_touch.R
-import com.euphony.project.account_touch.data.entity.Bank
+import com.euphony.project.account_touch.ui.component.Bank
 import com.euphony.project.account_touch.ui.theme.mainColor
 import com.euphony.project.account_touch.ui.theme.white
 import java.util.*
-import kotlin.collections.ArrayList
 
 @Preview(showBackground = true)
 @Composable
@@ -52,17 +51,6 @@ fun loadingMainView(){
                 )
             }
         }
-
-        //내 계좌 리스트
-        /*DB작업 - 유저가 등록한 계좌 리스트 불러오기
-        val aList = ArrayList<Bank>()
-        aList.add(Bank(1, "닉네임1", BankInfo.BNK,
-            10, ExternalPackage.KOOKMIN,
-            createDate = Date(2022,1,2),
-            Date(2022,3,1)
-        ))
-        myAccountList(aList)
-        */
     }
 }
 
@@ -72,10 +60,7 @@ fun myAccountList(accounts: List<Bank>){
     Column(
         Modifier.verticalScroll(scrollState)
     ){
-//        items(accounts){ account ->
-//            //data class에서 필요한 부분만 추출하여 호출
-//            myAccountItem(name = "닉네임", bankName = "국민 은행", bankIcon = painterResource(id = R.drawable.ic_profile_twinkle), account = "123-123-123", bgColor = Purple200)
-//        }
+
     }
 }
 

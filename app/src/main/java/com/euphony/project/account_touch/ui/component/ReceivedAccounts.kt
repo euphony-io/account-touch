@@ -25,23 +25,18 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.euphony.project.account_touch.data.entity.Received
-import com.euphony.project.account_touch.data.entity.User
-import com.euphony.project.account_touch.data.entity.model.UserIcon
 import com.euphony.project.account_touch.ui.theme.Blue_6D95FF
 import com.euphony.project.account_touch.ui.theme.Blue_DFE8FF
 import com.euphony.project.account_touch.ui.theme.Gray_9C9C9C
 import com.euphony.project.account_touch.ui.theme.Gray_F4F4F4
 import com.euphony.project.account_touch.utils.AssetsUtil
+import com.euphony.project.account_touch.utils.model.UserIcon
 import java.text.SimpleDateFormat
 
 @Composable
 fun ReceivedAccountsScreen() { // TODO: viewModel, onBackClick as parameters
     // dummy data
-    val user = User(
-        nickname = "영욱",
-        icon = UserIcon.CRYING,
-    )
+    val user = User("영욱", UserIcon.CRYING)
     val receiveds = listOf<Received>(
         Received(
             bank = 1,

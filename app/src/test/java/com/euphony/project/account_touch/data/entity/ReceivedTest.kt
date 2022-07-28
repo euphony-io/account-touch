@@ -1,6 +1,7 @@
 package com.euphony.project.account_touch.data.entity
 
-import com.euphony.project.account_touch.data.entity.model.UserIcon
+import com.euphony.project.account_touch.data.received.entity.Received
+import com.euphony.project.account_touch.utils.model.UserIcon
 import com.google.common.truth.Truth.assertThat
 import org.junit.Test
 
