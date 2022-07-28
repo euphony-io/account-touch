@@ -1,4 +1,4 @@
-package com.euphony.project.account_touch.ui.component
+package com.euphony.project.account_touch.ui.screen.main
 
 import com.euphony.project.account_touch.utils.model.UserIcon
 import java.util.*

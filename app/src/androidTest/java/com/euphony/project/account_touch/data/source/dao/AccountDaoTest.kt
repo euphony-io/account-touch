@@ -70,7 +70,6 @@ class AccountDaoTest : TestCase() {
         db.close()
     }
 
-
     @Test
     fun 계좌_생성() = testScope.runBlockingTest {
         //given

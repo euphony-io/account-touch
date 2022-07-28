@@ -1,4 +1,4 @@
-package com.euphony.project.account_touch.ui.component
+package com.euphony.project.account_touch.ui.screen.receivedetail
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -21,17 +21,17 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.euphony.project.account_touch.ui.screen.common.UserIconItem
+import com.euphony.project.account_touch.ui.screen.main.Received
 import com.euphony.project.account_touch.ui.theme.Blue_6D95FF
 import com.euphony.project.account_touch.ui.theme.Blue_DFE8FF
 import com.euphony.project.account_touch.ui.theme.Gray_F4F4F4
 import com.euphony.project.account_touch.utils.AssetsUtil
 import com.euphony.project.account_touch.utils.model.UserIcon
 
-
 @Composable
 fun ReceivedDetailScreen() { // TODO: viewMode, onBackClick as parameters
     val received = Received(
-        bank = 1,
         accountNickname = "붕어빵",
         accountNumber = "123456789",
         speakerNickName = "붕어빵 사장",
@@ -123,7 +123,6 @@ fun ReceivedAccount(received: Received) {
 @Composable
 fun ReceivedDetailPreview() {
     val received = Received(
-        bank = 1,
         accountNickname = "붕어빵",
         accountNumber = "123456789",
         speakerNickName = "붕어빵 사장",

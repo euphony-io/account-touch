@@ -15,18 +15,21 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Accounttouch"
         tools:targetApi="31">
-        <activity android:name=".euphony.EuphonyActivity" />
+
         <activity
-            android:name=".MainActivity"
-            android:exported="true"
-            android:label="@string/app_name"
-            android:theme="@style/Theme.Accounttouch">
+            android:name=".ui.screen.userregister.UserRegisterActivity"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <activity android:name=".ui.screen.main.MainActivity" />
+
+        <activity android:name=".euphony.EuphonyActivity" />
+
     </application>
 
 </manifest>
