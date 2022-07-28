@@ -1,4 +1,4 @@
-package com.euphony.project.account_touch.ui.screen.receive
+package com.euphony.project.account_touch.ui.screen.main.receivedaccounts
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column

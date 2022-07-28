@@ -1,4 +1,4 @@
-package com.euphony.project.account_touch.ui.screen.transmit
+package com.euphony.project.account_touch.ui.screen.main.transmitaccount
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
