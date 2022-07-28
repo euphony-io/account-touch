@@ -11,6 +11,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
 import androidx.compose.material.Icon
+import androidx.compose.material.IconButton
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
@@ -37,7 +38,7 @@ import com.euphony.project.account_touch.utils.model.UserIcon
 import java.text.SimpleDateFormat
 
 @Composable
-fun ReceivedAccountsScreen() { // TODO: viewModel, onBackClick as parameters
+fun ReceivedAccountsScreen(onBackClick: () -> Unit) { // TODO: viewModel as parameter
     // dummy data
     val user = User("영욱", UserIcon.CRYING)
     val receiveds = listOf<Received>(
@@ -60,11 +61,15 @@ fun ReceivedAccountsScreen() { // TODO: viewModel, onBackClick as parameters
             speakerIcon = UserIcon.STAR,
         )
     )
-    ReceivedAccounts(user, receiveds)
+    ReceivedAccounts(user, receiveds, onBackClick)
 }
 
 @Composable
-fun ReceivedAccounts(user: User, receiveds: List<Received>) {
+fun ReceivedAccounts(
+    user: User,
+    receiveds: List<Received>,
+    onBackClick: () -> Unit,
+) {
     Scaffold(
         topBar = {
             TopAppBar(
@@ -73,12 +78,14 @@ fun ReceivedAccounts(user: User, receiveds: List<Received>) {
                 },
                 backgroundColor = Color.White,
                 navigationIcon = {
-                    Icon(
-                        modifier = Modifier.padding(start = 12.dp),
-                        imageVector = Icons.Filled.ArrowBack,
-                        contentDescription = "뒤로가기",
-                        tint = Blue_6D95FF
-                    )
+                    IconButton(onClick = { onBackClick() }) {
+                        Icon(
+                            modifier = Modifier.padding(start = 12.dp),
+                            imageVector = Icons.Filled.ArrowBack,
+                            contentDescription = "뒤로가기",
+                            tint = Blue_6D95FF,
+                        )
+                    }
                 },
                 elevation = 0.dp
             )
@@ -207,5 +214,5 @@ fun ReceivedAccountsPreview() {
             speakerIcon = UserIcon.STAR,
         )
     )
-    ReceivedAccounts(user, receiveds)
+    ReceivedAccounts(user, receiveds, onBackClick = {})
 }

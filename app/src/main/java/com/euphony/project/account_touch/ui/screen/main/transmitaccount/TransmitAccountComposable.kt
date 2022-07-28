@@ -15,6 +15,7 @@ import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Card
 import androidx.compose.material.Icon
+import androidx.compose.material.IconButton
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
@@ -46,7 +47,7 @@ import com.euphony.project.account_touch.utils.model.Color
 import com.euphony.project.account_touch.utils.model.UserIcon
 
 @Composable
-fun TransmitAccountScreen() { // TODO: viewModel
+fun TransmitAccountScreen(onBackClick: () -> Unit) { // TODO: viewModel
     val user = User(
         nickname = "영욱",
         icon = UserIcon.HAPPY
@@ -84,11 +85,11 @@ fun TransmitAccountScreen() { // TODO: viewModel
             icon = UserIcon.SMILE
         ),
     )
-    TransmitAccount(user, account, receivers)
+    TransmitAccount(user, account, receivers, onBackClick)
 }
 
 @Composable
-fun TransmitAccount(user: User, account: Account, receivers: List<User>) {
+fun TransmitAccount(user: User, account: Account, receivers: List<User>, onBackClick: () -> Unit) {
     Scaffold(
         topBar = {
             TopAppBar(
@@ -97,12 +98,14 @@ fun TransmitAccount(user: User, account: Account, receivers: List<User>) {
                 },
                 backgroundColor = colorResource(id = R.color.white),
                 navigationIcon = {
-                    Icon(
-                        modifier = Modifier.padding(start = 12.dp),
-                        imageVector = Icons.Filled.ArrowBack,
-                        contentDescription = "뒤로가기",
-                        tint = Blue_6D95FF
-                    )
+                    IconButton(onClick = { onBackClick() }) {
+                        Icon(
+                            modifier = Modifier.padding(start = 12.dp),
+                            imageVector = Icons.Filled.ArrowBack,
+                            contentDescription = "뒤로가기",
+                            tint = Blue_6D95FF,
+                        )
+                    }
                 },
                 elevation = 0.dp
             )
@@ -272,5 +275,5 @@ fun TransmitAccountPreview() {
             icon = UserIcon.SMILE
         ),
     )
-    TransmitAccount(user, account, receivers)
+    TransmitAccount(user, account, receivers, onBackClick = {})
 }
