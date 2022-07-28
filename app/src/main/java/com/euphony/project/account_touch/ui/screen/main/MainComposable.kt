@@ -37,6 +37,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.euphony.project.account_touch.R
+import com.euphony.project.account_touch.ui.screen.main.model.Content
 import com.euphony.project.account_touch.ui.screen.userregister.LoadText
 import com.euphony.project.account_touch.ui.screen.userregister.ProfileImage
 import com.euphony.project.account_touch.ui.theme.mainColor
@@ -53,20 +54,51 @@ fun MainBottomSheetScreen(
         rememberModalBottomSheetState(initialValue = ModalBottomSheetValue.Hidden)
     val coroutineScope = rememberCoroutineScope()
     var isEditClicked by remember { mutableStateOf(false) }
+    var content by remember { mutableStateOf(Content.CHOOSE_BANK) }
 
     ModalBottomSheetLayout(
         sheetContent = {
-            ChooseBankScreen(
-                onCloseClick = {
-                    coroutineScope.launch {
-                        modalBottomSheetState.hide()
-                    }
+            when (content) {
+                Content.CHOOSE_BANK -> {
+                    ChooseBankScreen(
+                        onCloseClick = {
+                            coroutineScope.launch {
+                                modalBottomSheetState.hide()
+                            }
+                        },
+                        onBankItemClick = { content = Content.ADD_ACCOUNT }
+                    )
                 }
-            )
+                Content.ADD_ACCOUNT -> {
+                    AccountInfoScreen(
+                        isEditClicked = isEditClicked,
+                        onCloseClick = {
+                            coroutineScope.launch {
+                                modalBottomSheetState.hide()
+                            }
+                        },
+                        onEditClick = { isEditClicked = !isEditClicked },
+                        isAddContent = true
+                    )
+                }
+                Content.UPDATE_ACCOUNT -> {
+                    AccountInfoScreen(
+                        isEditClicked = isEditClicked,
+                        onCloseClick = {
+                            coroutineScope.launch {
+                                modalBottomSheetState.hide()
+                            }
+                        },
+                        onEditClick = { isEditClicked = !isEditClicked },
+                        isAddContent = false
+                    )
+                }
+            }
+
         },
         sheetState = modalBottomSheetState,
         sheetShape = RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp),
-        sheetBackgroundColor = Color.White
+        sheetBackgroundColor = Color.White,
     ) {
         Column(
             modifier = Modifier
@@ -77,6 +109,7 @@ fun MainBottomSheetScreen(
         ) {
             Button(onClick = {
                 isEditClicked = false
+                content = Content.CHOOSE_BANK
                 coroutineScope.launch {
                     modalBottomSheetState.show()
                 }

@@ -54,8 +54,9 @@ fun AccountInfoScreen(
     isEditClicked: Boolean,
     onCloseClick: () -> Unit,
     onEditClick: () -> Unit,
+    isAddContent: Boolean
 ) { // TODO: viewModel (insert NEW ACCOUNT)
-    AccountInfo(isEditClicked, onCloseClick, onEditClick)
+    AccountInfo(isEditClicked, onCloseClick, onEditClick, isAddContent)
 }
 
 @Composable
@@ -63,6 +64,7 @@ fun AccountInfo(
     isEditClicked: Boolean,
     onCloseClick: () -> Unit,
     onEditClick: () -> Unit,
+    isEditContent: Boolean
 ) {
     var accountNickname by remember { mutableStateOf(TextFieldValue("부산은행")) }
     var accountNumber by remember { mutableStateOf(TextFieldValue("")) }
@@ -84,7 +86,8 @@ fun AccountInfo(
             textFieldValue = accountNumber,
             onValueChange = {
                 accountNumber = it
-            }
+            },
+            isEditContent = isEditContent
         )
         AccountColors(
             colors = colors,
@@ -169,6 +172,7 @@ fun AccountInfoTitle(
 fun Account(
     textFieldValue: TextFieldValue,
     onValueChange: (TextFieldValue) -> Unit,
+    isEditContent: Boolean
 ) {
 
     Column(
@@ -184,6 +188,7 @@ fun Account(
         )
         TextField(
             value = textFieldValue,
+            enabled = isEditContent,
             onValueChange = { onValueChange(it) },
             label = {
                 Text(text = "계좌번호를 입력해주세요.", color = Black_333B58)
@@ -322,6 +327,7 @@ fun AccountInfoPreview() {
     AccountInfo(
         isEditClicked = false,
         onCloseClick = {},
-        onEditClick = {}
+        onEditClick = {},
+        isEditContent = true
     )
 }
