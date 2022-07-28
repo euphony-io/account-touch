@@ -1,7 +1,8 @@
 package com.euphony.project.account_touch.data.entity
 
 
-import com.euphony.project.account_touch.data.entity.model.Color
+import com.euphony.project.account_touch.data.account.entity.Account
+import com.euphony.project.account_touch.utils.model.Color
 import com.google.common.truth.Truth.assertThat
 import org.junit.Test
 
@@ -20,7 +21,6 @@ internal class AccountTest{
             nickname,
             accountNumber,
             false,
-            true,
             Color.BLACK
         )
 

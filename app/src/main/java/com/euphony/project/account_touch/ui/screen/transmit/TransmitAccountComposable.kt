@@ -32,11 +32,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.euphony.project.account_touch.R
-import com.euphony.project.account_touch.data.entity.Account
-import com.euphony.project.account_touch.data.entity.User
-import com.euphony.project.account_touch.data.entity.model.Color
-import com.euphony.project.account_touch.data.entity.model.UserIcon
+import com.euphony.project.account_touch.data.account.entity.Account
 import com.euphony.project.account_touch.ui.screen.common.UserIconItem
+import com.euphony.project.account_touch.ui.screen.main.User
 import com.euphony.project.account_touch.ui.theme.Blue_6D95FF
 import com.euphony.project.account_touch.ui.theme.Blue_DFE8FF
 import com.euphony.project.account_touch.ui.theme.Gray_9C9C9C
@@ -44,6 +42,8 @@ import com.euphony.project.account_touch.ui.theme.Gray_D2D2D2
 import com.euphony.project.account_touch.ui.theme.Gray_F4F4F4
 import com.euphony.project.account_touch.ui.theme.White_FAF5F5
 import com.euphony.project.account_touch.utils.AssetsUtil
+import com.euphony.project.account_touch.utils.model.Color
+import com.euphony.project.account_touch.utils.model.UserIcon
 
 @Composable
 fun TransmitAccountScreen() { // TODO: viewModel
@@ -52,10 +52,9 @@ fun TransmitAccountScreen() { // TODO: viewModel
         icon = UserIcon.HAPPY
     )
     val account = Account(
-        bank = 1,
+        bank_id = 1L,
         nickname = "국민은행 체크카드",
         accountNumber = "123456789",
-        isAllowAny = false,
         isAlwaysOn = false,
         color = Color.SKY
     )
@@ -241,10 +240,9 @@ fun TransmitAccountPreview() {
         icon = UserIcon.HAPPY
     )
     val account = Account(
-        bank = 1,
+        bank_id = 1L,
         nickname = "국민은행 체크카드",
         accountNumber = "123456789",
-        isAllowAny = false,
         isAlwaysOn = false,
         color = Color.SKY
     )
