@@ -42,6 +42,7 @@ import androidx.compose.ui.unit.sp
 import com.euphony.project.account_touch.R
 import com.euphony.project.account_touch.data.account.dto.CreateAccountRequest
 import com.euphony.project.account_touch.data.global.AccountWithBank
+import com.euphony.project.account_touch.data.user.entity.User
 import com.euphony.project.account_touch.ui.screen.main.model.Content
 import com.euphony.project.account_touch.ui.screen.userregister.LoadText
 import com.euphony.project.account_touch.ui.screen.userregister.ProfileImage
@@ -50,6 +51,7 @@ import com.euphony.project.account_touch.ui.theme.mainColor
 import com.euphony.project.account_touch.ui.theme.white
 import com.euphony.project.account_touch.ui.viewmodel.AccountViewModel
 import com.euphony.project.account_touch.ui.viewmodel.BankViewModel
+import com.euphony.project.account_touch.ui.viewmodel.UserViewModel
 import com.euphony.project.account_touch.utils.AssetsUtil
 import kotlinx.coroutines.launch
 
@@ -58,6 +60,7 @@ import kotlinx.coroutines.launch
 fun MainBottomSheetScreen(
     accountViewModel: AccountViewModel,
     bankViewModel: BankViewModel,
+    userViewModel: UserViewModel,
     onReceivedIconClick: () -> Unit,
     onAccountClick: () -> Unit,
     onAddAccountInValid: () -> Unit,
@@ -66,6 +69,7 @@ fun MainBottomSheetScreen(
     val accounts = accountViewModel.accounts.observeAsState().value ?: listOf()
     // TODO: getBanks from BankViewModel
     // TODO: selected bank index state
+    val user by userViewModel.user.observeAsState()
 
     val modalBottomSheetState =
         rememberModalBottomSheetState(initialValue = ModalBottomSheetValue.Hidden)
@@ -125,6 +129,7 @@ fun MainBottomSheetScreen(
     ) {
         LoadMainView(
             accounts,
+            user,
             onAddButtonClick = {
                 isEditClicked = false
                 content = Content.CHOOSE_BANK
@@ -136,17 +141,17 @@ fun MainBottomSheetScreen(
     }
 }
 
-@Preview(showBackground = true)
-@Composable
-fun MainPreview() {
-    LoadMainView(
-        listOf(),
-        onAddButtonClick = {}
-    )
-}
+//@Preview(showBackground = true)
+//@Composable
+//fun MainPreview() {
+//    LoadMainView(
+//        listOf(),
+//        onAddButtonClick = {}
+//    )
+//}
 
 @Composable
-fun LoadMainView(accounts: List<AccountWithBank>, onAddButtonClick: () -> Unit) {
+fun LoadMainView(accounts: List<AccountWithBank>, user: User?, onAddButtonClick: () -> Unit) {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -159,8 +164,7 @@ fun LoadMainView(accounts: List<AccountWithBank>, onAddButtonClick: () -> Unit) 
             Image(painter = painterResource(id = R.drawable.ic_alarm), contentDescription = "알람 아이")
         }
         Row {
-            var nickname: String = "임시 닉네임"
-            LoadText(str = "$nickname 님, \n안녕하세요.")
+            LoadText(str = "${user?.nickname} 님, \n안녕하세요.")
             Box(
                 modifier = Modifier.fillMaxWidth(),
                 contentAlignment = Alignment.TopEnd

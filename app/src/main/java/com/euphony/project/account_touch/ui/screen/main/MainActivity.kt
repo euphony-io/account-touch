@@ -79,6 +79,7 @@ fun MainNavHost(
             MainBottomSheetScreen(
                 accountViewModel,
                 bankViewModel,
+                userViewModel,
                 onReceivedIconClick = {
                     navController.navigateSingleTopTo(ReceivedAccounts.route)
                 },
