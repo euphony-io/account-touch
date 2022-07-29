@@ -3,15 +3,26 @@ package com.euphony.project.account_touch.data.source.dao
 import androidx.room.Room
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
-import com.euphony.project.account_touch.data.entity.Bank
-import com.euphony.project.account_touch.data.entity.Received
-import com.euphony.project.account_touch.data.entity.model.BankIcon
-import com.euphony.project.account_touch.data.entity.model.ExternalPackage
-import com.euphony.project.account_touch.data.entity.model.UserIcon
-import com.euphony.project.account_touch.data.source.EuphonyDatabase
+import com.euphony.project.account_touch.data.bank.dao.BankDao
+import com.euphony.project.account_touch.data.received.dao.ReceivedDao
+import com.euphony.project.account_touch.data.bank.entity.Bank
+import com.euphony.project.account_touch.data.received.entity.Received
+import com.euphony.project.account_touch.utils.model.BankIcon
+import com.euphony.project.account_touch.utils.model.ExternalPackage
+import com.euphony.project.account_touch.utils.model.UserIcon
+import com.euphony.project.account_touch.data.global.config.EuphonyDatabase
 import com.google.common.truth.Truth.assertThat
 import junit.framework.TestCase
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.asExecutor
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.filterNotNull
+import kotlinx.coroutines.flow.take
+import kotlinx.coroutines.flow.toList
+import kotlinx.coroutines.test.TestCoroutineDispatcher
+import kotlinx.coroutines.test.TestCoroutineScope
+import kotlinx.coroutines.test.runBlockingTest
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
@@ -19,90 +30,105 @@ import org.junit.runner.RunWith
 import java.io.IOException
 import java.util.*
 
+@OptIn(ExperimentalCoroutinesApi::class, FlowPreview::class)
 @RunWith(AndroidJUnit4::class)
 class ReceivedDaoTest :TestCase(){
     private lateinit var dao: ReceivedDao
     private lateinit var bankDao: BankDao
     private lateinit var db: EuphonyDatabase
 
+    private val testDispatcher = TestCoroutineDispatcher()
+    private val testScope = TestCoroutineScope(testDispatcher)
+
     @Before
     public override fun setUp() {
-        val appContext = InstrumentationRegistry.getInstrumentation().targetContext
-        db = Room.inMemoryDatabaseBuilder(
-            appContext,
-            EuphonyDatabase::class.java
-        ).build()
+        val context = InstrumentationRegistry.getInstrumentation().targetContext
+        db = Room.inMemoryDatabaseBuilder(context, EuphonyDatabase::class.java)
+            .setTransactionExecutor(testDispatcher.asExecutor())
+            .setQueryExecutor(testDispatcher.asExecutor())
+            .build()
 
         dao = db.getReceivedDao()
         bankDao = db.getBankDao()
     }
 
+    companion object {
+        val bank = Bank(1L, "국민은행", BankIcon.KB, 12, ExternalPackage.KOOKMIN)
+        val _received = fun(bankId: Long): Received{
+            return Received(1L,  bankId,"도영이의 국민 계좌", "123123123123", "은빈", UserIcon.GHOST)
+        }
+        val _receivedList = fun(bankId: Long): List<Received>{
+            return listOf(
+                Received(1L, bankId,"도영이의 국민 계좌", "123123123123", "은빈",
+                    UserIcon.GHOST, Date(2020,12,12)),
+                Received(2L, bankId, "도영이의 하나 계좌", "32132132123", "은빈",
+                    UserIcon.GHOST, Date(2021,12,12)),
+                Received(3L, bankId, "도영이의 카카오 계좌", "34532153", "은빈",
+                    UserIcon.GHOST, Date(2022,12,12))
+            )
+        }
+    }
+
     @Test
-    fun 받은_계좌_생성() = runBlocking {
+    fun 받은_계좌_생성() =  testScope.runBlockingTest {
         //given
-        val bankId = bankDao.addBank(Bank(1L, "국민은행", BankIcon.KB, 12, ExternalPackage.KOOKMIN))
+        val bankId = bankDao.insert(bank)
         val received = Received(1L, bankId, "도영이의 국민 계좌", "123123123123", "은빈", UserIcon.GHOST)
 
         //when
-        val newId = dao.addReceived(received)
+        val newId = dao.insert(received)
 
         //then
         assertThat(received.id).isEqualTo(newId)
     }
 
     @Test
-    fun 받은_계좌_리스트_조회() = runBlocking {
+    fun 받은_계좌_리스트_조회() =  testScope.runBlockingTest {
         //given
-        val bankId = bankDao.addBank(Bank(1L, "국민은행", BankIcon.KB, 12, ExternalPackage.KOOKMIN))
-        val received1 = Received(1L, bankId,
-            "도영이의 국민 계좌", "123123123123",
-            "은빈", UserIcon.GHOST, Date(2020,12,12))
-        val received2 = Received(2L, bankId,
-            "도영이의 하나 계좌", "32132132123",
-            "은빈", UserIcon.GHOST, Date(2021,12,12))
-        val received3 = Received(3L, bankId,
-            "도영이의 카카오 계좌", "34532153",
-            "은빈", UserIcon.GHOST, Date(2022,12,12))
-
-        dao.addReceived(received1)
-        dao.addReceived(received2)
-        dao.addReceived(received3)
+        val bankId = bankDao.insert(bank)
+        val receivedList = _receivedList(bankId)
+        receivedList.forEach { received ->
+            dao.insert(received)
+        }
 
         //when
-        val receivedList = dao.getAll();
+        val receivedNewList = dao.findAllBy();
 
         //then
-        assertThat(receivedList.first().id).isEqualTo(received3.id)
-        assertThat(receivedList.last().id).isEqualTo(received1.id)
+        receivedNewList.take(1).collect{ received ->
+            assertThat(received.first()?.id).isEqualTo(receivedList[2].id)
+            assertThat(received.last()?.id).isEqualTo(receivedList[0].id)
+        }
     }
 
     @Test
-    fun 받은_계좌_상세_조회() = runBlocking {
+    fun 받은_계좌_상세_조회() =  testScope.runBlockingTest {
         //given
-        val bankId = bankDao.addBank(Bank(1L, "국민은행", BankIcon.KB, 12, ExternalPackage.KOOKMIN))
-        val received = Received(1L, bankId, "도영이의 국민 계좌", "123123123123", "은빈", UserIcon.GHOST)
-        dao.addReceived(received)
+        val bankId = bankDao.insert(bank)
+        val received = _received(bankId);
+        dao.insert(received)
 
         //when
-        val findReceived = dao.getReceivedById(received.id);
+        val findReceived = dao.findById(received.id);
 
         //then
         assertThat(findReceived.id).isEqualTo(received.id)
     }
 
     @Test
-    fun 받은_계좌_삭제() = runBlocking {
+    fun 받은_계좌_삭제() =  testScope.runBlockingTest {
         //given
-        val bankId = bankDao.addBank(Bank(1L, "국민은행", BankIcon.KB, 12, ExternalPackage.KOOKMIN))
-        val received = Received(1L,  bankId,"도영이의 국민 계좌", "123123123123", "은빈", UserIcon.GHOST)
-        dao.addReceived(received)
+        val bankId = bankDao.insert(bank)
+        val received = _received(bankId);
+        dao.insert(received)
 
         //when
-        dao.deleteReceived(received);
-        val receivedList = dao.getAll();
-
+        dao.delete(received);
+        val receivedNewList = dao.findAllBy().filterNotNull()
         //then
-        assertThat(receivedList).isEmpty()
+        receivedNewList.take(1).collect{ received ->
+            assertThat(received).isEmpty()
+        }
     }
 
 
