@@ -9,6 +9,7 @@ import java.util.*
 
 @Dao
 interface AccountDao {
+    @Transaction
     @Query("SELECT * FROM account ORDER BY is_always_on DESC, create_date DESC")
     fun findAllBy(): Flow<List<AccountWithBank>>
 

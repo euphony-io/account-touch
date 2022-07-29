@@ -11,11 +11,11 @@ class BankRepository(private val dao : BankDao) {
         return dao.findAllBy()
     }
 
-    fun getBanksById(id: Long): Bank {
+    suspend fun getBanksById(id: Long): Bank {
         return dao.findById(id)
     }
 
-    fun getAppPackageById(id: Long): ExternalPackage {
+    suspend fun getAppPackageById(id: Long): ExternalPackage {
         return dao.findAppPackageById(id)
     }
 }

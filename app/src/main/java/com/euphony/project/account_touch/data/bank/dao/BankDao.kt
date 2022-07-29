@@ -14,10 +14,10 @@ interface BankDao {
     fun findAllBy(): Flow<List<Bank>>
 
     @Query("SELECT * FROM bank WHERE bank_id = :id")
-    fun findById(id: Long): Bank
+    suspend fun findById(id: Long): Bank
 
     @Query("SELECT app_package FROM bank WHERE bank_id = :id")
-    fun findAppPackageById(id: Long): ExternalPackage
+    suspend fun findAppPackageById(id: Long): ExternalPackage
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(bank: Bank) : Long

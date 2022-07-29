@@ -27,7 +27,8 @@ import java.util.concurrent.Executors
         (Received::class),
         (Bank::class)
     ],
-    version = 1
+    version = 1,
+    exportSchema = false
 )
 @TypeConverters(DateConverter::class)
 abstract class EuphonyDatabase : RoomDatabase() {
@@ -53,10 +54,12 @@ abstract class EuphonyDatabase : RoomDatabase() {
                 var instance = INSTANCE
 
                 if (instance == null) {
-                    instance = Room.databaseBuilder(
+                    instance = Room
+                    .databaseBuilder(
                         context.applicationContext,
                         EuphonyDatabase::class.java,
-                        "euphony_db")
+                        "euphony_db"
+                    )
                     .addCallback(object : RoomDatabase.Callback(){
                         override fun onCreate(db: SupportSQLiteDatabase) {
                             super.onCreate(db)

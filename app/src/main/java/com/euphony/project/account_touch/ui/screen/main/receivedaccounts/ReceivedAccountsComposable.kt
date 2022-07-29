@@ -18,50 +18,41 @@ import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
+import com.euphony.project.account_touch.data.received.entity.Received
+import com.euphony.project.account_touch.data.user.entity.User
 import com.euphony.project.account_touch.ui.screen.common.UserIconItem
-import com.euphony.project.account_touch.ui.screen.main.Received
-import com.euphony.project.account_touch.ui.screen.main.User
 import com.euphony.project.account_touch.ui.theme.Blue_6D95FF
 import com.euphony.project.account_touch.ui.theme.Blue_DFE8FF
 import com.euphony.project.account_touch.ui.theme.Gray_9C9C9C
 import com.euphony.project.account_touch.ui.theme.Gray_F4F4F4
+import com.euphony.project.account_touch.ui.viewmodel.ReceivedViewModel
 import com.euphony.project.account_touch.utils.AssetsUtil
-import com.euphony.project.account_touch.utils.model.UserIcon
 import java.text.SimpleDateFormat
 
 @Composable
-fun ReceivedAccountsScreen(onBackClick: () -> Unit) { // TODO: viewModel as parameter
-    // dummy data
-    val user = User("영욱", UserIcon.CRYING)
-    val receiveds = listOf<Received>(
-        Received(
-            accountNickname = "붕어빵",
-            accountNumber = "123456789",
-            speakerNickName = "붕어빵 사장",
-            speakerIcon = UserIcon.GHOST,
-        ),
-        Received(
-            accountNickname = "포장마차",
-            accountNumber = "123456789",
-            speakerNickName = "포장마차 사장",
-            speakerIcon = UserIcon.HAPPY,
-        ),
-        Received(
-            accountNickname = "옷가게",
-            accountNumber = "123456789",
-            speakerNickName = "옷가게 사장",
-            speakerIcon = UserIcon.STAR,
-        )
-    )
-    ReceivedAccounts(user, receiveds, onBackClick)
+fun ReceivedAccountsScreen(
+    viewModel: ReceivedViewModel = hiltViewModel(),
+    onBackClick: () -> Unit,
+) {
+    // TODO: onBackClick as parameters
+
+    var user = viewModel.user.observeAsState().value
+    val allReceived = viewModel.allReceived.observeAsState().value ?: listOf()
+
+    if (user == null) {
+        throw Exception("에러 발생")
+    }
+
+    ReceivedAccounts(user, allReceived, onBackClick)
 }
 
 @Composable
@@ -92,7 +83,7 @@ fun ReceivedAccounts(
         },
         content = {
             Column {
-                ReceivedAccountsUser(user, "님께서\n받으신 계좌입니다")
+                ReceivedAccountsUser(user)
                 ReceivedAccountItems(receiveds)
             }
         }
@@ -100,7 +91,7 @@ fun ReceivedAccounts(
 }
 
 @Composable
-fun ReceivedAccountsUser(user: User, str: String) {
+fun ReceivedAccountsUser(user: User) {
     val imageBitmap = AssetsUtil.getBitmap(LocalContext.current, user.icon.path)
 
     Row(
@@ -110,8 +101,7 @@ fun ReceivedAccountsUser(user: User, str: String) {
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
         Text(
-            text = "${user.nickname}${str}",
-//            text = "${user.nickname}님께서\n받으신 계좌입니다.",
+            text = "${user.nickname}님께서\n받으신 계좌입니다.",
             color = Blue_6D95FF,
             fontWeight = FontWeight.Bold,
             fontSize = 22.sp
@@ -187,33 +177,33 @@ fun ReceivedAccountItem(received: Received) {
         }
     }
 }
-
-@Preview(showBackground = true)
-@Composable
-fun ReceivedAccountsPreview() {
-    val user = User(
-        nickname = "영욱",
-        icon = UserIcon.CRYING,
-    )
-    val receiveds = listOf<Received>(
-        Received(
-            accountNickname = "붕어빵",
-            accountNumber = "123456789",
-            speakerNickName = "붕어빵 사장",
-            speakerIcon = UserIcon.GHOST,
-        ),
-        Received(
-            accountNickname = "포장마차",
-            accountNumber = "123456789",
-            speakerNickName = "포장마차 사장",
-            speakerIcon = UserIcon.HAPPY,
-        ),
-        Received(
-            accountNickname = "옷가게",
-            accountNumber = "123456789",
-            speakerNickName = "옷가게 사장",
-            speakerIcon = UserIcon.STAR,
-        )
-    )
-    ReceivedAccounts(user, receiveds, onBackClick = {})
-}
+//
+//@Preview(showBackground = true)
+//@Composable
+//fun ReceivedAccountsPreview() {
+//    val user = User(
+//        nickname = "영욱",
+//        icon = UserIcon.CRYING,
+//    )
+//    val receiveds = listOf<Received>(
+//        Received(
+//            accountNickname = "붕어빵",
+//            accountNumber = "123456789",
+//            speakerNickName = "붕어빵 사장",
+//            speakerIcon = UserIcon.GHOST,
+//        ),
+//        Received(
+//            accountNickname = "포장마차",
+//            accountNumber = "123456789",
+//            speakerNickName = "포장마차 사장",
+//            speakerIcon = UserIcon.HAPPY,
+//        ),
+//        Received(
+//            accountNickname = "옷가게",
+//            accountNumber = "123456789",
+//            speakerNickName = "옷가게 사장",
+//            speakerIcon = UserIcon.STAR,
+//        )
+//    )
+//    ReceivedAccounts(user, receiveds)
+//}
