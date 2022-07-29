@@ -23,6 +23,7 @@ import androidx.compose.material.Text
 import androidx.compose.material.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -35,28 +36,29 @@ import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.semantics.contentDescription
-import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.euphony.project.account_touch.R
-import com.euphony.project.account_touch.data.account.entity.Account
+import com.euphony.project.account_touch.data.global.AccountWithBank
 import com.euphony.project.account_touch.ui.screen.main.model.Content
 import com.euphony.project.account_touch.ui.screen.userregister.LoadText
 import com.euphony.project.account_touch.ui.screen.userregister.ProfileImage
 import com.euphony.project.account_touch.ui.screen.userregister.space
 import com.euphony.project.account_touch.ui.theme.mainColor
 import com.euphony.project.account_touch.ui.theme.white
+import com.euphony.project.account_touch.ui.viewmodel.AccountViewModel
 import com.euphony.project.account_touch.utils.AssetsUtil
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun MainBottomSheetScreen(
+    accountViewModel: AccountViewModel,
     onReceivedIconClick: () -> Unit,
     onAccountClick: () -> Unit,
 ) {
+    val accounts = accountViewModel.accounts.observeAsState()
     val modalBottomSheetState =
         rememberModalBottomSheetState(initialValue = ModalBottomSheetValue.Hidden)
     val coroutineScope = rememberCoroutineScope()
@@ -107,35 +109,30 @@ fun MainBottomSheetScreen(
         sheetShape = RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp),
         sheetBackgroundColor = Color.White,
     ) {
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .semantics { contentDescription = "MainBottomSheet screen" },
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            Button(onClick = {
+        LoadMainView(
+            accounts.value,
+            onAddButtonClick = {
                 isEditClicked = false
                 content = Content.CHOOSE_BANK
                 coroutineScope.launch {
                     modalBottomSheetState.show()
                 }
-            }) {
-                // TODO: 계좌 리스트 화면
-                Text(text = "OPEN BOTTOM SHEET")
             }
-        }
+        )
     }
 }
 
 @Preview(showBackground = true)
 @Composable
 fun MainPreview() {
-    LoadMainView()
+    LoadMainView(
+        listOf(),
+        onAddButtonClick = {}
+    )
 }
 
 @Composable
-fun LoadMainView() {
+fun LoadMainView(accounts: List<AccountWithBank>?, onAddButtonClick: () -> Unit) {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -159,57 +156,43 @@ fun LoadMainView() {
                     width = 120, height = 120, color = mainColor)
             }
         }
-
-        //DB- 유저가 등록한 계좌 리스트 불러오기
-        //Account Dummy Data
-        val aList = ArrayList<Account>()
-        aList.add(Account(1,
-            1,
-            "user1",
-            "123-123-123",
-            true,
-            color = com.euphony.project.account_touch.utils.model.Color.BLUE))
-        aList.add(Account(2,
-            1,
-            "user2",
-            "123-456-123",
-            false,
-            color = com.euphony.project.account_touch.utils.model.Color.PINK))
-        aList.add(Account(3,
-            1,
-            "user3",
-            "456-789-123",
-            false,
-            color = com.euphony.project.account_touch.utils.model.Color.INDIGO))
-        myAccountList(aList)
+        myAccountList(accounts)
+        Column(
+            modifier = Modifier
+                .fillMaxSize(),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Button(onClick = { onAddButtonClick() }) {
+                Text(text = "OPEN BOTTOM SHEET")
+            }
+        }
     }
 }
 
 @Composable
-fun myAccountList(accounts: List<Account>) {
+fun myAccountList(accounts: List<AccountWithBank>?) {
+    val _accounts = accounts ?: listOf()
+
     LazyColumn {
-        items(accounts.size) {
-            myAccountItem(accounts[it])
+        items(_accounts.size) {
+            myAccountItem(_accounts[it])
             space(20)
         }
     }
 }
 
 @Composable
-fun myAccountItem(account: Account) {
-    //Test Data
-    var bankName = "국민" //account.bank의 id통해 가져와야 함
-    var bankIconPath = "banks/kb_bank.png"
-    var bgColor = account.color.colorId
-    var fontColor = account.color.fontColorId
-    val bankImgBitmap = AssetsUtil.getBitmap(LocalContext.current, bankIconPath)
+fun myAccountItem(accountWithBank: AccountWithBank) {
+    val bankImgBitmap =
+        AssetsUtil.getBitmap(LocalContext.current, accountWithBank.bank.bankIconPath.path)
 
     Card(
         modifier = Modifier
             .fillMaxWidth()
             .height(75.dp),
         shape = RoundedCornerShape(8.dp),
-        backgroundColor = colorResource(id = bgColor),
+        backgroundColor = colorResource(id = accountWithBank.account.color.colorId),
         elevation = 5.dp,
     ) {
         Row {
@@ -224,14 +207,14 @@ fun myAccountItem(account: Account) {
                     Modifier.padding(start = 15.dp)
                 ) {
                     Text(
-                        "${account.nickname}의 ${bankName} 계좌",
+                        "${accountWithBank.account.nickname}의 ${accountWithBank.bank.name} 계좌",
                         fontSize = 18.sp,
-                        color = colorResource(id = fontColor)
+                        color = colorResource(id = accountWithBank.account.color.fontColorId)
                     )
                     Text(
-                        "${account.accountNumber}",
+                        accountWithBank.account.accountNumber,
                         fontSize = 18.sp,
-                        color = colorResource(id = fontColor)
+                        color = colorResource(id = accountWithBank.account.color.fontColorId)
                     )
                 }
 
@@ -240,7 +223,7 @@ fun myAccountItem(account: Account) {
                     Modifier.fillMaxWidth(),
                     contentAlignment = Alignment.CenterEnd
                 ) {
-                    ShareImage(account.isAlwaysOn)
+                    ShareImage(accountWithBank.account.isAlwaysOn)
                 }
             }
         }
