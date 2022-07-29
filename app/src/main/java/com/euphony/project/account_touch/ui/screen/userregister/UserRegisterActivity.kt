@@ -6,6 +6,7 @@ import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
+import androidx.compose.runtime.livedata.observeAsState
 import com.euphony.project.account_touch.ui.screen.main.MainActivity
 import com.euphony.project.account_touch.ui.theme.AccounttouchTheme
 import com.euphony.project.account_touch.ui.viewmodel.UserViewModel
@@ -19,21 +20,27 @@ class UserRegisterActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        // TODO: 유저 생성 유무 로직
         setContent {
             AccounttouchTheme {
+                if (userViewModel.user.observeAsState().value != null) {
+                    startMainActivity()
+                }
+
                 UserRegisterScreen(
                     userViewModel,
-                    onStartMainActivity = {
-                        val intent = Intent(this, MainActivity::class.java)
-                        startActivity(intent)
-                        finish()
-                    },
+                    onStartMainActivity = { startMainActivity() },
                     onUserNicknameInvalid = {
-                        Toast.makeText(this, "유저 이름은 1자 이상 15자 이하로 입력해주세요.", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this, "유저 이름은 1자 이상 15자 이하로 입력해주세요.", Toast.LENGTH_SHORT)
+                            .show()
                     }
                 )
             }
         }
+    }
+
+    private fun startMainActivity() {
+        val intent = Intent(this, MainActivity::class.java)
+        startActivity(intent)
+        finish()
     }
 }
