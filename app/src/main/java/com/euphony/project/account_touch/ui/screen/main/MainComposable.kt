@@ -42,7 +42,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.euphony.project.account_touch.R
 import com.euphony.project.account_touch.data.account.entity.Account
-import com.euphony.project.account_touch.ui.screen.main.model.Content
 import com.euphony.project.account_touch.ui.screen.userregister.LoadText
 import com.euphony.project.account_touch.ui.screen.userregister.ProfileImage
 import com.euphony.project.account_touch.ui.screen.userregister.space
