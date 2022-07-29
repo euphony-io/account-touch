@@ -11,6 +11,7 @@ import androidx.compose.foundation.lazy.GridCells
 import androidx.compose.foundation.lazy.LazyVerticalGrid
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
+import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.Text
@@ -34,14 +35,17 @@ import com.euphony.project.account_touch.utils.AssetsUtil
 @Composable
 fun ChooseBankScreen(
     onCloseClick: () -> Unit,
-) { // TODO: viewModel, OnItemClick
-    ChooseBank(onCloseClick)
+    onBankItemClick: () -> Unit
+) { // TODO: viewModel
+    ChooseBank(onCloseClick, onBankItemClick)
 }
 
 @Composable
-fun ChooseBank(onCloseClick: () -> Unit) {
-    ChooseBankTitle(onCloseClick, "은행 선택")
-    BanksContent()
+fun ChooseBank(onCloseClick: () -> Unit, onBankItemClick: () -> Unit) {
+    Column {
+        ChooseBankTitle(onCloseClick, "은행 선택")
+        BanksContent(onBankItemClick)
+    }
 }
 
 @Composable
@@ -77,7 +81,7 @@ fun ChooseBankTitle(
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun BanksContent() {
+fun BanksContent(onBankItemClick: () -> Unit) {
     val bankBitmaps = AssetsUtil.getBitmaps(LocalContext.current, "banks")
 
     LazyVerticalGrid(
@@ -88,16 +92,18 @@ fun BanksContent() {
         horizontalArrangement = Arrangement.spacedBy(8.dp)
     ) {
         items(bankBitmaps.size) {
-            BankItem(bankBitmaps[it])
+            BankItem(bankBitmaps[it], onBankItemClick)
         }
     }
 }
 
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun BankItem(imageBitmap: ImageBitmap?) {
+fun BankItem(imageBitmap: ImageBitmap?, onBankItemClick: () -> Unit) {
     Card(
         shape = RoundedCornerShape(8.dp),
-        backgroundColor = Gray_F4F4F4
+        backgroundColor = Gray_F4F4F4,
+        onClick = { onBankItemClick() }
     ) {
         Column(
             modifier = Modifier.padding(vertical = 24.dp, horizontal = 16.dp),
@@ -122,5 +128,5 @@ fun BankItem(imageBitmap: ImageBitmap?) {
 @Preview(showBackground = true)
 @Composable
 fun ChooseBankPreview() {
-    ChooseBank(onCloseClick = {})
+    ChooseBank(onCloseClick = {}, onBankItemClick = {})
 }
