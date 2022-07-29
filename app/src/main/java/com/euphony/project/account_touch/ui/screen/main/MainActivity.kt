@@ -7,12 +7,18 @@ import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.euphony.project.account_touch.data.global.AccountWithBank
+import com.euphony.project.account_touch.data.user.entity.User
 import com.euphony.project.account_touch.ui.screen.main.receivedaccounts.ReceivedAccountsScreen
 import com.euphony.project.account_touch.ui.screen.main.transmitaccount.TransmitAccountScreen
 import com.euphony.project.account_touch.ui.theme.AccounttouchTheme
@@ -20,6 +26,7 @@ import com.euphony.project.account_touch.ui.viewmodel.AccountViewModel
 import com.euphony.project.account_touch.ui.viewmodel.BankViewModel
 import com.euphony.project.account_touch.ui.viewmodel.ReceivedViewModel
 import com.euphony.project.account_touch.ui.viewmodel.UserViewModel
+import com.euphony.project.account_touch.utils.model.UserIcon
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -33,7 +40,11 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
+
             AccounttouchTheme {
+                val user = userViewModel.user.observeAsState().value ?: User(nickname = "temp", icon = UserIcon.GHOST)
+                val accounts = accountViewModel.accounts.observeAsState().value ?: listOf()
+
                 val navController = rememberNavController()
                 val currentBackStack by navController.currentBackStackEntryAsState()
                 val currentDestination = currentBackStack?.destination
@@ -42,7 +53,8 @@ class MainActivity : ComponentActivity() {
 
                 MainNavHost(
                     navController,
-                    userViewModel,
+                    user,
+                    accounts,
                     bankViewModel,
                     receivedViewModel,
                     accountViewModel,
@@ -64,26 +76,31 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun MainNavHost(
     navController: NavHostController,
-    userViewModel: UserViewModel,
+    user: User,
+    accounts: List<AccountWithBank>,
     bankViewModel: BankViewModel,
     receivedViewModel: ReceivedViewModel,
     accountViewModel: AccountViewModel,
     onAddAccountInValid: () -> Unit,
     onModifyAccountInValid: () -> Unit,
 ) {
+    var accountIndex by remember { mutableStateOf(-1) }
+
     NavHost(
         navController = navController,
         startDestination = Accounts.route
     ) {
         composable(route = Accounts.route) {
             MainBottomSheetScreen(
+                user,
+                accounts,
                 accountViewModel,
                 bankViewModel,
-                userViewModel,
                 onReceivedIconClick = {
                     navController.navigateSingleTopTo(ReceivedAccounts.route)
                 },
                 onAccountClick = {
+                    accountIndex = it
                     navController.navigateSingleTopTo(TransmitAccount.route)
                 },
                 onAddAccountInValid = { onAddAccountInValid() },
@@ -92,6 +109,8 @@ fun MainNavHost(
         }
         composable(route = TransmitAccount.route) {
             TransmitAccountScreen(
+                accounts[accountIndex],
+                user,
                 onBackClick = {
                     navController.popBackStack()
                 }

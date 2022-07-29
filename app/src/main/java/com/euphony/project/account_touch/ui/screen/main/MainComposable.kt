@@ -2,6 +2,7 @@ package com.euphony.project.account_touch.ui.screen.main
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -23,7 +24,6 @@ import androidx.compose.material.Text
 import androidx.compose.material.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -40,7 +40,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.euphony.project.account_touch.R
-import com.euphony.project.account_touch.data.account.dto.CreateAccountRequest
 import com.euphony.project.account_touch.data.global.AccountWithBank
 import com.euphony.project.account_touch.data.user.entity.User
 import com.euphony.project.account_touch.ui.screen.main.model.Content
@@ -51,25 +50,24 @@ import com.euphony.project.account_touch.ui.theme.mainColor
 import com.euphony.project.account_touch.ui.theme.white
 import com.euphony.project.account_touch.ui.viewmodel.AccountViewModel
 import com.euphony.project.account_touch.ui.viewmodel.BankViewModel
-import com.euphony.project.account_touch.ui.viewmodel.UserViewModel
 import com.euphony.project.account_touch.utils.AssetsUtil
+import com.euphony.project.account_touch.utils.model.UserIcon
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun MainBottomSheetScreen(
+    user: User,
+    accounts: List<AccountWithBank>,
     accountViewModel: AccountViewModel,
     bankViewModel: BankViewModel,
-    userViewModel: UserViewModel,
     onReceivedIconClick: () -> Unit,
-    onAccountClick: () -> Unit,
+    onAccountClick: (Int) -> Unit,
     onAddAccountInValid: () -> Unit,
     onModifyAccountInValid: () -> Unit,
 ) {
-    val accounts = accountViewModel.accounts.observeAsState().value ?: listOf()
     // TODO: getBanks from BankViewModel
     // TODO: selected bank index state
-    val user by userViewModel.user.observeAsState()
 
     val modalBottomSheetState =
         rememberModalBottomSheetState(initialValue = ModalBottomSheetValue.Hidden)
@@ -136,22 +134,30 @@ fun MainBottomSheetScreen(
                 coroutineScope.launch {
                     modalBottomSheetState.show()
                 }
-            }
+            },
+            onAccountClick
         )
     }
 }
 
-//@Preview(showBackground = true)
-//@Composable
-//fun MainPreview() {
-//    LoadMainView(
-//        listOf(),
-//        onAddButtonClick = {}
-//    )
-//}
+@Preview(showBackground = true)
+@Composable
+fun MainPreview() {
+    LoadMainView(
+        listOf(),
+        user = User(nickname = "kim", icon = UserIcon.GHOST),
+        onAddButtonClick = {},
+        onAccountClick = {}
+    )
+}
 
 @Composable
-fun LoadMainView(accounts: List<AccountWithBank>, user: User?, onAddButtonClick: () -> Unit) {
+fun LoadMainView(
+    accounts: List<AccountWithBank>,
+    user: User,
+    onAddButtonClick: () -> Unit,
+    onAccountClick: (Int) -> Unit,
+) {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -164,7 +170,7 @@ fun LoadMainView(accounts: List<AccountWithBank>, user: User?, onAddButtonClick:
             Image(painter = painterResource(id = R.drawable.ic_alarm), contentDescription = "알람 아이")
         }
         Row {
-            LoadText(str = "${user?.nickname} 님, \n안녕하세요.")
+            LoadText(str = "${user.nickname} 님, \n안녕하세요.")
             Box(
                 modifier = Modifier.fillMaxWidth(),
                 contentAlignment = Alignment.TopEnd
@@ -174,7 +180,7 @@ fun LoadMainView(accounts: List<AccountWithBank>, user: User?, onAddButtonClick:
                     width = 120, height = 120, color = mainColor)
             }
         }
-        myAccountList(accounts)
+        MyAccountList(accounts, onAccountClick)
         Column(
             modifier = Modifier
                 .fillMaxSize(),
@@ -189,17 +195,17 @@ fun LoadMainView(accounts: List<AccountWithBank>, user: User?, onAddButtonClick:
 }
 
 @Composable
-fun myAccountList(accounts: List<AccountWithBank>) {
+fun MyAccountList(accounts: List<AccountWithBank>, onAccountClick: (Int) -> Unit) {
     LazyColumn {
         items(accounts.size) {
-            myAccountItem(accounts[it])
+            MyAccountItem(accounts[it], it, onAccountClick)
             space(20)
         }
     }
 }
 
 @Composable
-fun myAccountItem(accountWithBank: AccountWithBank) {
+fun MyAccountItem(accountWithBank: AccountWithBank, index: Int, onAccountClick: (Int) -> Unit) {
     val bankImgBitmap =
         AssetsUtil.getBitmap(LocalContext.current, accountWithBank.bank.bankIconPath.path)
 
@@ -239,7 +245,7 @@ fun myAccountItem(accountWithBank: AccountWithBank) {
                     Modifier.fillMaxWidth(),
                     contentAlignment = Alignment.CenterEnd
                 ) {
-                    ShareImage(accountWithBank.account.isAlwaysOn)
+                    ShareImage(accountWithBank.account.isAlwaysOn, index, onAccountClick)
                 }
             }
         }
@@ -264,11 +270,12 @@ fun BankImage(imageBitmap: ImageBitmap?) {
 
 //계좌 공유 아이콘 이미지뷰
 @Composable
-fun ShareImage(isAlways: Boolean) {
+fun ShareImage(isAlways: Boolean, index: Int, onAccountClick: (Int) -> Unit) {
     Box(
         modifier = Modifier
             .size(30.dp)
             .clip(RoundedCornerShape(10.dp))
+            .clickable { onAccountClick(index) }
             .background(white),
         contentAlignment = Alignment.Center
     ) {

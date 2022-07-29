@@ -34,8 +34,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.euphony.project.account_touch.R
 import com.euphony.project.account_touch.data.account.entity.Account
+import com.euphony.project.account_touch.data.global.AccountWithBank
+import com.euphony.project.account_touch.data.user.entity.User
 import com.euphony.project.account_touch.ui.screen.common.UserIconItem
-import com.euphony.project.account_touch.ui.screen.main.User
 import com.euphony.project.account_touch.ui.theme.Blue_6D95FF
 import com.euphony.project.account_touch.ui.theme.Blue_DFE8FF
 import com.euphony.project.account_touch.ui.theme.Gray_9C9C9C
@@ -47,18 +48,7 @@ import com.euphony.project.account_touch.utils.model.Color
 import com.euphony.project.account_touch.utils.model.UserIcon
 
 @Composable
-fun TransmitAccountScreen(onBackClick: () -> Unit) { // TODO: viewModel
-    val user = User(
-        nickname = "영욱",
-        icon = UserIcon.HAPPY
-    )
-    val account = Account(
-        bank_id = 1L,
-        nickname = "국민은행 체크카드",
-        accountNumber = "123456789",
-        isAlwaysOn = false,
-        color = Color.SKY
-    )
+fun TransmitAccountScreen(account: AccountWithBank?, user: User?, onBackClick: () -> Unit) {
     val receivers = listOf<User>(
         User(
             nickname = "나연",
@@ -89,7 +79,7 @@ fun TransmitAccountScreen(onBackClick: () -> Unit) { // TODO: viewModel
 }
 
 @Composable
-fun TransmitAccount(user: User, account: Account, receivers: List<User>, onBackClick: () -> Unit) {
+fun TransmitAccount(user: User?, account: AccountWithBank?, receivers: List<User>, onBackClick: () -> Unit) {
     Scaffold(
         topBar = {
             TopAppBar(
@@ -124,7 +114,7 @@ fun TransmitAccount(user: User, account: Account, receivers: List<User>, onBackC
 }
 
 @Composable
-fun TransmitAccountInfo(user: User, account: Account) {
+fun TransmitAccountInfo(user: User?, accountWithBank: AccountWithBank?) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -132,7 +122,7 @@ fun TransmitAccountInfo(user: User, account: Account) {
         horizontalArrangement = Arrangement.Center
     ) {
         Text(
-            text = "${user.nickname}의\n${account.nickname} 계좌를\n전송합니다.",
+            text = "${user?.nickname}의\n${accountWithBank?.account?.nickname} 계좌를\n전송합니다.",
             fontWeight = FontWeight.Bold,
             fontSize = 26.sp,
             textAlign = TextAlign.Center,
@@ -275,5 +265,5 @@ fun TransmitAccountPreview() {
             icon = UserIcon.SMILE
         ),
     )
-    TransmitAccount(user, account, receivers, onBackClick = {})
+//    TransmitAccount(user, account, receivers, onBackClick = {})
 }
