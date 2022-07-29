@@ -92,7 +92,7 @@ fun ReceivedAccounts(
         },
         content = {
             Column {
-                ReceivedAccountsUser(user)
+                ReceivedAccountsUser(user, "님께서\n받으신 계좌입니다")
                 ReceivedAccountItems(receiveds)
             }
         }
@@ -100,7 +100,7 @@ fun ReceivedAccounts(
 }
 
 @Composable
-fun ReceivedAccountsUser(user: User) {
+fun ReceivedAccountsUser(user: User, str: String) {
     val imageBitmap = AssetsUtil.getBitmap(LocalContext.current, user.icon.path)
 
     Row(
@@ -110,7 +110,8 @@ fun ReceivedAccountsUser(user: User) {
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
         Text(
-            text = "${user.nickname}님께서\n받으신 계좌입니다.",
+            text = "${user.nickname}${str}",
+//            text = "${user.nickname}님께서\n받으신 계좌입니다.",
             color = Blue_6D95FF,
             fontWeight = FontWeight.Bold,
             fontSize = 22.sp
