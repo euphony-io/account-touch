@@ -1,6 +1,7 @@
 package com.euphony.project.account_touch.ui.screen.main
 
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
@@ -44,7 +45,15 @@ class MainActivity : ComponentActivity() {
                     userViewModel,
                     bankViewModel,
                     receivedViewModel,
-                    accountViewModel
+                    accountViewModel,
+                    onAddAccountInValid = {
+                        Toast.makeText(this, "계좌 이름을 10자 이내로 작성해주세요.", Toast.LENGTH_SHORT)
+                            .show()
+                    },
+                    onModifyAccountInValid = {
+                        Toast.makeText(this, "계좌 수정에 실패하였습니다.", Toast.LENGTH_SHORT)
+                            .show()
+                    }
                 )
             }
         }
@@ -59,6 +68,8 @@ fun MainNavHost(
     bankViewModel: BankViewModel,
     receivedViewModel: ReceivedViewModel,
     accountViewModel: AccountViewModel,
+    onAddAccountInValid: () -> Unit,
+    onModifyAccountInValid: () -> Unit,
 ) {
     NavHost(
         navController = navController,
@@ -67,12 +78,16 @@ fun MainNavHost(
         composable(route = Accounts.route) {
             MainBottomSheetScreen(
                 accountViewModel,
+                bankViewModel,
                 onReceivedIconClick = {
                     navController.navigateSingleTopTo(ReceivedAccounts.route)
-                }
-            ) {
-                navController.navigateSingleTopTo(TransmitAccount.route)
-            }
+                },
+                onAccountClick = {
+                    navController.navigateSingleTopTo(TransmitAccount.route)
+                },
+                onAddAccountInValid = { onAddAccountInValid() },
+                onModifyAccountInValid = { onModifyAccountInValid() }
+            )
         }
         composable(route = TransmitAccount.route) {
             TransmitAccountScreen(

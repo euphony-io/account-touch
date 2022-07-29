@@ -40,6 +40,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.euphony.project.account_touch.R
+import com.euphony.project.account_touch.data.account.dto.CreateAccountRequest
 import com.euphony.project.account_touch.data.global.AccountWithBank
 import com.euphony.project.account_touch.ui.screen.main.model.Content
 import com.euphony.project.account_touch.ui.screen.userregister.LoadText
@@ -48,6 +49,7 @@ import com.euphony.project.account_touch.ui.screen.userregister.space
 import com.euphony.project.account_touch.ui.theme.mainColor
 import com.euphony.project.account_touch.ui.theme.white
 import com.euphony.project.account_touch.ui.viewmodel.AccountViewModel
+import com.euphony.project.account_touch.ui.viewmodel.BankViewModel
 import com.euphony.project.account_touch.utils.AssetsUtil
 import kotlinx.coroutines.launch
 
@@ -55,10 +57,16 @@ import kotlinx.coroutines.launch
 @Composable
 fun MainBottomSheetScreen(
     accountViewModel: AccountViewModel,
+    bankViewModel: BankViewModel,
     onReceivedIconClick: () -> Unit,
     onAccountClick: () -> Unit,
+    onAddAccountInValid: () -> Unit,
+    onModifyAccountInValid: () -> Unit,
 ) {
-    val accounts = accountViewModel.accounts.observeAsState()
+    val accounts = accountViewModel.accounts.observeAsState().value ?: listOf()
+    // TODO: getBanks from BankViewModel
+    // TODO: selected bank index state
+
     val modalBottomSheetState =
         rememberModalBottomSheetState(initialValue = ModalBottomSheetValue.Hidden)
     val coroutineScope = rememberCoroutineScope()
@@ -87,7 +95,10 @@ fun MainBottomSheetScreen(
                             }
                         },
                         onEditClick = { isEditClicked = !isEditClicked },
-                        isAddContent = true
+                        isAddContent = true,
+                        accountViewModel,
+                        onAddAccountInValid = { onAddAccountInValid() },
+                        onModifyAccountInValid = { onModifyAccountInValid() }
                     )
                 }
                 Content.UPDATE_ACCOUNT -> {
@@ -99,7 +110,10 @@ fun MainBottomSheetScreen(
                             }
                         },
                         onEditClick = { isEditClicked = !isEditClicked },
-                        isAddContent = false
+                        isAddContent = false,
+                        accountViewModel,
+                        onAddAccountInValid = { onAddAccountInValid() },
+                        onModifyAccountInValid = { onModifyAccountInValid() }
                     )
                 }
             }
@@ -110,7 +124,7 @@ fun MainBottomSheetScreen(
         sheetBackgroundColor = Color.White,
     ) {
         LoadMainView(
-            accounts.value,
+            accounts,
             onAddButtonClick = {
                 isEditClicked = false
                 content = Content.CHOOSE_BANK
@@ -132,7 +146,7 @@ fun MainPreview() {
 }
 
 @Composable
-fun LoadMainView(accounts: List<AccountWithBank>?, onAddButtonClick: () -> Unit) {
+fun LoadMainView(accounts: List<AccountWithBank>, onAddButtonClick: () -> Unit) {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -171,12 +185,10 @@ fun LoadMainView(accounts: List<AccountWithBank>?, onAddButtonClick: () -> Unit)
 }
 
 @Composable
-fun myAccountList(accounts: List<AccountWithBank>?) {
-    val _accounts = accounts ?: listOf()
-
+fun myAccountList(accounts: List<AccountWithBank>) {
     LazyColumn {
-        items(_accounts.size) {
-            myAccountItem(_accounts[it])
+        items(accounts.size) {
+            myAccountItem(accounts[it])
             space(20)
         }
     }
