@@ -1,7 +1,6 @@
 package com.euphony.project.account_touch.ui.component
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
@@ -13,16 +12,15 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.colorResource
-import androidx.compose.ui.semantics.Role.Companion.Image
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import com.euphony.project.account_touch.R
-import com.euphony.project.account_touch.ui.screen.loadText
-import com.euphony.project.account_touch.ui.screen.space
-import com.euphony.project.account_touch.ui.theme.Blue_6D95FF
+import com.euphony.project.account_touch.ui.screen.transmit.TransmitImage
+import com.euphony.project.account_touch.ui.screen.userregister.LoadText
+import com.euphony.project.account_touch.ui.screen.userregister.space
 import com.euphony.project.account_touch.ui.theme.grey
 import com.euphony.project.account_touch.ui.theme.mainColor
 import com.euphony.project.account_touch.ui.theme.white
@@ -30,11 +28,11 @@ import com.euphony.project.account_touch.ui.theme.white
 @Preview(showBackground = true)
 @Composable
 fun DialogPreview() {
-    TransmitDialog(str = "계좌 보내기 성공")   //or 계좌 보내기 실패
+    TransmitResultDialog(str = "성공")   //or 실패
 }
 
 @Composable
-fun TransmitDialog(str:String){
+fun TransmitResultDialog(str:String){
     Dialog(onDismissRequest = {}) {
         Surface(
             modifier = Modifier
@@ -43,20 +41,20 @@ fun TransmitDialog(str:String){
             shape = RoundedCornerShape(15.dp),
             color = white
         ){
-            successContent(str)
+            ResultContent(str)
         }
     }
 }
 
 @Composable
-fun successContent(str:String){
+fun ResultContent(str:String){
     Column(
         modifier = Modifier
             .padding(vertical = 30.dp),
         verticalArrangement =  Arrangement.Center,
         Alignment.CenterHorizontally
     ){
-        loadText("${str}")
+        LoadText("계좌 보내기 ${str}")
         space(value = 10)
 
         TransmitImage()
