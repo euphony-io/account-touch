@@ -5,14 +5,17 @@ import com.euphony.project.account_touch.data.received.dao.ReceivedDao
 import com.euphony.project.account_touch.data.received.dto.CreateReceivedRequest
 import com.euphony.project.account_touch.data.received.entity.Received
 import kotlinx.coroutines.flow.Flow
+import javax.inject.Inject
 
-class ReceivedRepository(private val dao : ReceivedDao) {
+class ReceivedRepository @Inject constructor (
+    private val dao : ReceivedDao
+) {
 
-    fun getReceivedList(): Flow<List<Received?>> {
+    fun getReceivedList(): Flow<List<Received>> {
         return dao.findAllBy()
     }
 
-    fun getReceived(id: Long): Received {
+    suspend fun getReceived(id: Long): Received {
         return dao.findById(id)
     }
 

@@ -8,7 +8,6 @@ import com.euphony.project.account_touch.utils.model.UserIcon
 import com.euphony.project.account_touch.data.global.config.EuphonyDatabase
 import com.euphony.project.account_touch.data.user.dao.UserDao
 import junit.framework.TestCase
-import kotlinx.coroutines.runBlocking
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
@@ -18,7 +17,6 @@ import com.google.common.truth.Truth.assertThat
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.asExecutor
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.take
 import kotlinx.coroutines.test.TestCoroutineDispatcher
 import kotlinx.coroutines.test.TestCoroutineScope
