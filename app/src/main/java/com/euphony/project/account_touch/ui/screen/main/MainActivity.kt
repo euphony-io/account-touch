@@ -3,76 +3,76 @@ package com.euphony.project.account_touch.ui.screen.main
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Button
-import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.ModalBottomSheetLayout
-import androidx.compose.material.ModalBottomSheetValue
-import androidx.compose.material.Text
-import androidx.compose.material.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.unit.dp
+import androidx.navigation.NavGraph.Companion.findStartDestination
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.currentBackStackEntryAsState
+import androidx.navigation.compose.rememberNavController
+import com.euphony.project.account_touch.ui.screen.main.receivedaccounts.ReceivedAccountsScreen
+import com.euphony.project.account_touch.ui.screen.main.transmitaccount.TransmitAccountScreen
 import com.euphony.project.account_touch.ui.theme.AccounttouchTheme
-import kotlinx.coroutines.launch
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
             AccounttouchTheme {
-                ModalBottomSheet()
+                val navController = rememberNavController()
+                val currentBackStack by navController.currentBackStackEntryAsState()
+                val currentDestination = currentBackStack?.destination
+                val currentScreen =
+                    mainScreens.find { it.route == currentDestination?.route } ?: Accounts
+
+                MainNavHost(navController)
             }
         }
     }
 }
 
-@OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun ModalBottomSheet() {
-    val modalBottomSheetState =
-        rememberModalBottomSheetState(initialValue = ModalBottomSheetValue.Hidden)
-    val coroutineScope = rememberCoroutineScope()
-    var isEditClicked by remember { mutableStateOf(false) }
-
-    ModalBottomSheetLayout(
-        sheetContent = {
-            ChooseBankScreen(
-                onCloseClick = {
-                    coroutineScope.launch {
-                        modalBottomSheetState.hide()
-                    }
+fun MainNavHost(navController: NavHostController) {
+    NavHost(
+        navController = navController,
+        startDestination = Accounts.route
+    ) {
+        composable(route = Accounts.route) {
+            MainBottomSheetScreen(
+                onReceivedIconClick = {
+                    navController.navigateSingleTopTo(ReceivedAccounts.route)
+                },
+                onAccountClick = {
+                    navController.navigateSingleTopTo(TransmitAccount.route)
                 }
             )
-        },
-        sheetState = modalBottomSheetState,
-        sheetShape = RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp),
-        sheetBackgroundColor = Color.White
-    ) {
-        Column(
-            modifier = Modifier.fillMaxSize(),
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            Button(onClick = {
-                isEditClicked = false
-                coroutineScope.launch {
-                    modalBottomSheetState.show()
+        }
+        composable(route = TransmitAccount.route) {
+            TransmitAccountScreen(
+                onBackClick = {
+                    navController.popBackStack()
                 }
-            }) {
-                Text(text = "OPEN BOTTOM SHEET")
-            }
+            )
+        }
+        composable(route = ReceivedAccounts.route) {
+            ReceivedAccountsScreen(
+                onBackClick = {
+                    navController.popBackStack()
+                }
+            )
         }
     }
 }
+
+fun NavHostController.navigateSingleTopTo(route: String) =
+    this.navigate(route) {
+        popUpTo(
+            this@navigateSingleTopTo.graph.findStartDestination().id
+        ) {
+            saveState = true
+        }
+        launchSingleTop = true
+        restoreState = true
+    }
 

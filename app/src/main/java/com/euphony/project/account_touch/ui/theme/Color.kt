@@ -1,7 +1,6 @@
 package com.euphony.project.account_touch.ui.theme
 
 import androidx.compose.ui.graphics.Color
-import com.euphony.project.account_touch.R
 
 val mainColor = Color(109, 149, 255)
 val grey = Color(244, 244, 244)
