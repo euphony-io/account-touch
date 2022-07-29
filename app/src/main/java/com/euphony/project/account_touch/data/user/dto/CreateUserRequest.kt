@@ -9,7 +9,7 @@ class CreateUserRequest (
     val userIcon: UserIcon,
 ) :BaseRequest {
     override fun validate(): Boolean {
-        if(nickname.length > 15) return false
+        if(nickname.length !in 1..15) return false
         return true
     }
 
