@@ -1,4 +1,4 @@
-package com.euphony.project.account_touch.ui.component
+package com.euphony.project.account_touch.ui.screen.main
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -18,7 +18,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import com.euphony.project.account_touch.R
-import com.euphony.project.account_touch.ui.screen.transmit.TransmitImage
+import com.euphony.project.account_touch.ui.screen.main.transmitaccount.TransmitImage
 import com.euphony.project.account_touch.ui.screen.userregister.LoadText
 import com.euphony.project.account_touch.ui.screen.userregister.space
 import com.euphony.project.account_touch.ui.theme.grey
