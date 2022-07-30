@@ -49,38 +49,16 @@ import com.euphony.project.account_touch.utils.model.Color
 import com.euphony.project.account_touch.utils.model.UserIcon
 
 @Composable
-fun TransmitAccountScreen(account: AccountWithBank?, user: User?, onBackClick: () -> Unit) {
-    val receivers = listOf<User>(
-        User(
-            nickname = "나연",
-            icon = UserIcon.PARTY
-        ),
-        User(
-            nickname = "나연",
-            icon = UserIcon.PARTY
-        ),
-        User(
-            nickname = "나연",
-            icon = UserIcon.PARTY
-        ),
-        User(
-            nickname = "은빈",
-            icon = UserIcon.SMILE
-        ),
-        User(
-            nickname = "은빈",
-            icon = UserIcon.SMILE
-        ),
-        User(
-            nickname = "은빈",
-            icon = UserIcon.SMILE
-        ),
-    )
-    TransmitAccount(user, account, receivers, onBackClick)
+fun TransmitAccountScreen(
+    account: AccountWithBank?,
+    user: User?,
+    onBackClick: () -> Unit
+) {
+    TransmitAccount(user, account, onBackClick)
 }
 
 @Composable
-fun TransmitAccount(user: User?, account: AccountWithBank?, receivers: List<User>, onBackClick: () -> Unit) {
+fun TransmitAccount(user: User?, account: AccountWithBank?, onBackClick: () -> Unit) {
     Scaffold(
         topBar = {
             TopAppBar(
@@ -108,8 +86,7 @@ fun TransmitAccount(user: User?, account: AccountWithBank?, receivers: List<User
             ) {
                 TransmitAccountInfo(user, account)
                 TransmitImage()
-//                TransmitAllButton()
-//                Receivers(receivers)
+                //ddd
             }
         }
     )
@@ -146,30 +123,6 @@ fun TransmitImage() {
             modifier = Modifier
                 .size(100.dp)
         )
-    }
-}
-
-@Composable
-fun TransmitAllButton() {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(vertical = 8.dp),
-        horizontalArrangement = Arrangement.End
-    ) {
-        Button(
-            onClick = { /*TODO*/ },
-            shape = RoundedCornerShape(18.dp),
-            colors = ButtonDefaults.buttonColors(
-                backgroundColor = Gray_D2D2D2
-            )
-        ) {
-            Text(
-                text = "모두에게 보내기",
-                color = White_FAF5F5,
-                fontSize = 10.sp
-            )
-        }
     }
 }
 
@@ -225,47 +178,4 @@ fun ReceiverItem(user: User) {
             )
         }
     }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun TransmitAccountPreview() {
-    val user = User(
-        nickname = "영욱",
-        icon = UserIcon.HAPPY
-    )
-    val account = Account(
-        bank_id = 1L,
-        nickname = "국민은행 체크카드",
-        accountNumber = "123456789",
-        color = Color.SKY
-    )
-    val receivers = listOf<User>(
-        User(
-            nickname = "나연",
-            icon = UserIcon.PARTY
-        ),
-        User(
-            nickname = "나연",
-            icon = UserIcon.PARTY
-        ),
-        User(
-            nickname = "나연",
-            icon = UserIcon.PARTY
-        ),
-        User(
-            nickname = "은빈",
-            icon = UserIcon.SMILE
-        ),
-        User(
-            nickname = "은빈",
-            icon = UserIcon.SMILE
-        ),
-        User(
-            nickname = "은빈",
-            icon = UserIcon.SMILE
-        ),
-    )
-
-    TransmitAccount(user, null, receivers, onBackClick = {})
 }

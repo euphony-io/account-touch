@@ -31,8 +31,10 @@ import androidx.navigation.compose.rememberNavController
 import com.euphony.project.account_touch.data.bank.entity.Bank
 import com.euphony.project.account_touch.data.global.AccountWithBank
 import com.euphony.project.account_touch.data.user.entity.User
+import com.euphony.project.account_touch.euphony.EuphonyViewModel
 import com.euphony.project.account_touch.ui.screen.main.receivedaccounts.ReceivedAccountsScreen
 import com.euphony.project.account_touch.ui.screen.main.transmitaccount.TransmitAccountScreen
+import com.euphony.project.account_touch.ui.screen.receivedetail.ReceivedDetailScreen
 import com.euphony.project.account_touch.ui.theme.AccounttouchTheme
 import java.lang.Exception
 import com.euphony.project.account_touch.ui.viewmodel.AccountViewModel
@@ -41,6 +43,7 @@ import com.euphony.project.account_touch.ui.viewmodel.ReceivedViewModel
 import com.euphony.project.account_touch.ui.viewmodel.UserViewModel
 import com.euphony.project.account_touch.utils.model.UserIcon
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.callbackFlow
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
@@ -49,9 +52,11 @@ class MainActivity : ComponentActivity() {
     private val bankViewModel by viewModels<BankViewModel>()
     private val receivedViewModel by viewModels<ReceivedViewModel>()
     private val accountViewModel by viewModels<AccountViewModel>()
+    private val euphonyViewModel by viewModels<EuphonyViewModel>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        euphonyViewModel.listen()
         setContent {
 
             AccounttouchTheme {
@@ -72,6 +77,7 @@ class MainActivity : ComponentActivity() {
                     banks,
                     receivedViewModel,
                     accountViewModel,
+                    euphonyViewModel,
                     onAddAccountInValid = {
                         Toast.makeText(this, "계좌 이름을 10자 이내로 작성해주세요.", Toast.LENGTH_SHORT)
                             .show()
@@ -95,6 +101,7 @@ fun MainNavHost(
     banks: List<Bank>,
     receivedViewModel: ReceivedViewModel,
     accountViewModel: AccountViewModel,
+    euphonyViewModel: EuphonyViewModel,
     onAddAccountInValid: () -> Unit,
     onModifyAccountInValid: () -> Unit,
 ) {
@@ -116,6 +123,11 @@ fun MainNavHost(
                 onAccountClick = {
                     accountIndex = it
                     navController.navigateSingleTopTo(TransmitAccount.route)
+                    val account = accounts[accountIndex].account;
+                    euphonyViewModel.speak(
+                        account.bank_id,
+                        account.accountNumber
+                    )
                 },
                 onAddAccountInValid = { onAddAccountInValid() },
                 onModifyAccountInValid = { onModifyAccountInValid() }

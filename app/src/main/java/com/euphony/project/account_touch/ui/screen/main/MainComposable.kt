@@ -273,7 +273,6 @@ fun MyAccountItem(accountWithBank: AccountWithBank, index: Int, onAccountClick: 
                     )
                 }
 
-                //계좌별 공유 방식 아이콘
                 Box(
                     Modifier.fillMaxWidth(),
                     contentAlignment = Alignment.CenterEnd

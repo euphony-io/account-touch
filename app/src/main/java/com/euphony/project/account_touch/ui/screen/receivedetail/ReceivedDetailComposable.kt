@@ -18,27 +18,24 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.euphony.project.account_touch.ui.screen.common.UserIconItem
+import com.euphony.project.account_touch.data.received.entity.Received
+import com.euphony.project.account_touch.euphony.EuphonyViewModel
 import com.euphony.project.account_touch.ui.screen.main.BankImage
-import com.euphony.project.account_touch.ui.screen.main.Received
 import com.euphony.project.account_touch.ui.theme.Blue_6D95FF
-import com.euphony.project.account_touch.ui.theme.Blue_DFE8FF
 import com.euphony.project.account_touch.ui.theme.Gray_F4F4F4
+import com.euphony.project.account_touch.ui.viewmodel.ReceivedViewModel
 import com.euphony.project.account_touch.utils.AssetsUtil
-import com.euphony.project.account_touch.utils.model.UserIcon
 
 @Composable
-fun ReceivedDetailScreen() { // TODO: viewMode, onBackClick as parameters
-    val received = Received(
-        accountNickname = "붕어빵",
-        accountNumber = "123456789",
-        speakerNickName = "붕어빵 사장",
-        speakerIcon = UserIcon.GHOST,
-    )
-    ReceivedDetail(received)
+fun ReceivedDetailScreen(
+    id: Long,
+    receivedViewModel: ReceivedViewModel,
+    onBackClick: () -> Unit,
+) {
+    //val received = receivedViewModel.getReceived(id);
+    //ReceivedDetail(received)
 }
 
 @Composable
@@ -103,12 +100,6 @@ fun ReceivedAccount(received: Received) {
                 BankImage(imageBitmap)
             }
             Text(
-                text = received.accountNickname,
-                fontWeight = FontWeight.Bold,
-                color = Blue_6D95FF,
-                fontSize = 18.sp
-            )
-            Text(
                 modifier = Modifier
                     .padding(vertical = 16.dp),
                 text = received.accountNumber,
@@ -118,16 +109,4 @@ fun ReceivedAccount(received: Received) {
             )
         }
     }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun ReceivedDetailPreview() {
-    val received = Received(
-        accountNickname = "붕어빵",
-        accountNumber = "123456789",
-        speakerNickName = "붕어빵 사장",
-        speakerIcon = UserIcon.GHOST,
-    )
-    ReceivedDetail(received)
 }
