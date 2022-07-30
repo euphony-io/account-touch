@@ -7,12 +7,11 @@ import co.euphony.rx.AcousticSensor
 import co.euphony.rx.EuRxManager
 import co.euphony.tx.EuTxManager
 import co.euphony.util.EuOption
-import com.euphony.project.account_touch.data.account.entity.Account
 import com.euphony.project.account_touch.data.received.entity.Received
 import com.euphony.project.account_touch.data.user.entity.User
 import com.euphony.project.account_touch.euphony.dto.AccountInfoModel
+import com.euphony.project.account_touch.euphony.dto.InfoModel
 import com.euphony.project.account_touch.euphony.dto.UserInfoModel
-import com.euphony.project.account_touch.ui.viewmodel.AccountViewModel
 import com.euphony.project.account_touch.utils.FormatUtil
 
 class EuphonyViewModel (application: Application) : AndroidViewModel(application) {
@@ -25,6 +24,10 @@ class EuphonyViewModel (application: Application) : AndroidViewModel(application
 
     private val _isProcessing = MutableLiveData(false)
     val isProcessing get() = _isProcessing
+
+
+    private val _accountEveryInfo = MutableLiveData<AccountInfoModel>()
+    val accountEveryInfo get() = _accountEveryInfo
 
     private val _accountInfo = MutableLiveData<AccountInfoModel>()
     val accountInfo get() = _accountInfo
@@ -40,30 +43,27 @@ class EuphonyViewModel (application: Application) : AndroidViewModel(application
         EuRxManager(EuOption.ModeType.EUPI)
     }
 
-    // 항상 모두에게 자신의 정보 보냄 (21000)
-    fun speakUser(phone: String, sendObj: User) {
-        txManager.code = FormatUtil.userInfoToJson(
-            UserInfoModel(phone, sendObj.nickname, sendObj.icon)
-        )
-        txManager.callEuPI(25000.0, EuTxManager.EuPIDuration.LENGTH_FOREVER)
-    }
-
-    // 항상 모두에게 보냄 (25000)
-    fun speakAll(sendObj: Received) {
-        txManager.code = FormatUtil.accountInfoToJson(
-            AccountInfoModel(
-                sendObj.accountNumber,
-                sendObj.accountNickname,
-                sendObj.speakerNickName,
-                sendObj.speakerIcon,
-                sendObj.bank_id
+    // 항상 모두에게 보냄 (21000)
+    fun speakAll(receivedObj: Received, userObj: User, key: String) {
+        txManager.code = FormatUtil.infoToJson(
+            InfoModel(
+                UserInfoModel(key, userObj.nickname, userObj.icon),
+                AccountInfoModel(
+                    receivedObj.accountNumber,
+                    receivedObj.accountNickname,
+                    receivedObj.speakerNickName,
+                    receivedObj.speakerIcon,
+                    receivedObj.bank_id
+                )
             )
         )
-        txManager.callEuPI(25000.0, EuTxManager.EuPIDuration.LENGTH_FOREVER)
+
+        txManager.callEuPI(21000.0, EuTxManager.EuPIDuration.LENGTH_FOREVER)
     }
 
     // 특정인에게 보냄 (24000)
     fun speak(key: String, sendObj: Received){
+        txManager.stop()
         txManager.code = FormatUtil.accountInfoToJson(
             key,
             AccountInfoModel(
@@ -74,32 +74,36 @@ class EuphonyViewModel (application: Application) : AndroidViewModel(application
                 sendObj.bank_id
             )
         )
-
         txManager.callEuPI(24000.0, EuTxManager.EuPIDuration.LENGTH_LONG)
     }
 
-    // 유저 정보 받음 (모두에게) (21000)
-    fun listenUser(){
+    // 유저 정보, 계좌 받음 (모두에게) (21000)
+    fun listenAll(){
         if (isListening.value == false) {
             rxManager.listen()
         }
 
         rxManager.setOnWaveKeyDown(21000){ }
-        //rxManager.setFrequencyForDetect(21000)
 
         rxManager.acousticSensor = AcousticSensor {
-            val obj = FormatUtil.jsonToUserInfo(it)
-            _usersInfo.value = _usersInfo.value?.plus(obj) ?: listOf(obj)
+            val infoInfo = FormatUtil.jsonToInfo(it)
+
+            val userInfo = infoInfo.userInfo;
+            val accountInfo = infoInfo.accountInfo; //null 처리 필요
+
+            // 주변인 리스트
+            _usersInfo.value = _usersInfo.value?.plus(userInfo) ?: listOf(userInfo)
+            //항상 공유하는 계좌 받음
+            _accountEveryInfo.value = accountInfo
         }
     }
 
-    // 계좌 받음 (모두에게: 25000, 특정인에게: 24000)
+    // 계좌 받음 (특정인에게: 24000)
     fun listen(key: String) {
         if (isListening.value == false) {
             rxManager.listen()
         }
 
-        rxManager.setOnWaveKeyPressed(25000){ }
         rxManager.setOnWaveKeyPressed(24000){ }
 
         rxManager.acousticSensor = AcousticSensor {

@@ -1,6 +1,7 @@
 package com.euphony.project.account_touch.utils
 
 import com.euphony.project.account_touch.euphony.dto.AccountInfoModel
+import com.euphony.project.account_touch.euphony.dto.InfoModel
 import com.euphony.project.account_touch.euphony.dto.UserInfoModel
 import com.google.gson.Gson
 
@@ -8,12 +9,12 @@ object FormatUtil {
 
     val gson = Gson()
 
-    fun userInfoToJson(userInfo: UserInfoModel): String{
-        return gson.toJson(userInfo)
+    fun infoToJson(infoModel: InfoModel): String{
+        return gson.toJson(infoModel)
     }
 
-    fun jsonToUserInfo(json: String): UserInfoModel {
-        return gson.fromJson(json, UserInfoModel::class.java)
+    fun jsonToInfo(json: String): InfoModel {
+        return gson.fromJson(json, InfoModel::class.java)
     }
 
     fun accountInfoToJson(key: String, accountInfo: AccountInfoModel): String{
