@@ -5,8 +5,7 @@ import com.euphony.project.account_touch.utils.model.Color
 
 class UpdateAccountRequest(
     val id: Long,
-    val color: Color,
-    val isAlwaysOn : Boolean
+    val color: Color
 ): BaseRequest {
     override fun validate(): Boolean {
         if(id < 0) return false

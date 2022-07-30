@@ -46,9 +46,9 @@ class AccountDaoTest : TestCase() {
     companion object {
         val bank = Bank(1L, "국민은행", BankIcon.KB, 12, ExternalPackage.KOOKMIN)
         val accountList = listOf<Account>(
-            Account(1L,1L, "은빈이의 국민은행", "123321123", isAlwaysOn = false, Color.GREEN),
-            Account(2L,1L, "은빈이의 하나은행", "343463456", isAlwaysOn = false, Color.BLACK),
-            Account(3L,1L, "은빈이의 농협은행", "12313543", isAlwaysOn = false, Color.BLACK)
+            Account(1L,1L, "은빈이의 국민은행", "123321123", Color.GREEN),
+            Account(2L,1L, "은빈이의 하나은행", "343463456", Color.BLACK),
+            Account(3L,1L, "은빈이의 농협은행", "12313543", Color.BLACK)
         )
     }
 
@@ -77,7 +77,7 @@ class AccountDaoTest : TestCase() {
 
         val nickname = "은빈이의 국민은행 계좌임돠"
         val accountNumber = "123123123"
-        val account = Account(1L, bankId, nickname, accountNumber, isAlwaysOn = true, Color.APRICOT)
+        val account = Account(1L, bankId, nickname, accountNumber, Color.APRICOT)
 
         //when
         dao.insert(account)
@@ -99,11 +99,10 @@ class AccountDaoTest : TestCase() {
         dao.insert(account)
 
         //when
-        dao.update(1L, modifyIsAlwaysOn, Color.GREEN)
+        dao.update(1L, Color.GREEN)
 
         //then
         dao.findAllBy().take(1).collect { account ->
-            assertThat(account[0].account?.isAlwaysOn).isEqualTo(modifyIsAlwaysOn)
             assertThat(account[0].account?.color).isEqualTo(Color.GREEN)
         }
     }
@@ -133,7 +132,6 @@ class AccountDaoTest : TestCase() {
 
         //then
         val getList = dao.findAllBy()
-
         assertThat(getList.toList()).isEmpty()
     }
 

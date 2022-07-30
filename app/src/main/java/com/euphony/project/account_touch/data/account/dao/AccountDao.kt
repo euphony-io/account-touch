@@ -10,10 +10,10 @@ import java.util.*
 @Dao
 interface AccountDao {
     @Transaction
-    @Query("SELECT * FROM account ORDER BY is_always_on DESC, create_date DESC")
+    @Query("SELECT * FROM account ORDER BY create_date DESC")
     fun findAllBy(): Flow<List<AccountWithBank>>
 
-    @Query("SELECT * FROM account WHERE bank_id = :bankId ORDER BY is_always_on DESC, create_date DESC")
+    @Query("SELECT * FROM account WHERE bank_id = :bankId ORDER BY create_date DESC")
     fun findAllByBankId(bankId: Long): Flow<List<Account>>
 
     @Query("SELECT * FROM account WHERE account_id = :id")
@@ -22,10 +22,8 @@ interface AccountDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(account: Account): Long
 
-    @Query("UPDATE account SET is_always_on = :isAlwaysOn, color = :modifyColor," +
-            "modify_date = :modifyDate WHERE account_id =:id")
-    suspend fun update(id: Long, isAlwaysOn: Boolean, modifyColor: Color,
-                              modifyDate: Date = Date(System.currentTimeMillis()))
+    @Query("UPDATE account SET color = :modifyColor, modify_date = :modifyDate WHERE account_id =:id")
+    suspend fun update(id: Long, modifyColor: Color, modifyDate: Date = Date(System.currentTimeMillis()))
 
     @Delete
     suspend fun delete(account: Account)
