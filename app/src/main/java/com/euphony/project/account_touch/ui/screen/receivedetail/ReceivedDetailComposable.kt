@@ -22,6 +22,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.euphony.project.account_touch.ui.screen.common.UserIconItem
+import com.euphony.project.account_touch.ui.screen.main.BankImage
 import com.euphony.project.account_touch.ui.screen.main.Received
 import com.euphony.project.account_touch.ui.theme.Blue_6D95FF
 import com.euphony.project.account_touch.ui.theme.Blue_DFE8FF
@@ -74,7 +75,7 @@ fun SpeakerInfo(received: Received) {
     Text(
         modifier = Modifier
             .padding(vertical = 36.dp, horizontal = 16.dp),
-        text = "${received.speakerNickName}님꼐서 보내신\n${received.accountNickname} 계좌입니다.",
+        text = "${received.createDate}에 받은 계좌",
         fontWeight = FontWeight.Bold,
         fontSize = 24.sp,
         color = Blue_6D95FF
@@ -83,7 +84,7 @@ fun SpeakerInfo(received: Received) {
 
 @Composable
 fun ReceivedAccount(received: Received) {
-    val imageBitmap = AssetsUtil.getBitmap(LocalContext.current, received.speakerIcon.path)
+    val imageBitmap = AssetsUtil.getBitmap(LocalContext.current, "banks/bnk_bank")
 
     Card(
         modifier = Modifier
@@ -99,7 +100,7 @@ fun ReceivedAccount(received: Received) {
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Row(modifier = Modifier.padding(vertical = 24.dp)) {
-                UserIconItem(imageBitmap = imageBitmap, color = Blue_DFE8FF)
+                BankImage(imageBitmap)
             }
             Text(
                 text = received.accountNickname,
