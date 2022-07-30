@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="toss_package">viva.republica.toss</string>
+    <string name="kakaobank_package">com.kakaobank.channel</string>
+    <string name="kakaopay_package">com.kakaopay.app</string>
+    <string name="kookmin_package">com.kbstar.kbbank</string>
+    <string name="kbank_package">com.kbankwith.smartbank</string>
+    <string name="woori_package">com.wooribank.smart.npib</string>
+    <string name="nh_package">nh.smart.banking</string>
+    <string name="ibk_package">com.ibk.android.ionebank</string>
+    <string name="shinhan_package">com.shinhan.sbanking</string>
+    <string name="hanabank_package">com.kebhana.hanapush</string>
+    <string name="sinhyeob_package">kr.co.cu.onbank</string>
+</resources>
