@@ -177,13 +177,7 @@ fun ReceivedAccountsPreview() {
         icon = UserIcon.CRYING,
     )
     val receiveds = listOf<Received>(
-        Received(
-            bank_id = 1,
-            accountNumber = "1234",
-            accountNickname = "가나다",
-            speakerIcon = UserIcon.GHOST,
-            speakerNickName = "test"
-        )
+        Received(bank_id = 1, accountNumber = "1234")
     )
     ReceivedAccounts(user, receiveds, {})
 }

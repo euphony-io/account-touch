@@ -64,6 +64,7 @@ fun ResultContent(str:String){
         space(value = 5)
         Row(Modifier.padding(horizontal = 10.dp)){
             TextRound("송신자님")
+            Spacer(Modifier.width(5.dp))
             TextRound("수신자님")
         }
 

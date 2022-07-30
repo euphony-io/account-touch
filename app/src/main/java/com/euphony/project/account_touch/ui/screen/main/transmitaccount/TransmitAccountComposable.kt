@@ -37,6 +37,7 @@ import com.euphony.project.account_touch.data.account.entity.Account
 import com.euphony.project.account_touch.data.global.AccountWithBank
 import com.euphony.project.account_touch.data.user.entity.User
 import com.euphony.project.account_touch.ui.screen.common.UserIconItem
+import com.euphony.project.account_touch.ui.screen.userregister.space
 import com.euphony.project.account_touch.ui.theme.Blue_6D95FF
 import com.euphony.project.account_touch.ui.theme.Blue_DFE8FF
 import com.euphony.project.account_touch.ui.theme.Gray_9C9C9C
@@ -101,13 +102,14 @@ fun TransmitAccount(user: User?, account: AccountWithBank?, receivers: List<User
             )
         },
         content = {
+            space(value = 50)
             Column(
                 modifier = Modifier.padding(horizontal = 16.dp)
             ) {
                 TransmitAccountInfo(user, account)
                 TransmitImage()
-                TransmitAllButton()
-                Receivers(receivers)
+//                TransmitAllButton()
+//                Receivers(receivers)
             }
         }
     )
@@ -236,7 +238,6 @@ fun TransmitAccountPreview() {
         bank_id = 1L,
         nickname = "국민은행 체크카드",
         accountNumber = "123456789",
-        isAlwaysOn = false,
         color = Color.SKY
     )
     val receivers = listOf<User>(
@@ -265,5 +266,6 @@ fun TransmitAccountPreview() {
             icon = UserIcon.SMILE
         ),
     )
-//    TransmitAccount(user, account, receivers, onBackClick = {})
+
+    TransmitAccount(user, null, receivers, onBackClick = {})
 }

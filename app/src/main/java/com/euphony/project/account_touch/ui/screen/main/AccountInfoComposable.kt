@@ -96,7 +96,6 @@ fun AccountInfoScreen(
                     1,
                     accountNickname.text,
                     accountNumber.text,
-                    isShare,
                     colors[colorIndex]
                 )
                 if (createAccountRequest.validate()) {
@@ -107,7 +106,7 @@ fun AccountInfoScreen(
                 }
             } else {
                 val updateAccountRequest =
-                    UpdateAccountRequest(1, color = colors[colorIndex], isShare)
+                    UpdateAccountRequest(1, color = colors[colorIndex])
                 if (updateAccountRequest.validate()) {
                     accountViewModel.modifyAccount(updateAccountRequest)
                     onCloseClick()
