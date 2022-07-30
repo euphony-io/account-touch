@@ -25,24 +25,26 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.euphony.project.account_touch.data.received.entity.Received
 import com.euphony.project.account_touch.data.user.entity.User
 import com.euphony.project.account_touch.ui.screen.common.UserIconItem
+import com.euphony.project.account_touch.ui.screen.main.BankImage
 import com.euphony.project.account_touch.ui.theme.Blue_6D95FF
-import com.euphony.project.account_touch.ui.theme.Blue_DFE8FF
 import com.euphony.project.account_touch.ui.theme.Gray_9C9C9C
 import com.euphony.project.account_touch.ui.theme.Gray_F4F4F4
 import com.euphony.project.account_touch.ui.viewmodel.ReceivedViewModel
 import com.euphony.project.account_touch.utils.AssetsUtil
+import com.euphony.project.account_touch.utils.model.UserIcon
 import java.text.SimpleDateFormat
 
 @Composable
 fun ReceivedAccountsScreen(
     user: User?,
     receivedViewModel: ReceivedViewModel,
-    onBackClick: () -> Unit
+    onBackClick: () -> Unit,
 ) {
     val allReceived by receivedViewModel.allReceived.observeAsState()
 
@@ -86,7 +88,8 @@ fun ReceivedAccounts(
 
 @Composable
 fun ReceivedAccountsUser(user: User?) {
-    val imageBitmap = if (user == null) null else AssetsUtil.getBitmap(LocalContext.current, user.icon.path)
+    val imageBitmap =
+        if (user == null) null else AssetsUtil.getBitmap(LocalContext.current, user.icon.path)
 
     Row(
         modifier = Modifier
@@ -117,7 +120,8 @@ fun ReceivedAccountItems(receiveds: List<Received>?) {
 
 @Composable
 fun ReceivedAccountItem(received: Received) {
-    val imageBitmap = AssetsUtil.getBitmap(LocalContext.current, received.speakerIcon.path)
+    val context = LocalContext.current
+    val imageBitmap = AssetsUtil.getBitmap(context, "banks/bnk_bank.png")
     val yyyyMMdd = SimpleDateFormat("yyyy.MM.dd").format(received.createDate)
 
     Card(
@@ -132,38 +136,29 @@ fun ReceivedAccountItem(received: Received) {
         ) {
             Column(
                 modifier = Modifier
-                    .padding(8.dp),
+                    .padding(16.dp)
             ) {
-                UserIconItem(imageBitmap = imageBitmap, color = Blue_DFE8FF)
+                BankImage(imageBitmap = imageBitmap)
             }
             Row(
                 modifier = Modifier
                     .fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                Column(
+                Row(
                     modifier = Modifier
-                        .padding(start = 4.dp)
+                        .fillMaxWidth(),
+                   horizontalArrangement = Arrangement.SpaceBetween
                 ) {
-                    Text(
-                        text = received.speakerNickName,
-                        color = Blue_6D95FF,
-                        fontWeight = FontWeight.Bold,
-                        fontSize = 16.sp
-                    )
                     Text(
                         text = received.accountNumber,
                         color = Color.Black,
                         fontWeight = FontWeight.Bold,
-                        fontSize = 12.sp
+                        fontSize = 16.sp
                     )
-                }
-                Column(
-                    modifier = Modifier
-                        .padding(end = 16.dp)
-                ) {
-                    Spacer(modifier = Modifier.height(24.dp))
                     Text(
+                        modifier = Modifier
+                            .padding(end = 16.dp),
                         text = yyyyMMdd,
                         color = Gray_9C9C9C,
                         fontSize = 10.sp
@@ -173,33 +168,22 @@ fun ReceivedAccountItem(received: Received) {
         }
     }
 }
-//
-//@Preview(showBackground = true)
-//@Composable
-//fun ReceivedAccountsPreview() {
-//    val user = User(
-//        nickname = "영욱",
-//        icon = UserIcon.CRYING,
-//    )
-//    val receiveds = listOf<Received>(
-//        Received(
-//            accountNickname = "붕어빵",
-//            accountNumber = "123456789",
-//            speakerNickName = "붕어빵 사장",
-//            speakerIcon = UserIcon.GHOST,
-//        ),
-//        Received(
-//            accountNickname = "포장마차",
-//            accountNumber = "123456789",
-//            speakerNickName = "포장마차 사장",
-//            speakerIcon = UserIcon.HAPPY,
-//        ),
-//        Received(
-//            accountNickname = "옷가게",
-//            accountNumber = "123456789",
-//            speakerNickName = "옷가게 사장",
-//            speakerIcon = UserIcon.STAR,
-//        )
-//    )
-//    ReceivedAccounts(user, receiveds)
-//}
+
+@Preview(showBackground = true)
+@Composable
+fun ReceivedAccountsPreview() {
+    val user = User(
+        nickname = "영욱",
+        icon = UserIcon.CRYING,
+    )
+    val receiveds = listOf<Received>(
+        Received(
+            bank_id = 1,
+            accountNumber = "1234",
+            accountNickname = "가나다",
+            speakerIcon = UserIcon.GHOST,
+            speakerNickName = "test"
+        )
+    )
+    ReceivedAccounts(user, receiveds, {})
+}

@@ -284,7 +284,6 @@ fun BankImage(imageBitmap: ImageBitmap?) {
         if (imageBitmap != null)
             Image(bitmap = imageBitmap, contentDescription = "")
     }
-
 }
 
 //계좌 공유 아이콘 이미지뷰
