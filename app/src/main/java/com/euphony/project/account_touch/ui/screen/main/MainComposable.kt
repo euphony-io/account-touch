@@ -40,18 +40,17 @@ import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.euphony.project.account_touch.R
 import com.euphony.project.account_touch.data.global.AccountWithBank
 import com.euphony.project.account_touch.data.user.entity.User
+import com.euphony.project.account_touch.ui.screen.common.UserIconItem
 import com.euphony.project.account_touch.ui.screen.main.model.Content
-import com.euphony.project.account_touch.ui.screen.userregister.LoadText
-import com.euphony.project.account_touch.ui.screen.userregister.ProfileImage
 import com.euphony.project.account_touch.ui.screen.userregister.space
 import com.euphony.project.account_touch.ui.theme.Blue_6D95FF
-import com.euphony.project.account_touch.ui.theme.mainColor
 import com.euphony.project.account_touch.ui.theme.white
 import com.euphony.project.account_touch.ui.viewmodel.AccountViewModel
 import com.euphony.project.account_touch.ui.viewmodel.BankViewModel
@@ -166,10 +165,11 @@ fun LoadMainView(
     onAddButtonClick: () -> Unit,
     onAccountClick: (Int) -> Unit,
 ) {
+    val imageBitmap = AssetsUtil.getBitmap(LocalContext.current, user.icon.path)
+
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(start = 20.dp, end = 20.dp, top = 40.dp)
     ) {
         Box(
             modifier = Modifier.fillMaxWidth(),
@@ -183,16 +183,19 @@ fun LoadMainView(
                 )
             }
         }
-        Row {
-            LoadText(str = "${user.nickname} 님, \n안녕하세요.")
-            Box(
-                modifier = Modifier.fillMaxWidth(),
-                contentAlignment = Alignment.TopEnd
-            ) {
-                ProfileImage(
-                    profile = painterResource(id = R.drawable.ic_profile_smile),
-                    width = 120, height = 120, color = mainColor)
-            }
+        Row(
+            modifier = Modifier
+                .padding(vertical = 24.dp, horizontal = 16.dp)
+                .fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            Text(
+                text = "${user.nickname}님께서\n받으신 계좌입니다.",
+                color = Blue_6D95FF,
+                fontWeight = FontWeight.Bold,
+                fontSize = 22.sp
+            )
+            UserIconItem(imageBitmap, Blue_6D95FF)
         }
         MyAccountList(accounts, onAccountClick)
         Column(
@@ -210,7 +213,9 @@ fun LoadMainView(
 
 @Composable
 fun MyAccountList(accounts: List<AccountWithBank>, onAccountClick: (Int) -> Unit) {
-    LazyColumn {
+    LazyColumn(
+        modifier = Modifier.padding(horizontal = 16.dp)
+    ) {
         items(accounts.size) {
             MyAccountItem(accounts[it], it, onAccountClick)
             space(20)
