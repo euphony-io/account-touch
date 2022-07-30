@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.BottomSheetScaffold
@@ -42,19 +43,47 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.euphony.project.account_touch.R
+import com.euphony.project.account_touch.data.user.dto.CreateUserRequest
 import com.euphony.project.account_touch.ui.theme.grey
 import com.euphony.project.account_touch.ui.theme.mainColor
 import com.euphony.project.account_touch.ui.theme.white
+import com.euphony.project.account_touch.ui.viewmodel.UserViewModel
+import com.euphony.project.account_touch.utils.model.UserIcon
 import kotlinx.coroutines.launch
 
 @Composable
-fun UserRegisterScreen(onNextClick: () -> Unit) { // TODO: viewModel (유저 생성)
-    UserRegisterContent(onNextClick = onNextClick)
+fun UserRegisterScreen(
+    userViewModel: UserViewModel,
+    onStartMainActivity: () -> Unit,
+    onUserNicknameInvalid: () -> Unit,
+) {
+    var userNickname by remember { mutableStateOf("") }
+    var userIcon by remember { mutableStateOf(UserIcon.GHOST) }
+
+    UserRegisterContent(
+        userNickname,
+        onUserNicknameChange = {
+            userNickname = it
+        },
+        onNextClick = {
+            val createUserRequest = CreateUserRequest(userNickname, userIcon)
+            if (createUserRequest.validate()) {
+                userViewModel.addUser(createUserRequest)
+                onStartMainActivity()
+            } else {
+                onUserNicknameInvalid()
+            }
+        }
+    )
 }
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun UserRegisterContent(onNextClick: () -> Unit) {
+fun UserRegisterContent(
+    userNickname: String,
+    onUserNicknameChange: (String) -> Unit,
+    onNextClick: () -> Unit,
+) {
     val bottomSheetScaffoldState = rememberBottomSheetScaffoldState(
         bottomSheetState = BottomSheetState(BottomSheetValue.Collapsed)
     )
@@ -80,12 +109,14 @@ fun UserRegisterContent(onNextClick: () -> Unit) {
         sheetShape = RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp),
     ) {
         LoadingUserRegisterView(
+            userNickname,
+            onUserNicknameChange,
             onUserIconClick = {
                 coroutineScope.launch {
                     bottomSheetScaffoldState.bottomSheetState.expand()
                 }
             },
-            onNextClick = onNextClick
+            onNextClick
         )
     }
 }
@@ -156,6 +187,8 @@ fun space(value: Int) {
 
 @Composable
 fun LoadingUserRegisterView(
+    userNickname: String,
+    onUserNicknameChange: (String) -> Unit,
     onUserIconClick: () -> Unit,
     onNextClick: () -> Unit,
 ) {
@@ -177,7 +210,10 @@ fun LoadingUserRegisterView(
             )
         }
         space(100)
-        NicknameEditText()
+        NicknameEditText(
+            userNickname,
+            onUserNicknameChange
+        )
         space(value = 30)
         NextButton(onNextClick = onNextClick)
     }
@@ -194,16 +230,17 @@ fun LoadText(str: String) {
 }
 
 @Composable
-fun NicknameEditText() {
-    var text by remember { mutableStateOf("") }
-
+fun NicknameEditText(
+    userNickname: String,
+    onUserNicknameChange: (String) -> Unit,
+) {
     TextField(
         modifier = Modifier
             .fillMaxWidth()
             .height(70.dp),
         shape = RoundedCornerShape(8.dp),
-        value = text,
-        onValueChange = { text = it },
+        value = userNickname,
+        onValueChange = { onUserNicknameChange(it) },
         singleLine = true,
         label = { Text("닉네임", color = mainColor, fontSize = 12.sp) })
 }
@@ -244,7 +281,8 @@ fun ProfileImage(
             modifier = modifier.height(200.dp),
             contentAlignment = Alignment.Center
         ) {
-            Image(painter = profile, contentDescription = "", alignment = Alignment.Center)
+            Image(
+                modifier = Modifier.size(60.dp), painter = profile, contentDescription = "", alignment = Alignment.Center)
         }
     }
 }

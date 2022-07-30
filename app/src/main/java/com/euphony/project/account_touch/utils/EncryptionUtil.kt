@@ -35,7 +35,7 @@ object EncryptionUtil {
             cipher.doFinal(data)
         } catch (e: Exception) {
             Log.e("EncryptionUtil", e.message.toString())
-            null
+           "".toByteArray()
         }
     }
 }

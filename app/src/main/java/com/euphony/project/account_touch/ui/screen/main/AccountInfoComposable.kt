@@ -44,9 +44,12 @@ import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.euphony.project.account_touch.R
+import com.euphony.project.account_touch.data.account.dto.CreateAccountRequest
+import com.euphony.project.account_touch.data.account.dto.UpdateAccountRequest
 import com.euphony.project.account_touch.ui.theme.Black_333B58
 import com.euphony.project.account_touch.ui.theme.Blue_6D95FF
 import com.euphony.project.account_touch.ui.theme.Gray_F4F4F4
+import com.euphony.project.account_touch.ui.viewmodel.AccountViewModel
 import com.euphony.project.account_touch.utils.model.Color
 
 @Composable
@@ -54,9 +57,66 @@ fun AccountInfoScreen(
     isEditClicked: Boolean,
     onCloseClick: () -> Unit,
     onEditClick: () -> Unit,
-    isAddContent: Boolean
-) { // TODO: viewModel (insert NEW ACCOUNT)
-    AccountInfo(isEditClicked, onCloseClick, onEditClick, isAddContent)
+    isAddContent: Boolean,
+    accountViewModel: AccountViewModel,
+    onAddAccountInValid: () -> Unit,
+    onModifyAccountInValid: () -> Unit,
+) {
+    var accountNickname by remember { mutableStateOf(TextFieldValue("부산은행")) }
+    var accountNumber by remember { mutableStateOf(TextFieldValue("")) }
+    var colorIndex by remember { mutableStateOf(0) }
+    val colors = Color.values()
+    var isShare by remember { mutableStateOf(false) }
+
+    AccountInfo(
+        isEditClicked,
+        onCloseClick,
+        onEditClick,
+        isAddContent,
+        accountNickname,
+        onAccountNicknameChange = {
+            if (it.text.length <= 10) accountNickname = it
+        },
+        accountNumber,
+        onAccountNumberChange = {
+            if (it.text.length <= 15) accountNumber = it
+        },
+        colorIndex,
+        onColorClick = {
+            colorIndex = it
+        },
+        colors,
+        isShare,
+        onShareClick = {
+            isShare = !isShare
+        },
+        onCompleteClick = {
+            if (isAddContent) {
+                val createAccountRequest = CreateAccountRequest(
+                    1,
+                    accountNickname.text,
+                    accountNumber.text,
+                    isShare,
+                    colors[colorIndex]
+                )
+                if (createAccountRequest.validate()) {
+                    accountViewModel.addAccount(createAccountRequest)
+                    onCloseClick()
+                } else {
+                    onAddAccountInValid()
+                }
+            } else {
+                val updateAccountRequest =
+                    UpdateAccountRequest(1, color = colors[colorIndex], isShare)
+                if (updateAccountRequest.validate()) {
+                    accountViewModel.modifyAccount(updateAccountRequest)
+                    onCloseClick()
+                } else {
+                    onModifyAccountInValid()
+                }
+            }
+        }
+    )
 }
 
 @Composable
@@ -64,45 +124,44 @@ fun AccountInfo(
     isEditClicked: Boolean,
     onCloseClick: () -> Unit,
     onEditClick: () -> Unit,
-    isEditContent: Boolean
+    isAddContent: Boolean,
+    accountNickname: TextFieldValue,
+    onAccountNicknameChange: (TextFieldValue) -> Unit,
+    accountNumber: TextFieldValue,
+    onAccountNumberChange: (TextFieldValue) -> Unit,
+    colorIndex: Int,
+    onColorClick: (Int) -> Unit,
+    colors: Array<Color>,
+    isShare: Boolean,
+    onShareClick: (Boolean) -> Unit,
+    onCompleteClick: () -> Unit,
 ) {
-    var accountNickname by remember { mutableStateOf(TextFieldValue("부산은행")) }
-    var accountNumber by remember { mutableStateOf(TextFieldValue("")) }
-    var colorIndex by remember { mutableStateOf(-1) }
-    val colors = Color.values()
-    var isShare by remember { mutableStateOf(false) }
 
     Column {
         AccountInfoTitle(
             isEditClicked,
             onCloseClick = onCloseClick,
-            onEditClick = onEditClick,
+            onEditClick,
             textFieldValue = accountNickname,
-            onValueChange = {
-                if (it.text.length <= 10) accountNickname = it
-            }
+            onValueChange = { onAccountNicknameChange(it) }
         )
         Account(
             textFieldValue = accountNumber,
-            onValueChange = {
-                accountNumber = it
-            },
-            isEditContent = isEditContent
+            onValueChange = { onAccountNumberChange(it) },
+            isAddContent
         )
         AccountColors(
             colors = colors,
             colorIndex = colorIndex,
-            onColorClick = {
-                colorIndex = it
-            }
+            onColorClick = { onColorClick(it) }
         )
         AccountOption(
             isShare = isShare,
-            onCheckedChange = {
-                isShare = !isShare
-            }
+            onCheckedChange = { onShareClick(it) }
         )
-        AccountButton() // TODO: NEW ACCOUNT 생성
+        AccountButton(
+            onCompleteClick = { onCompleteClick() }
+        )
     }
 }
 
@@ -172,9 +231,8 @@ fun AccountInfoTitle(
 fun Account(
     textFieldValue: TextFieldValue,
     onValueChange: (TextFieldValue) -> Unit,
-    isEditContent: Boolean
+    isAddContent: Boolean,
 ) {
-
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -188,7 +246,7 @@ fun Account(
         )
         TextField(
             value = textFieldValue,
-            enabled = isEditContent,
+            enabled = isAddContent,
             onValueChange = { onValueChange(it) },
             label = {
                 Text(text = "계좌번호를 입력해주세요.", color = Black_333B58)
@@ -296,7 +354,7 @@ fun AccountOption(isShare: Boolean, onCheckedChange: (Boolean) -> Unit) {
 }
 
 @Composable
-fun AccountButton() {
+fun AccountButton(onCompleteClick: () -> Unit) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -304,7 +362,7 @@ fun AccountButton() {
         horizontalArrangement = Arrangement.Center
     ) {
         Button(
-            onClick = { /*TODO*/ },
+            onClick = { onCompleteClick() },
             modifier = Modifier
                 .fillMaxWidth(0.3f),
             colors = ButtonDefaults.buttonColors(
@@ -328,6 +386,16 @@ fun AccountInfoPreview() {
         isEditClicked = false,
         onCloseClick = {},
         onEditClick = {},
-        isEditContent = true
+        isAddContent = true,
+        accountNickname = TextFieldValue("nickname"),
+        onAccountNicknameChange = {},
+        accountNumber = TextFieldValue("123456789"),
+        onAccountNumberChange = {},
+        colorIndex = 0,
+        onColorClick = {},
+        colors = Color.values(),
+        isShare = true,
+        onShareClick = {},
+        onCompleteClick = {}
     )
 }

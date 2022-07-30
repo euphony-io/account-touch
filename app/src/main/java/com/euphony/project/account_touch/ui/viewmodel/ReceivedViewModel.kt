@@ -29,7 +29,7 @@ class ReceivedViewModel @Inject constructor (
 ) : ViewModel() {
 
     val allReceived: LiveData<List<Received>> = repository.getReceivedList().asLiveData()
-    val user: LiveData<User> = userRepository.getUser(0).asLiveData()
+    val user: LiveData<User> = userRepository.getUser(1).asLiveData()
 
     suspend fun getReceived(id: Long): Received {
         return repository.getReceived(id)

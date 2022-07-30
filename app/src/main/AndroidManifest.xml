@@ -29,7 +29,4 @@
 
         <activity android:name=".ui.screen.main.MainActivity" />
 
-
-    </application>
-
 </manifest>
