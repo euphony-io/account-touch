@@ -64,6 +64,9 @@ class EuphonyViewModel (application: Application) : AndroidViewModel(application
 
     // 특정인에게 보냄 (24000)
     fun speak(key: String, accountObj: Account, userObj: User){
+
+        if(!accountObj.isAlwaysOn) return
+
         txManager.stop()
         txManager.code = FormatUtil.accountInfoToJson(
             key,
@@ -75,6 +78,8 @@ class EuphonyViewModel (application: Application) : AndroidViewModel(application
                 accountObj.bank_id
             )
         )
+
+        txManager.callEuPI(21000.0, EuTxManager.EuPIDuration.LENGTH_FOREVER)
         txManager.callEuPI(24000.0, EuTxManager.EuPIDuration.LENGTH_LONG)
     }
 
