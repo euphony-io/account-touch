@@ -6,16 +6,10 @@ import com.euphony.project.account_touch.utils.model.UserIcon
 
 class CreateReceivedRequest(
     private val bankId: Long,
-    private val accountNickname: String,
-    private val accountNumber: String,
-    private val speakerNickname: String,
-    private val speakerIcon: UserIcon
+    private val accountNumber: String
 ): BaseRequest{
     override fun validate(): Boolean {
         if(bankId < 0) return false
-        if(accountNickname.isEmpty()) return false
-        if(accountNumber.isEmpty()) return false
-        if(speakerNickname.isEmpty()) return false
         return true
     }
 
