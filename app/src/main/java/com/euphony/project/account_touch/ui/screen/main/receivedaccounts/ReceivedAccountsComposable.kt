@@ -18,6 +18,7 @@ import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -26,7 +27,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.hilt.navigation.compose.hiltViewModel
 import com.euphony.project.account_touch.data.received.entity.Received
 import com.euphony.project.account_touch.data.user.entity.User
 import com.euphony.project.account_touch.ui.screen.common.UserIconItem
@@ -40,25 +40,19 @@ import java.text.SimpleDateFormat
 
 @Composable
 fun ReceivedAccountsScreen(
-    viewModel: ReceivedViewModel = hiltViewModel(),
-    onBackClick: () -> Unit,
+    user: User?,
+    receivedViewModel: ReceivedViewModel,
+    onBackClick: () -> Unit
 ) {
-    // TODO: onBackClick as parameters
-
-    var user = viewModel.user.observeAsState().value
-    val allReceived = viewModel.allReceived.observeAsState().value ?: listOf()
-
-    if (user == null) {
-        throw Exception("에러 발생")
-    }
+    val allReceived by receivedViewModel.allReceived.observeAsState()
 
     ReceivedAccounts(user, allReceived, onBackClick)
 }
 
 @Composable
 fun ReceivedAccounts(
-    user: User,
-    receiveds: List<Received>,
+    user: User?,
+    receiveds: List<Received>?,
     onBackClick: () -> Unit,
 ) {
     Scaffold(
@@ -91,8 +85,8 @@ fun ReceivedAccounts(
 }
 
 @Composable
-fun ReceivedAccountsUser(user: User) {
-    val imageBitmap = AssetsUtil.getBitmap(LocalContext.current, user.icon.path)
+fun ReceivedAccountsUser(user: User?) {
+    val imageBitmap = if (user == null) null else AssetsUtil.getBitmap(LocalContext.current, user.icon.path)
 
     Row(
         modifier = Modifier
@@ -101,7 +95,7 @@ fun ReceivedAccountsUser(user: User) {
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
         Text(
-            text = "${user.nickname}님께서\n받으신 계좌입니다.",
+            text = "${user?.nickname}님께서\n받으신 계좌입니다.",
             color = Blue_6D95FF,
             fontWeight = FontWeight.Bold,
             fontSize = 22.sp
@@ -111,10 +105,12 @@ fun ReceivedAccountsUser(user: User) {
 }
 
 @Composable
-fun ReceivedAccountItems(receiveds: List<Received>) {
+fun ReceivedAccountItems(receiveds: List<Received>?) {
+    val _receiveds = receiveds ?: listOf()
+
     LazyColumn {
-        items(receiveds.size) {
-            ReceivedAccountItem(receiveds[it])
+        items(_receiveds.size) {
+            ReceivedAccountItem(_receiveds[it])
         }
     }
 }

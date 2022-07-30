@@ -118,6 +118,8 @@ fun MainNavHost(
         }
         composable(route = ReceivedAccounts.route) {
             ReceivedAccountsScreen(
+                user,
+                receivedViewModel,
                 onBackClick = {
                     navController.popBackStack()
                 }

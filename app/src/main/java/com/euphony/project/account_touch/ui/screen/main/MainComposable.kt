@@ -18,9 +18,13 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
 import androidx.compose.material.Card
 import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.Icon
+import androidx.compose.material.IconButton
 import androidx.compose.material.ModalBottomSheetLayout
 import androidx.compose.material.ModalBottomSheetValue
 import androidx.compose.material.Text
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Send
 import androidx.compose.material.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -46,6 +50,7 @@ import com.euphony.project.account_touch.ui.screen.main.model.Content
 import com.euphony.project.account_touch.ui.screen.userregister.LoadText
 import com.euphony.project.account_touch.ui.screen.userregister.ProfileImage
 import com.euphony.project.account_touch.ui.screen.userregister.space
+import com.euphony.project.account_touch.ui.theme.Blue_6D95FF
 import com.euphony.project.account_touch.ui.theme.mainColor
 import com.euphony.project.account_touch.ui.theme.white
 import com.euphony.project.account_touch.ui.viewmodel.AccountViewModel
@@ -128,6 +133,7 @@ fun MainBottomSheetScreen(
         LoadMainView(
             accounts,
             user,
+            onReceivedIconClick,
             onAddButtonClick = {
                 isEditClicked = false
                 content = Content.CHOOSE_BANK
@@ -146,6 +152,7 @@ fun MainPreview() {
     LoadMainView(
         listOf(),
         user = User(nickname = "kim", icon = UserIcon.GHOST),
+        onReceivedIconClick = {},
         onAddButtonClick = {},
         onAccountClick = {}
     )
@@ -155,6 +162,7 @@ fun MainPreview() {
 fun LoadMainView(
     accounts: List<AccountWithBank>,
     user: User,
+    onReceivedIconClick: () -> Unit,
     onAddButtonClick: () -> Unit,
     onAccountClick: (Int) -> Unit,
 ) {
@@ -167,7 +175,13 @@ fun LoadMainView(
             modifier = Modifier.fillMaxWidth(),
             contentAlignment = Alignment.TopEnd
         ) {
-            Image(painter = painterResource(id = R.drawable.ic_alarm), contentDescription = "알람 아이")
+            IconButton(onClick = { onReceivedIconClick() }) {
+                Icon(
+                    imageVector = Icons.Filled.Send,
+                    contentDescription = "수신 계좌",
+                    tint = Blue_6D95FF
+                )
+            }
         }
         Row {
             LoadText(str = "${user.nickname} 님, \n안녕하세요.")
