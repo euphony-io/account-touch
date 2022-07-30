@@ -46,6 +46,7 @@ import androidx.compose.ui.unit.sp
 import com.euphony.project.account_touch.R
 import com.euphony.project.account_touch.data.account.dto.CreateAccountRequest
 import com.euphony.project.account_touch.data.account.dto.UpdateAccountRequest
+import com.euphony.project.account_touch.data.bank.entity.Bank
 import com.euphony.project.account_touch.ui.theme.Black_333B58
 import com.euphony.project.account_touch.ui.theme.Blue_6D95FF
 import com.euphony.project.account_touch.ui.theme.Gray_F4F4F4
@@ -54,6 +55,7 @@ import com.euphony.project.account_touch.utils.model.Color
 
 @Composable
 fun AccountInfoScreen(
+    bank: Bank,
     isEditClicked: Boolean,
     onCloseClick: () -> Unit,
     onEditClick: () -> Unit,
@@ -93,7 +95,7 @@ fun AccountInfoScreen(
         onCompleteClick = {
             if (isAddContent) {
                 val createAccountRequest = CreateAccountRequest(
-                    1,
+                    bank.id,
                     accountNickname.text,
                     accountNumber.text,
                     colors[colorIndex]
@@ -106,7 +108,7 @@ fun AccountInfoScreen(
                 }
             } else {
                 val updateAccountRequest =
-                    UpdateAccountRequest(1, color = colors[colorIndex])
+                    UpdateAccountRequest(bank.id, color = colors[colorIndex])
                 if (updateAccountRequest.validate()) {
                     accountViewModel.modifyAccount(updateAccountRequest)
                     onCloseClick()

@@ -27,6 +27,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.euphony.project.account_touch.data.bank.entity.Bank
 import com.euphony.project.account_touch.ui.theme.Black_333B58
 import com.euphony.project.account_touch.ui.theme.Blue_6D95FF
 import com.euphony.project.account_touch.ui.theme.Gray_F4F4F4
@@ -34,17 +35,18 @@ import com.euphony.project.account_touch.utils.AssetsUtil
 
 @Composable
 fun ChooseBankScreen(
+    banks: List<Bank>,
     onCloseClick: () -> Unit,
-    onBankItemClick: () -> Unit
-) { // TODO: viewModel
-    ChooseBank(onCloseClick, onBankItemClick)
+    onBankItemClick: (Int) -> Unit,
+) {
+    ChooseBank(banks, onCloseClick, onBankItemClick)
 }
 
 @Composable
-fun ChooseBank(onCloseClick: () -> Unit, onBankItemClick: () -> Unit) {
+fun ChooseBank(banks: List<Bank>, onCloseClick: () -> Unit, onBankItemClick: (Int) -> Unit) {
     Column {
         ChooseBankTitle(onCloseClick, "은행 선택")
-        BanksContent(onBankItemClick)
+        BanksContent(banks, onBankItemClick)
     }
 }
 
@@ -81,8 +83,9 @@ fun ChooseBankTitle(
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun BanksContent(onBankItemClick: () -> Unit) {
-    val bankBitmaps = AssetsUtil.getBitmaps(LocalContext.current, "banks")
+fun BanksContent(banks: List<Bank>, onBankItemClick: (Int) -> Unit) {
+    val bankBitmaps =
+        banks.map { bank -> AssetsUtil.getBitmap(LocalContext.current, bank.bankIconPath.path) }
 
     LazyVerticalGrid(
         cells = GridCells.Fixed(3),
@@ -92,18 +95,18 @@ fun BanksContent(onBankItemClick: () -> Unit) {
         horizontalArrangement = Arrangement.spacedBy(8.dp)
     ) {
         items(bankBitmaps.size) {
-            BankItem(bankBitmaps[it], onBankItemClick)
+            BankItem(bankBitmaps[it], it, onBankItemClick)
         }
     }
 }
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun BankItem(imageBitmap: ImageBitmap?, onBankItemClick: () -> Unit) {
+fun BankItem(imageBitmap: ImageBitmap?, index: Int, onBankItemClick: (Int) -> Unit) {
     Card(
         shape = RoundedCornerShape(8.dp),
         backgroundColor = Gray_F4F4F4,
-        onClick = { onBankItemClick() }
+        onClick = { onBankItemClick(index) }
     ) {
         Column(
             modifier = Modifier.padding(vertical = 24.dp, horizontal = 16.dp),
@@ -125,8 +128,3 @@ fun BankItem(imageBitmap: ImageBitmap?, onBankItemClick: () -> Unit) {
     }
 }
 
-@Preview(showBackground = true)
-@Composable
-fun ChooseBankPreview() {
-    ChooseBank(onCloseClick = {}, onBankItemClick = {})
-}

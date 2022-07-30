@@ -15,12 +15,18 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.*
+import androidx.compose.material.Button
+import androidx.compose.material.ButtonDefaults
+import androidx.compose.material.Card
+import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.Icon
+import androidx.compose.material.IconButton
+import androidx.compose.material.ModalBottomSheetLayout
+import androidx.compose.material.ModalBottomSheetValue
+import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Alarm
 import androidx.compose.material.icons.filled.AlarmOn
-import androidx.compose.material.icons.filled.Doorbell
-import androidx.compose.material.icons.filled.Send
+import androidx.compose.material.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -40,6 +46,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.euphony.project.account_touch.R
+import com.euphony.project.account_touch.data.bank.entity.Bank
 import com.euphony.project.account_touch.data.global.AccountWithBank
 import com.euphony.project.account_touch.data.user.entity.User
 import com.euphony.project.account_touch.ui.screen.common.UserIconItem
@@ -49,7 +56,6 @@ import com.euphony.project.account_touch.ui.theme.Blue_6D95FF
 import com.euphony.project.account_touch.ui.theme.mainColor
 import com.euphony.project.account_touch.ui.theme.white
 import com.euphony.project.account_touch.ui.viewmodel.AccountViewModel
-import com.euphony.project.account_touch.ui.viewmodel.BankViewModel
 import com.euphony.project.account_touch.utils.AssetsUtil
 import com.euphony.project.account_touch.utils.model.UserIcon
 import kotlinx.coroutines.launch
@@ -60,36 +66,39 @@ fun MainBottomSheetScreen(
     user: User,
     accounts: List<AccountWithBank>,
     accountViewModel: AccountViewModel,
-    bankViewModel: BankViewModel,
+    banks: List<Bank>,
     onReceivedIconClick: () -> Unit,
     onAccountClick: (Int) -> Unit,
     onAddAccountInValid: () -> Unit,
     onModifyAccountInValid: () -> Unit,
 ) {
-    // TODO: getBanks from BankViewModel
-    // TODO: selected bank index state
-
     val modalBottomSheetState =
         rememberModalBottomSheetState(initialValue = ModalBottomSheetValue.Hidden)
     val coroutineScope = rememberCoroutineScope()
     var isEditClicked by remember { mutableStateOf(false) }
     var content by remember { mutableStateOf(Content.CHOOSE_BANK) }
+    var bankIndex by remember { mutableStateOf(0) }
 
     ModalBottomSheetLayout(
         sheetContent = {
             when (content) {
                 Content.CHOOSE_BANK -> {
                     ChooseBankScreen(
+                        banks,
                         onCloseClick = {
                             coroutineScope.launch {
                                 modalBottomSheetState.hide()
                             }
                         },
-                        onBankItemClick = { content = Content.ADD_ACCOUNT }
+                        onBankItemClick = { it ->
+                            bankIndex = it
+                            content = Content.ADD_ACCOUNT
+                        }
                     )
                 }
                 Content.ADD_ACCOUNT -> {
                     AccountInfoScreen(
+                        banks[bankIndex],
                         isEditClicked = isEditClicked,
                         onCloseClick = {
                             coroutineScope.launch {
@@ -105,6 +114,7 @@ fun MainBottomSheetScreen(
                 }
                 Content.UPDATE_ACCOUNT -> {
                     AccountInfoScreen(
+                        banks[bankIndex],
                         isEditClicked = isEditClicked,
                         onCloseClick = {
                             coroutineScope.launch {
@@ -211,7 +221,7 @@ fun LoadMainView(
             onClick = {
                 onAddButtonClick()
             }
-        ){
+        ) {
             Text(text = "+", Modifier.size(20.dp))
         }
     }
@@ -301,6 +311,6 @@ fun ShareImage(index: Int, onAccountClick: (Int) -> Unit) {
             .background(white),
         contentAlignment = Alignment.Center
     ) {
-            Image(painterResource(id = R.drawable.ic_share), "계좌 공유 아이콘")
+        Image(painterResource(id = R.drawable.ic_share), "계좌 공유 아이콘")
     }
 }
