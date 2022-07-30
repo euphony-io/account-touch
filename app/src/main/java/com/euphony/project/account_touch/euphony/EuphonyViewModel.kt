@@ -7,6 +7,7 @@ import co.euphony.rx.AcousticSensor
 import co.euphony.rx.EuRxManager
 import co.euphony.tx.EuTxManager
 import co.euphony.util.EuOption
+import com.euphony.project.account_touch.data.account.entity.Account
 import com.euphony.project.account_touch.data.received.entity.Received
 import com.euphony.project.account_touch.data.user.entity.User
 import com.euphony.project.account_touch.euphony.dto.AccountInfoModel
@@ -26,10 +27,10 @@ class EuphonyViewModel (application: Application) : AndroidViewModel(application
     val isProcessing get() = _isProcessing
 
 
-    private val _accountEveryInfo = MutableLiveData<AccountInfoModel>()
+    private val _accountEveryInfo = MutableLiveData<Received>()
     val accountEveryInfo get() = _accountEveryInfo
 
-    private val _accountInfo = MutableLiveData<AccountInfoModel>()
+    private val _accountInfo = MutableLiveData<Received>()
     val accountInfo get() = _accountInfo
 
     private val _usersInfo: MutableLiveData<List<UserInfoModel>> = MutableLiveData(listOf())
@@ -44,16 +45,16 @@ class EuphonyViewModel (application: Application) : AndroidViewModel(application
     }
 
     // 항상 모두에게 보냄 (21000)
-    fun speakAll(receivedObj: Received, userObj: User, key: String) {
+    fun speakAll(key: String, accountObj: Account, userObj: User) {
         txManager.code = FormatUtil.infoToJson(
             InfoModel(
                 UserInfoModel(key, userObj.nickname, userObj.icon),
                 AccountInfoModel(
-                    receivedObj.accountNumber,
-                    receivedObj.accountNickname,
-                    receivedObj.speakerNickName,
-                    receivedObj.speakerIcon,
-                    receivedObj.bank_id
+                    accountObj.accountNumber,
+                    accountObj.nickname,
+                    userObj.nickname,
+                    userObj.icon,
+                    accountObj.bank_id
                 )
             )
         )
@@ -62,16 +63,16 @@ class EuphonyViewModel (application: Application) : AndroidViewModel(application
     }
 
     // 특정인에게 보냄 (24000)
-    fun speak(key: String, sendObj: Received){
+    fun speak(key: String, accountObj: Account, userObj: User){
         txManager.stop()
         txManager.code = FormatUtil.accountInfoToJson(
             key,
             AccountInfoModel(
-                sendObj.accountNumber,
-                sendObj.accountNickname,
-                sendObj.speakerNickName,
-                sendObj.speakerIcon,
-                sendObj.bank_id
+                accountObj.accountNumber,
+                accountObj.nickname,
+                userObj.nickname,
+                userObj.icon,
+                accountObj.bank_id
             )
         )
         txManager.callEuPI(24000.0, EuTxManager.EuPIDuration.LENGTH_LONG)
@@ -89,12 +90,22 @@ class EuphonyViewModel (application: Application) : AndroidViewModel(application
             val infoInfo = FormatUtil.jsonToInfo(it)
 
             val userInfo = infoInfo.userInfo;
-            val accountInfo = infoInfo.accountInfo; //null 처리 필요
+            val accountInfo = infoInfo.accountInfo;
 
             // 주변인 리스트
             _usersInfo.value = _usersInfo.value?.plus(userInfo) ?: listOf(userInfo)
+
             //항상 공유하는 계좌 받음
-            _accountEveryInfo.value = accountInfo
+            if(accountInfo != null){
+                _accountEveryInfo.value = Received(
+                    0,
+                    accountInfo.bank_id,
+                    accountInfo.accountNickname,
+                    accountInfo.accountNumber,
+                    userInfo.nickname,
+                    userInfo.icon,
+                )
+            }
         }
     }
 
@@ -110,10 +121,29 @@ class EuphonyViewModel (application: Application) : AndroidViewModel(application
             _isListening.postValue(false)
             _isProcessing.postValue(false)
             if(it.startsWith("@")){
-                _accountInfo.postValue(FormatUtil.jsonToAccountInfo(key, it))
-                //_accountInfo 값 ""이면 복호화 실패
+                val response = FormatUtil.jsonToAccountInfo(key, it)
+
+                if(!response.equals("")){
+                    _accountInfo.value = Received(
+                        0,
+                        response.bank_id,
+                        response.accountNickname,
+                        response.accountNumber,
+                        response.speakerNickName,
+                        response.speakerIcon,
+                    )
+                }
             } else {
-                _accountInfo.postValue(FormatUtil.jsonToAccountInfo(it))
+                val response = FormatUtil.jsonToAccountInfo(it)
+
+                _accountInfo.value = Received(
+                    0,
+                    response.bank_id,
+                    response.accountNickname,
+                    response.accountNumber,
+                    response.speakerNickName,
+                    response.speakerIcon,
+                )
             }
         }
 
