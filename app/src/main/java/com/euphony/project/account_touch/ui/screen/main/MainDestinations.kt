@@ -16,4 +16,8 @@ object ReceivedAccounts : Destination {
     override val route: String = "received"
 }
 
-val mainScreens = listOf(Accounts, TransmitAccount, ReceivedAccounts)
+object ReceivedAccountDetail : Destination {
+    override val route: String = "received-detail"
+}
+
+val mainScreens = listOf(Accounts, TransmitAccount, ReceivedAccounts, ReceivedAccountDetail)

@@ -47,7 +47,6 @@ fun ReceivedAccountsScreen(
     onBackClick: () -> Unit,
 ) {
     val allReceived by receivedViewModel.allReceived.observeAsState()
-
     ReceivedAccounts(user, allReceived, onBackClick)
 }
 
@@ -167,17 +166,4 @@ fun ReceivedAccountItem(received: Received) {
             }
         }
     }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun ReceivedAccountsPreview() {
-    val user = User(
-        nickname = "영욱",
-        icon = UserIcon.CRYING,
-    )
-    val receiveds = listOf<Received>(
-        Received(bank_id = 1, accountNumber = "1234")
-    )
-    ReceivedAccounts(user, receiveds, {})
 }
