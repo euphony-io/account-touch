@@ -29,8 +29,6 @@
 
         <activity android:name=".ui.screen.main.MainActivity" />
 
-        <activity android:name=".euphony.EuphonyActivity" />
-
-    </application>
+제    </application>
 
 </manifest>

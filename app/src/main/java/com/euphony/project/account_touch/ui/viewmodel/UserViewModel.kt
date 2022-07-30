@@ -17,7 +17,7 @@ class UserViewModel @Inject constructor (
     private val repository: UserRepository
 ) : ViewModel() {
 
-    val user: LiveData<User> = repository.getUser(0).asLiveData()
+    val user: LiveData<User> = repository.getUser(1).asLiveData()
 
     fun addUser(request: CreateUserRequest) = viewModelScope.launch {
         repository.createAt(request)
