@@ -29,6 +29,4 @@
 
         <activity android:name=".ui.screen.main.MainActivity" />
 
-제    </application>
-
 </manifest>
