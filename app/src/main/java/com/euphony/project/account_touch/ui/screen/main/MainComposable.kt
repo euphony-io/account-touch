@@ -15,17 +15,12 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Button
-import androidx.compose.material.Card
-import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.Icon
-import androidx.compose.material.IconButton
-import androidx.compose.material.ModalBottomSheetLayout
-import androidx.compose.material.ModalBottomSheetValue
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Alarm
+import androidx.compose.material.icons.filled.AlarmOn
+import androidx.compose.material.icons.filled.Doorbell
 import androidx.compose.material.icons.filled.Send
-import androidx.compose.material.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -51,6 +46,7 @@ import com.euphony.project.account_touch.ui.screen.common.UserIconItem
 import com.euphony.project.account_touch.ui.screen.main.model.Content
 import com.euphony.project.account_touch.ui.screen.userregister.space
 import com.euphony.project.account_touch.ui.theme.Blue_6D95FF
+import com.euphony.project.account_touch.ui.theme.mainColor
 import com.euphony.project.account_touch.ui.theme.white
 import com.euphony.project.account_touch.ui.viewmodel.AccountViewModel
 import com.euphony.project.account_touch.ui.viewmodel.BankViewModel
@@ -170,6 +166,7 @@ fun LoadMainView(
     Column(
         modifier = Modifier
             .fillMaxSize()
+            .padding(20.dp)
     ) {
         Box(
             modifier = Modifier.fillMaxWidth(),
@@ -177,7 +174,7 @@ fun LoadMainView(
         ) {
             IconButton(onClick = { onReceivedIconClick() }) {
                 Icon(
-                    imageVector = Icons.Filled.Send,
+                    imageVector = Icons.Filled.AlarmOn,
                     contentDescription = "수신 계좌",
                     tint = Blue_6D95FF
                 )
@@ -190,32 +187,39 @@ fun LoadMainView(
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             Text(
-                text = "${user.nickname}님께서\n받으신 계좌입니다.",
+                text = "${user.nickname}님, \n안녕하세요.",
                 color = Blue_6D95FF,
                 fontWeight = FontWeight.Bold,
                 fontSize = 22.sp
             )
+
             UserIconItem(imageBitmap, Blue_6D95FF)
         }
+
+        //내 계좌 리스트 불러오기
         MyAccountList(accounts, onAccountClick)
-        Column(
+
+        //추가 버튼
+        Button(
             modifier = Modifier
-                .fillMaxSize(),
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            Button(onClick = { onAddButtonClick() }) {
-                Text(text = "OPEN BOTTOM SHEET")
+                .fillMaxWidth()
+                .height(35.dp),
+            shape = RoundedCornerShape(8.dp),
+            colors = ButtonDefaults.buttonColors(
+                backgroundColor = mainColor, contentColor = white
+            ),
+            onClick = {
+                onAddButtonClick()
             }
+        ){
+            Text(text = "+", Modifier.size(20.dp))
         }
     }
 }
 
 @Composable
 fun MyAccountList(accounts: List<AccountWithBank>, onAccountClick: (Int) -> Unit) {
-    LazyColumn(
-        modifier = Modifier.padding(horizontal = 16.dp)
-    ) {
+    LazyColumn() {
         items(accounts.size) {
             MyAccountItem(accounts[it], it, onAccountClick)
             space(20)
@@ -264,7 +268,7 @@ fun MyAccountItem(accountWithBank: AccountWithBank, index: Int, onAccountClick: 
                     Modifier.fillMaxWidth(),
                     contentAlignment = Alignment.CenterEnd
                 ) {
-                    ShareImage(accountWithBank.account.isAlwaysOn, index, onAccountClick)
+                    ShareImage(index, onAccountClick)
                 }
             }
         }
@@ -288,7 +292,7 @@ fun BankImage(imageBitmap: ImageBitmap?) {
 
 //계좌 공유 아이콘 이미지뷰
 @Composable
-fun ShareImage(isAlways: Boolean, index: Int, onAccountClick: (Int) -> Unit) {
+fun ShareImage(index: Int, onAccountClick: (Int) -> Unit) {
     Box(
         modifier = Modifier
             .size(30.dp)
@@ -297,9 +301,6 @@ fun ShareImage(isAlways: Boolean, index: Int, onAccountClick: (Int) -> Unit) {
             .background(white),
         contentAlignment = Alignment.Center
     ) {
-        if (isAlways)
-            Image(painterResource(id = R.drawable.ic_on), "")
-        else
-            Image(painterResource(id = R.drawable.ic_share), "")
+            Image(painterResource(id = R.drawable.ic_share), "계좌 공유 아이콘")
     }
 }

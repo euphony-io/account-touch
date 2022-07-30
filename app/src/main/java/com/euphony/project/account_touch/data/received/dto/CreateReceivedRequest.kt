@@ -20,6 +20,6 @@ class CreateReceivedRequest(
     }
 
     fun toEntity(): Received{
-        return Received(0L, bankId, accountNickname, accountNumber,speakerNickname, speakerIcon)
+        return Received(0L, bankId, accountNumber)
     }
 }
