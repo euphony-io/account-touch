@@ -16,7 +16,7 @@ class ReceivedRepository @Inject constructor (
         return dao.findAllBy()
     }
 
-    suspend fun getReceived(id: Long): Received {
+    fun getReceived(id: Long): Flow<Received> {
         return dao.findById(id)
     }
 

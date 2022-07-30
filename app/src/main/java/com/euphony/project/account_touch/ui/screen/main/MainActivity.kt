@@ -2,10 +2,8 @@ package com.euphony.project.account_touch.ui.screen.main
 
 import android.content.ClipData
 import android.content.ClipboardManager
-import android.content.Context
 import android.content.Context.CLIPBOARD_SERVICE
 import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
@@ -14,20 +12,20 @@ import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.platform.LocalContext
-import androidx.core.content.ContextCompat.getSystemService
-import androidx.core.content.ContextCompat.startActivity
-import androidx.core.content.getSystemService
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.platform.LocalContext
+import androidx.core.content.ContextCompat.startActivity
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import com.euphony.project.account_touch.data.bank.entity.Bank
 import com.euphony.project.account_touch.data.global.AccountWithBank
 import com.euphony.project.account_touch.data.user.entity.User
@@ -36,14 +34,12 @@ import com.euphony.project.account_touch.ui.screen.main.receivedaccounts.Receive
 import com.euphony.project.account_touch.ui.screen.main.transmitaccount.TransmitAccountScreen
 import com.euphony.project.account_touch.ui.screen.receivedetail.ReceivedDetailScreen
 import com.euphony.project.account_touch.ui.theme.AccounttouchTheme
-import java.lang.Exception
 import com.euphony.project.account_touch.ui.viewmodel.AccountViewModel
 import com.euphony.project.account_touch.ui.viewmodel.BankViewModel
 import com.euphony.project.account_touch.ui.viewmodel.ReceivedViewModel
 import com.euphony.project.account_touch.ui.viewmodel.UserViewModel
 import com.euphony.project.account_touch.utils.model.UserIcon
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.callbackFlow
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
@@ -56,19 +52,22 @@ class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        euphonyViewModel.listen()
         setContent {
-
             AccounttouchTheme {
                 val user = userViewModel.user.observeAsState().value ?: User(nickname = "temp", icon = UserIcon.GHOST)
                 val accounts = accountViewModel.accounts.observeAsState().value ?: listOf()
                 val banks = bankViewModel.banks.observeAsState().value ?: listOf()
-
                 val navController = rememberNavController()
                 val currentBackStack by navController.currentBackStackEntryAsState()
                 val currentDestination = currentBackStack?.destination
                 val currentScreen =
                     mainScreens.find { it.route == currentDestination?.route } ?: Accounts
+
+                euphonyViewModel.listen(
+                    onNavigate = {
+                        navController.navigate("${ReceivedAccountDetail.route}/it")
+                    }
+                )
 
                 MainNavHost(
                     navController,
@@ -106,6 +105,7 @@ fun MainNavHost(
     onModifyAccountInValid: () -> Unit,
 ) {
     var accountIndex by remember { mutableStateOf(-1) }
+    var openDialog by remember { mutableStateOf(false) }
 
     NavHost(
         navController = navController,
@@ -126,7 +126,10 @@ fun MainNavHost(
                     val account = accounts[accountIndex].account;
                     euphonyViewModel.speak(
                         account.bank_id,
-                        account.accountNumber
+                        account.accountNumber,
+                        onShowDialog = {
+                            openDialog = true
+                        }
                     )
                 },
                 onAddAccountInValid = { onAddAccountInValid() },
@@ -139,12 +142,25 @@ fun MainNavHost(
                 user,
                 onBackClick = {
                     navController.popBackStack()
-                }
+                    openDialog = false
+                },
+                openDialog,
             )
         }
         composable(route = ReceivedAccounts.route) {
             ReceivedAccountsScreen(
                 user,
+                receivedViewModel,
+                onBackClick = {
+                    navController.popBackStack()
+                }
+            )
+        }
+        composable(route = "ReceivedAccountDetail.route/{id}", arguments = listOf(navArgument("id") { type = NavType.LongType })) { backStackEntry ->
+            val id = backStackEntry.arguments?.getLong("id") ?: 0
+
+            ReceivedDetailScreen(
+                id,
                 receivedViewModel,
                 onBackClick = {
                     navController.popBackStack()

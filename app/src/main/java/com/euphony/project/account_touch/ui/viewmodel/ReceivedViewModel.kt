@@ -31,9 +31,7 @@ class ReceivedViewModel @Inject constructor (
     val allReceived: LiveData<List<Received>> = repository.getReceivedList().asLiveData()
     val user: LiveData<User> = userRepository.getUser(1).asLiveData()
 
-    fun getReceived(id: Long) = viewModelScope.launch {
-         repository.getReceived(id)
-    }
+    fun getReceived(id: Long) = repository.getReceived(id).asLiveData()
 
     fun addReceived(request: CreateReceivedRequest) = viewModelScope.launch {
         repository.createAt(request)

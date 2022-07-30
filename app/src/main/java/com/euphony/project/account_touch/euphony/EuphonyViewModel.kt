@@ -2,6 +2,7 @@ package com.euphony.project.account_touch.euphony
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import com.euphony.project.account_touch.data.account.repository.AccountRepository
 import com.euphony.project.account_touch.data.received.dto.CreateReceivedRequest
@@ -13,6 +14,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import euphony.lib.receiver.AcousticSensor
 import euphony.lib.receiver.EuRxManager
 import euphony.lib.transmitter.EuTxManager
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -31,16 +33,20 @@ class EuphonyViewModel @Inject constructor (
         EuRxManager()
     }
 
-    fun speak(bankId: Long, accountNumber: String){
+    fun speak(bankId: Long, accountNumber: String, onShowDialog: () -> Unit){
         txManager.euInitTransmit(FormatUtil.infoToJson(
             InfoModel(bankId, accountNumber)
         ))
 
         txManager.process(-1)
-        txManager.stop()
+        viewModelScope.launch {
+            delay(5000)
+            txManager.stop()
+            onShowDialog()
+        }
     }
 
-    fun listen() {
+    fun listen(onNavigate: (Long) -> Unit) {
         rxManager.listen()
 
         rxManager.acousticSensor = AcousticSensor {
@@ -48,6 +54,8 @@ class EuphonyViewModel @Inject constructor (
 
             _info.value = received
             save(CreateReceivedRequest(received.id, received.num))
+            val id = repository.getReceivedList().asLiveData().value?.get(0)?.id ?: 0
+            onNavigate(id)
         }
     }
 

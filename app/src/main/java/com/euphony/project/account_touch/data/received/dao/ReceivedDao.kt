@@ -10,7 +10,7 @@ interface ReceivedDao {
     fun findAllBy(): Flow<List<Received>>
 
     @Query("SELECT * FROM received WHERE received_id = :id")
-    suspend fun findById(id: Long): Received
+    fun findById(id: Long): Flow<Received>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(received: Received): Long

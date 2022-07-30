@@ -28,52 +28,42 @@ import com.euphony.project.account_touch.ui.theme.white
 @Preview(showBackground = true)
 @Composable
 fun DialogPreview() {
-    TransmitResultDialog(str = "성공")   //or 실패
+    TransmitResultDialog(str = "성공", onCloseClick = {})   //or 실패
 }
 
 @Composable
-fun TransmitResultDialog(str:String){
-    Dialog(onDismissRequest = {}) {
+fun TransmitResultDialog(str: String, onCloseClick: () -> Unit) {
+    Dialog(onDismissRequest = {  }) {
         Surface(
             modifier = Modifier
                 .width(200.dp)
                 .wrapContentHeight(),
             shape = RoundedCornerShape(15.dp),
             color = white
-        ){
-            ResultContent(str)
+        ) {
+            ResultContent(str, onCloseClick)
         }
     }
 }
 
 @Composable
-fun ResultContent(str:String){
+fun ResultContent(str: String, onCloseClick: () -> Unit) {
     Column(
         modifier = Modifier
             .padding(vertical = 30.dp),
-        verticalArrangement =  Arrangement.Center,
+        verticalArrangement = Arrangement.Center,
         Alignment.CenterHorizontally
-    ){
+    ) {
         LoadText("계좌 보내기 ${str}")
         space(value = 10)
 
         TransmitImage()
         space(20)
 
-        TextRound("닉네임 님")
-        space(value = 5)
-        Row(Modifier.padding(horizontal = 10.dp)){
-            TextRound("송신자님")
-            Spacer(Modifier.width(5.dp))
-            TextRound("수신자님")
-        }
-
         //확인 버튼
         space(value = 20)
         Button(
-            onClick = {
-                      //다이얼로그 닫기 작업
-            },
+            onClick = onCloseClick,
             modifier = Modifier
                 .fillMaxWidth(0.3f),
             colors = ButtonDefaults.buttonColors(
@@ -91,14 +81,14 @@ fun ResultContent(str:String){
 }
 
 @Composable
-fun TextRound(str:String){
+fun TextRound(str: String) {
     Box(
         modifier = Modifier
             .clip(RoundedCornerShape(18.dp))
             .background(grey)
             .padding(vertical = 5.dp, horizontal = 10.dp),
         contentAlignment = Alignment.Center,
-    ){
+    ) {
         Text("${str}", color = mainColor, fontSize = 12.sp)
     }
 }

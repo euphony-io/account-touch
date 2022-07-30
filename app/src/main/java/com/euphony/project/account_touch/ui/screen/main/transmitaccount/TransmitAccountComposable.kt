@@ -11,8 +11,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.GridCells
 import androidx.compose.foundation.lazy.LazyVerticalGrid
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Button
-import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Card
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
@@ -29,31 +27,33 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.euphony.project.account_touch.R
-import com.euphony.project.account_touch.data.account.entity.Account
 import com.euphony.project.account_touch.data.global.AccountWithBank
 import com.euphony.project.account_touch.data.user.entity.User
 import com.euphony.project.account_touch.ui.screen.common.UserIconItem
+import com.euphony.project.account_touch.ui.screen.main.TransmitResultDialog
 import com.euphony.project.account_touch.ui.screen.userregister.space
 import com.euphony.project.account_touch.ui.theme.Blue_6D95FF
 import com.euphony.project.account_touch.ui.theme.Blue_DFE8FF
 import com.euphony.project.account_touch.ui.theme.Gray_9C9C9C
-import com.euphony.project.account_touch.ui.theme.Gray_D2D2D2
 import com.euphony.project.account_touch.ui.theme.Gray_F4F4F4
-import com.euphony.project.account_touch.ui.theme.White_FAF5F5
 import com.euphony.project.account_touch.utils.AssetsUtil
-import com.euphony.project.account_touch.utils.model.Color
-import com.euphony.project.account_touch.utils.model.UserIcon
 
 @Composable
 fun TransmitAccountScreen(
     account: AccountWithBank?,
     user: User?,
-    onBackClick: () -> Unit
+    onBackClick: () -> Unit,
+    openDialog: Boolean,
 ) {
+    if (openDialog) {
+        TransmitResultDialog(
+            "성공",
+            onCloseClick = onBackClick
+        )
+    }
     TransmitAccount(user, account, onBackClick)
 }
 

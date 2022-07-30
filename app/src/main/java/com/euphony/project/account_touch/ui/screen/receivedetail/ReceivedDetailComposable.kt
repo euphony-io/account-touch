@@ -7,12 +7,15 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
 import androidx.compose.material.Icon
+import androidx.compose.material.IconButton
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -34,12 +37,12 @@ fun ReceivedDetailScreen(
     receivedViewModel: ReceivedViewModel,
     onBackClick: () -> Unit,
 ) {
-    //val received = receivedViewModel.getReceived(id);
-    //ReceivedDetail(received)
+    val received by receivedViewModel.getReceived(id).observeAsState()
+    if (received != null) ReceivedDetail(received!!, onBackClick)
 }
 
 @Composable
-fun ReceivedDetail(received: Received) {
+fun ReceivedDetail(received: Received, onBackClick: () -> Unit) {
     Scaffold(
         topBar = {
             TopAppBar(
@@ -48,12 +51,14 @@ fun ReceivedDetail(received: Received) {
                 },
                 backgroundColor = Color.White,
                 navigationIcon = {
-                    Icon(
-                        modifier = Modifier.padding(start = 12.dp),
-                        imageVector = Icons.Filled.ArrowBack,
-                        contentDescription = "뒤로가기",
-                        tint = Blue_6D95FF
-                    )
+                    IconButton(onClick = { onBackClick() }) {
+                        Icon(
+                            modifier = Modifier.padding(start = 12.dp),
+                            imageVector = Icons.Filled.ArrowBack,
+                            contentDescription = "뒤로가기",
+                            tint = Blue_6D95FF,
+                        )
+                    }
                 },
                 elevation = 0.dp
             )
