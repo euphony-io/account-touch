@@ -16,6 +16,6 @@ class BankViewModel @Inject constructor (
     private val repository: BankRepository
 ): ViewModel() {
 
-    val getBanks: LiveData<List<Bank>> = repository.getBanks().asLiveData()
+    val banks: LiveData<List<Bank>> = repository.getBanks().asLiveData()
 
 }

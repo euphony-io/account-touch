@@ -28,6 +28,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.euphony.project.account_touch.data.bank.entity.Bank
 import com.euphony.project.account_touch.data.global.AccountWithBank
 import com.euphony.project.account_touch.data.user.entity.User
 import com.euphony.project.account_touch.euphony.EuphonyViewModel
@@ -61,6 +62,7 @@ class MainActivity : ComponentActivity() {
             AccounttouchTheme {
                 val user = userViewModel.user.observeAsState().value ?: User(nickname = "temp", icon = UserIcon.GHOST)
                 val accounts = accountViewModel.accounts.observeAsState().value ?: listOf()
+                val banks = bankViewModel.banks.observeAsState().value ?: listOf()
 
                 val navController = rememberNavController()
                 val currentBackStack by navController.currentBackStackEntryAsState()
@@ -72,7 +74,7 @@ class MainActivity : ComponentActivity() {
                     navController,
                     user,
                     accounts,
-                    bankViewModel,
+                    banks,
                     receivedViewModel,
                     accountViewModel,
                     euphonyViewModel,
@@ -96,7 +98,7 @@ fun MainNavHost(
     navController: NavHostController,
     user: User,
     accounts: List<AccountWithBank>,
-    bankViewModel: BankViewModel,
+    banks: List<Bank>,
     receivedViewModel: ReceivedViewModel,
     accountViewModel: AccountViewModel,
     euphonyViewModel: EuphonyViewModel,
@@ -114,7 +116,7 @@ fun MainNavHost(
                 user,
                 accounts,
                 accountViewModel,
-                bankViewModel,
+                banks,
                 onReceivedIconClick = {
                     navController.navigateSingleTopTo(ReceivedAccounts.route)
                 },
