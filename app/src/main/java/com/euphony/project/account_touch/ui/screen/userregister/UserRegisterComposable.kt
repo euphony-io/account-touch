@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.BottomSheetScaffold
@@ -280,7 +281,8 @@ fun ProfileImage(
             modifier = modifier.height(200.dp),
             contentAlignment = Alignment.Center
         ) {
-            Image(painter = profile, contentDescription = "", alignment = Alignment.Center)
+            Image(
+                modifier = Modifier.size(60.dp), painter = profile, contentDescription = "", alignment = Alignment.Center)
         }
     }
 }
