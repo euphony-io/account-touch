@@ -1,6 +1,7 @@
 package com.euphony.project.account_touch.data.received.repository
 
 import androidx.annotation.WorkerThread
+import com.euphony.project.account_touch.data.account.dto.CreateAccountRequest
 import com.euphony.project.account_touch.data.received.dao.ReceivedDao
 import com.euphony.project.account_touch.data.received.dto.CreateReceivedRequest
 import com.euphony.project.account_touch.data.received.entity.Received
