@@ -35,9 +35,6 @@ data class Account(
     @ColumnInfo(name = "account_number")
     val accountNumber: String,
 
-    @ColumnInfo(name = "is_always_on")
-    val isAlwaysOn: Boolean,
-
     @ColumnInfo(name = "color")
     val color: Color,
 

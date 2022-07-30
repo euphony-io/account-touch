@@ -28,17 +28,8 @@ data class Received(
     @ColumnInfo(name = "bank_id", index = true)
     val bank_id: Long,
 
-    @ColumnInfo(name = "account_nickname")
-    val accountNickname: String,
-
     @ColumnInfo(name = "account_number")
     val accountNumber: String,
-
-    @ColumnInfo(name = "speaker_nickname")
-    val speakerNickName: String,
-
-    @ColumnInfo(name = "speaker_icon")
-    val speakerIcon: UserIcon,
 
     @ColumnInfo(name = "create_date")
     override val createDate: Date = Date(System.currentTimeMillis()),

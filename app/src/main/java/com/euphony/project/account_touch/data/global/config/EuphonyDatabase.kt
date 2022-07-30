@@ -68,7 +68,7 @@ abstract class EuphonyDatabase : RoomDatabase() {
                     })
                     .setQueryCallback(QueryCallback {
                             sqlQuery, bindArgs ->  println("SQL Query: $sqlQuery SQL Args: $bindArgs")
-                        }, Executors.newSingleThreadExecutor())
+                }, Executors.newSingleThreadExecutor())
                     .fallbackToDestructiveMigration()
                     .build()
 

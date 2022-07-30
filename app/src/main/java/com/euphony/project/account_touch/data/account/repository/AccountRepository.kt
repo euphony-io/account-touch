@@ -33,7 +33,6 @@ class AccountRepository(private val dao : AccountDao){
     suspend fun modifyAccount(request: UpdateAccountRequest) {
         dao.update(
             id=request.id,
-            isAlwaysOn=request.isAlwaysOn,
             modifyColor=request.color,
         )
     }

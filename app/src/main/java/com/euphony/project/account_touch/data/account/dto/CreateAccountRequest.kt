@@ -8,7 +8,6 @@ class CreateAccountRequest(
     val bank: Long,
     val nickname: String,
     val accountNumber: String,
-    val isAlwaysOn: Boolean,
     val color: Color
 ): BaseRequest {
     override fun validate(): Boolean {
@@ -18,8 +17,6 @@ class CreateAccountRequest(
     }
 
     fun toEntity(): Account{
-        return Account(
-            0,bank, nickname, accountNumber, isAlwaysOn, color
-        )
+        return Account(0, bank, nickname, accountNumber, color)
     }
 }

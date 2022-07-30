@@ -55,16 +55,13 @@ class ReceivedDaoTest :TestCase(){
     companion object {
         val bank = Bank(1L, "국민은행", BankIcon.KB, 12, ExternalPackage.KOOKMIN)
         val _received = fun(bankId: Long): Received{
-            return Received(1L,  bankId,"도영이의 국민 계좌", "123123123123", "은빈", UserIcon.GHOST)
+            return Received(1L,  bankId, "123123123123",)
         }
         val _receivedList = fun(bankId: Long): List<Received>{
             return listOf(
-                Received(1L, bankId,"도영이의 국민 계좌", "123123123123", "은빈",
-                    UserIcon.GHOST, Date(2020,12,12)),
-                Received(2L, bankId, "도영이의 하나 계좌", "32132132123", "은빈",
-                    UserIcon.GHOST, Date(2021,12,12)),
-                Received(3L, bankId, "도영이의 카카오 계좌", "34532153", "은빈",
-                    UserIcon.GHOST, Date(2022,12,12))
+                Received(1L, bankId, "123123123123", Date(2020,12,12)),
+                Received(2L, bankId,  "32132132123", Date(2021,12,12)),
+                Received(3L, bankId,  "34532153", Date(2022,12,12))
             )
         }
     }
@@ -73,7 +70,7 @@ class ReceivedDaoTest :TestCase(){
     fun 받은_계좌_생성() =  testScope.runBlockingTest {
         //given
         val bankId = bankDao.insert(bank)
-        val received = Received(1L, bankId, "도영이의 국민 계좌", "123123123123", "은빈", UserIcon.GHOST)
+        val received = Received(1L, bankId,  "123123123123")
 
         //when
         val newId = dao.insert(received)

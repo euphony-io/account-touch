@@ -20,7 +20,6 @@ internal class AccountTest{
             1L,
             nickname,
             accountNumber,
-            false,
             Color.BLACK
         )
 
